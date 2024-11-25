@@ -4,6 +4,7 @@ class CObject;
 class CScene
 {
 protected:
+	GLboolean					loaded;
 	vector<CObject*>			arrObj[(GLuint)GROUP_TYPE::END];
 	wstring						strName;
 public:

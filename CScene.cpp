@@ -3,6 +3,7 @@
 #include "CObject.h"
 
 CScene::CScene()
+    :loaded(false)
 {
     for (GLuint i = 0; i < (GLuint)GROUP_TYPE::END; ++i) {
         arrObj[i] = std::vector<CObject*>();  // 각 요소를 벡터로 명시적으로 초기화

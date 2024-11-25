@@ -12,11 +12,17 @@ Start_Scene::~Start_Scene() {
 }
 
 void Start_Scene::Enter() {
-    CObject* obj = new Player();
-    Model* model = new Model(MODEL_TYPE::CUBE, GL_TRIANGLES);
-    obj->setModel(model);
+    if (!loaded) {
+        CObject* obj = new Player();
+        Model* model = new Model(MODEL_TYPE::CUBE, GL_TRIANGLES);
+        obj->setModel(model);
 
-    AddObject(obj, GROUP_TYPE::PLAYER);
+        AddObject(obj, GROUP_TYPE::PLAYER);
+        loaded = true;
+    }
+    else {
+        
+    }
 }
 
 void Start_Scene::Update() {
@@ -32,10 +38,4 @@ void Start_Scene::Render()
 }
 
 void Start_Scene::Exit() {
-    for (GLuint i = 0; i < (GLuint)GROUP_TYPE::END; ++i) {
-        for (size_t j = 0; j < arrObj[i].size(); ++j) {
-            delete arrObj[i][j];
-        }
-        arrObj[i].clear();
-    }
 }
