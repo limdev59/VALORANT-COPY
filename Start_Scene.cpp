@@ -1,9 +1,15 @@
 #include "pch.h"
 #include "Start_Scene.h"
-#include "Player.h"
-#include "Model.h"
+
 #include "KeyMgr.h"
 #include "SceneMgr.h"
+#include "MouseMgr.h"
+
+#include "Model.h"
+
+#include "Player.h"
+#include "Sphere.h"
+#include "AxisModel.h"
 
 Start_Scene::Start_Scene() {
 }
@@ -14,10 +20,38 @@ Start_Scene::~Start_Scene() {
 void Start_Scene::Enter() {
     if (!loaded) {
         CObject* obj = new Player();
-        Model* model = new Model(MODEL_TYPE::CUBE, GL_TRIANGLES);
+        Model* model = new Model(MODEL_TYPE::JETT, GL_TRIANGLES);
         obj->setModel(model);
+        obj->setPosition(vec3(0.0f)); 
+        obj->setScale(vec3(0.3f)); 
+        
+        CObject* obj2 = new Sphere();
+        Model* model2 = new Model(MODEL_TYPE::SPHERE, GL_TRIANGLES);
+        obj2->setScale(vec3(0.1f));
+        obj2->setModel(model2);  
 
-        AddObject(obj, GROUP_TYPE::PLAYER);
+        CObject* obj3 = new Sphere();
+        Model* model3 = new Model(MODEL_TYPE::SPHERE, GL_TRIANGLES);
+        obj3->setScale(vec3(0.1f));
+        obj3->setModel(model3);
+
+        CObject* obj4 = new AxisModel();
+        Model* model4 = new Model(MODEL_TYPE::AXIS_MODEL, GL_LINES);
+        model4->editVertex([](vector<vec3>& v) {
+            v[1] = vec3(1.0f, 0.0f, 0.0f);
+            v[3] = vec3(1.0f, 0.0f, 0.0f);
+            v[5] = vec3(0.0f, 1.0f, 0.0f);
+            v[7] = vec3(0.0f, 1.0f, 0.0f);
+            v[9] = vec3(0.0f, 0.0f, 1.0f);
+            v[11] = vec3(0.0f, 0.0f, 1.0f);
+            });
+        obj4->setScale(vec3(2.0f));
+        obj4->setModel(model4);
+
+        addObject(obj, GROUP_TYPE::PLAYER);
+        addObject(obj2, GROUP_TYPE::DEFAULT);
+        addObject(obj3, GROUP_TYPE::DEFAULT);
+        addObject(obj4, GROUP_TYPE::DEFAULT);
         loaded = true;
     }
     else {
@@ -27,9 +61,18 @@ void Start_Scene::Enter() {
 
 void Start_Scene::Update() {
     CScene::Update();
-    if (KeyMgr::Instance()->getKeyState(KEY::NUM_1) == KEY_TYPE::TAP) {
+    if (KeyMgr::Instance()->getKeyState(KEY::NUM_2) == KEY_TYPE::TAP) {
         SceneMgr::Instance()->changeScene(SCENE_TYPE::STAGE_1);
     }
+
+    vec3 a = MouseMgr::Instance()->getCursorPos(MOUSE_TYPE::MOVE_HOVER);
+    float z_ndc = (a.z / 1200) * 2.0f - 1.0f;
+    float y_ndc = (a.y / 768) * 2.0f - 1.0f;
+    getObject(GROUP_TYPE::DEFAULT, 0).setPosition(vec3(0.0f, y_ndc * 3, z_ndc * 3));
+    z_ndc = 1.0f - (a.z / 1200) * 2.0f;
+    y_ndc = 1.0f - (a.y / 768) * 2.0f;
+    getObject(GROUP_TYPE::DEFAULT, 1).setPosition(vec3(0.0f, y_ndc * 3, z_ndc * 3));
+
 }
 
 void Start_Scene::Render()

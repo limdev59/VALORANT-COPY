@@ -1,12 +1,23 @@
 #include "pch.h"
 #include "Model.h"
-#include "Camera.h"
 
 std::unordered_map<MODEL_TYPE, const std::vector<vec3>> Model::modelVertices = {
 	{MODEL_TYPE::CUBE,   ReadObj("cube.obj")},
 	{MODEL_TYPE::SPHERE,   ReadObj("sphere.obj")},
-	{MODEL_TYPE::AXIS,   ReadObj("axis.obj")},
+	{MODEL_TYPE::AXIS_MODEL,   ReadObj("axis.obj")},
+	{MODEL_TYPE::JETT,   ReadObj("jettSimple.obj")},
+	{MODEL_TYPE::PEARL,   ReadObj("Pearl.obj")},
 };
+std::unordered_map<MODEL_TYPE, const std::string> texturePaths = {
+	{MODEL_TYPE::CUBE, "textures/cube_texture.png"},
+	{MODEL_TYPE::SPHERE, "textures/sphere_texture.png"},
+	{MODEL_TYPE::AXIS_MODEL,   "textures/axis.png"},
+	{MODEL_TYPE::JETT,   "TP_Wushu_S0_DF.png"},
+	{MODEL_TYPE::PEARL,  "textures/Pearl.png"},
+};
+
+
+
 
  void Model::InitBuffer() {
 	if (VAO) glDeleteVertexArrays(1, &VAO);
@@ -27,6 +38,37 @@ std::unordered_map<MODEL_TYPE, const std::vector<vec3>> Model::modelVertices = {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 }
+ GLuint Model::LoadTexture(string filepath) {
+	 GLuint texture;
+	 glGenTextures(1, &texture);
+	 glBindTexture(GL_TEXTURE_2D, texture);
+
+	 int width, height, nrChannels;
+	 unsigned char* data = stbi_load(filepath.c_str(), &width, &height, &nrChannels, 0);
+	 if (data) {
+		 GLenum format = (nrChannels == 4) ? GL_RGBA : GL_RGB;
+		 glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+		 glGenerateMipmap(GL_TEXTURE_2D);
+	 }
+	 else {
+		 std::cerr << "texture err" << endl;
+	 }
+	 stbi_image_free(data);
+
+	 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	 return texture;
+ }
+ GLuint Model::LoadTextureForType(MODEL_TYPE type) {
+	 auto it = texturePaths.find(type);
+	 if (it != texturePaths.end()) {
+		 return LoadTexture(it->second.c_str());
+	 }
+	 return 0; // 텍스처가 없으면 0 반환
+ }
 
  Model::Model(MODEL_TYPE type, GLenum mode)
 	: renderMode(mode), transform(mat4(1.0f)) {
@@ -64,12 +106,20 @@ std::unordered_map<MODEL_TYPE, const std::vector<vec3>> Model::modelVertices = {
 	InitBuffer();
 }
  void Model::Render(GLuint& shaderProgram) {
-	glBindVertexArray(VAO);
-	GLuint modelLocation =glGetUniformLocation(shaderProgram, "modelTransform");
-	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(transform));
-	glDrawArrays(renderMode, 0, static_cast<GLsizei>(vertices.size() / 2));
-	glBindVertexArray(0);
-}
+	 glBindVertexArray(VAO);
+
+	 GLuint modelLocation = glGetUniformLocation(shaderProgram, "modelTransform");
+	 glUniformMatrix4fv(modelLocation, 1, GL_FALSE, value_ptr(transform));
+
+	 // 텍스처 활성화
+	 glActiveTexture(GL_TEXTURE0);
+	 glBindTexture(GL_TEXTURE_2D, textureID);
+	 GLuint textureLocation = glGetUniformLocation(shaderProgram, "textureSampler");
+	 glUniform1i(textureLocation, 0);
+
+	 glDrawArrays(renderMode, 0, static_cast<GLsizei>(vertices.size() / 2));
+	 glBindVertexArray(0);
+ }
  void Model::Update(vec3 position, vec3 rotation, vec3 scale) {
 	 mat4 toPivot = glm::translate(mat4(1.0f), -pivot);
 	 mat4 rotationAtPivot = glm::rotate(mat4(1.0f), glm::radians(rotationAtAngle), rotationAtAxis);

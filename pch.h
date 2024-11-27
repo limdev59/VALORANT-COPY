@@ -17,6 +17,7 @@
 #include <gl/glm/glm.hpp>
 #include <gl/glm/ext.hpp>
 #include <gl/glm/gtc/matrix_transform.hpp>
+#include "stb_image.h"
 
 using std::vector;
 using std::string;

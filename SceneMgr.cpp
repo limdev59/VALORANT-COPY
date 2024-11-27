@@ -15,8 +15,8 @@ SceneMgr::~SceneMgr() {
 void SceneMgr::Init() {
     arrScene[(GLuint)SCENE_TYPE::START] = new Start_Scene;
     arrScene[(GLuint)SCENE_TYPE::STAGE_1] = new Stage_1_Scene;
-    arrScene[(GLuint)SCENE_TYPE::START]->SetName(L"Start Scene");
-    arrScene[(GLuint)SCENE_TYPE::STAGE_1]->SetName(L"Stage 1 Scene");
+    arrScene[(GLuint)SCENE_TYPE::START]->setName(L"Start Scene");
+    arrScene[(GLuint)SCENE_TYPE::STAGE_1]->setName(L"Stage 1 Scene");
     currentScene = arrScene[(GLuint)SCENE_TYPE::START];
     currentScene->Enter();
 }

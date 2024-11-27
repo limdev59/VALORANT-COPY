@@ -4,7 +4,7 @@ class CScene;
 class SceneMgr {
     SINGLE(SceneMgr);
 private:
-    CScene*                 arrScene[(unsigned int)SCENE_TYPE::END];
+    CScene*                 arrScene[(GLuint)SCENE_TYPE::END];
     CScene*                 currentScene;
 
 public:

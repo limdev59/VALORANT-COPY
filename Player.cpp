@@ -3,7 +3,7 @@
 
 #include "KeyMgr.h"
 #include "TimeMgr.h"
-#include "SceneMgr.h"
+#include "MouseMgr.h"
 
 
 void Player::Update()
@@ -28,6 +28,3 @@ void Player::Update()
     hitboxCenter = position;
     hitboxSize *= scale;
 }
-
-
-

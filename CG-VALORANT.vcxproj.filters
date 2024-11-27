@@ -52,6 +52,27 @@
     <Filter Include="소스 파일\Scene\Stage_1_Scene">
       <UniqueIdentifier>{555fb8f5-fe8f-48f3-b415-cee791a23b19}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Object\Sphere">
+      <UniqueIdentifier>{745886ec-b155-4bd3-869f-1dd02093dcb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Camera">
+      <UniqueIdentifier>{6e107e69-a4f7-4717-826c-fe2b9a4106db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Camera\Start_Camera">
+      <UniqueIdentifier>{ff43ce33-2779-4038-a74e-dbfd423ba0e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Camera\Debug_Camera">
+      <UniqueIdentifier>{64ccad62-0258-4aea-82a3-0bb8c0c91fcc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object\Pearl">
+      <UniqueIdentifier>{200b9982-82dd-4081-8eed-a9aa358f41c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object\AxisModel">
+      <UniqueIdentifier>{2050e6b0-6dd0-469e-82da-33660bb2aa1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\stb_image">
+      <UniqueIdentifier>{07e254b4-d60f-4a24-bb63-e6b494deb03d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -87,11 +108,32 @@
     <ClCompile Include="Model.cpp">
       <Filter>소스 파일\Model</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>소스 파일\Manager\Camera</Filter>
-    </ClCompile>
     <ClCompile Include="Stage_1_Scene.cpp">
       <Filter>소스 파일\Scene\Stage_1_Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Sphere.cpp">
+      <Filter>소스 파일\Object\Sphere</Filter>
+    </ClCompile>
+    <ClCompile Include="AxisModel.cpp">
+      <Filter>소스 파일\Object\AxisModel</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraMgr.cpp">
+      <Filter>소스 파일\Manager\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="CCamera.cpp">
+      <Filter>소스 파일\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug_Camera.cpp">
+      <Filter>소스 파일\Camera\Debug_Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Start_Camera.cpp">
+      <Filter>소스 파일\Camera\Start_Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Pearl.cpp">
+      <Filter>소스 파일\Object\Pearl</Filter>
+    </ClCompile>
+    <ClCompile Include="stb_image.cpp">
+      <Filter>소스 파일\stb_image</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -135,11 +177,32 @@
     <ClInclude Include="Model.h">
       <Filter>소스 파일\Model</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>소스 파일\Manager\Camera</Filter>
-    </ClInclude>
     <ClInclude Include="Stage_1_Scene.h">
       <Filter>소스 파일\Scene\Stage_1_Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Sphere.h">
+      <Filter>소스 파일\Object\Sphere</Filter>
+    </ClInclude>
+    <ClInclude Include="AxisModel.h">
+      <Filter>소스 파일\Object\AxisModel</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraMgr.h">
+      <Filter>소스 파일\Manager\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="CCamera.h">
+      <Filter>소스 파일\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug_Camera.h">
+      <Filter>소스 파일\Camera\Debug_Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Start_Camera.h">
+      <Filter>소스 파일\Camera\Start_Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Pearl.h">
+      <Filter>소스 파일\Object\Pearl</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>소스 파일\stb_image</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

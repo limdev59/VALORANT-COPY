@@ -8,8 +8,8 @@ private:
     std::chrono::high_resolution_clock::time_point  prevTime;
     double                                          dDT;
     double                                          dAcc;
-    unsigned int                                    iCallCount;
-    unsigned int                                    iFPS;
+    GLuint                                          iCallCount;
+    GLuint                                          iFPS;
 
 public:
     void                                            Init();

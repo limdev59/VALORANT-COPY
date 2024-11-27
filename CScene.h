@@ -11,18 +11,24 @@ public:
 	CScene();
 	~CScene();
 
-	virtual void Update() = 0;
-	virtual void Render() = 0;
-	virtual void Enter() = 0;
-	virtual void Exit() = 0;
+	virtual void				Update() = 0;
+	virtual void				Render() = 0;
+	virtual void				Enter() = 0;
+	virtual void				Exit() = 0;
 
-	void SetName(const wstring& _strName) {
+	void setName(const wstring& _strName) {
 		strName = _strName;
 	}
-	const wstring& GetName() { return strName; }
+	const wstring& getName() { return strName; }
 
 protected:
-	void AddObject(CObject* obj, GROUP_TYPE type) {
+	CObject& getObject(GROUP_TYPE type, size_t index) {
+		if ((GLuint)type >= (GLuint)GROUP_TYPE::END || index >= arrObj[(GLuint)type].size()) {
+			exit(9);
+		}
+		return *arrObj[(GLuint)type][index];
+	}
+	void addObject(CObject* obj, GROUP_TYPE type) {
 		arrObj[(GLuint)type].push_back(obj);
 	}
 };

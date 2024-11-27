@@ -2,63 +2,69 @@
 #include "MouseMgr.h"
 
 MouseMgr::MouseMgr()
-    : width(0), height(0), clickDownPos(0.0f), clickUpPos(0.0f)
-{
-    clicked = false;
-}
+    : width(0), height(0), cursorPos(vec3(0.0f, 0.0f, 0.0f)) {}
 
 MouseMgr::~MouseMgr() {}
 
-void MouseMgr::setClickDownPos(int x, int y) {
-    GLint viewport[4];
-    glGetIntegerv(GL_VIEWPORT, viewport);
-    //cout << "x:" << x << " y:" << y << '\n';
-    MouseMgr::Instance()->clicked = false;
-}
-
-void MouseMgr::setClickUpPos(int x, int y) {
-    GLint viewport[4];
-    glGetIntegerv(GL_VIEWPORT, viewport);
-    MouseMgr::Instance()->clicked = true;
-}
-
-glm::vec3 MouseMgr::getClickDownPos() const
-{
-    return clickDownPos;
-}
-
-glm::vec3 MouseMgr::getClickUpPos() const
-{
-    return clickUpPos;
-}
-
-void MouseMgr::MouseCallback(int button, int state, int x, int y) {
-    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-        MouseMgr::Instance()->setClickDownPos(x, y);
+vec3 MouseMgr::getCursorPos(MOUSE_TYPE type) const {
+    if (!arrPos[static_cast<int>(type)].empty()) {
+        return arrPos[static_cast<int>(type)].back().cursorPos;
     }
-    else if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
-        MouseMgr::Instance()->setClickUpPos(x, y);
+    return vec3(0.0f, 0.0f, 0.0f); // 기본 값
+}
+
+void MouseMgr::handleMouseEvent(MOUSE_TYPE event, int x, int y) {
+    GLint vp[4];
+    glGetIntegerv(GL_VIEWPORT, vp);
+    arrPos[static_cast<int>(event)].emplace_back(MouseInfo {
+        vec3(0.0f, static_cast<float>(vp[3] - y), static_cast<float>(x)),
+            true
+    });
+}
+
+vec3 MouseMgr::getMouseClick(MOUSE_TYPE event) {
+    if (!arrPos[static_cast<int>(event)].empty()) {
+        return arrPos[static_cast<int>(event)].back().cursorPos;
     }
+    return vec3(0.0f, 0.0f, 0.0f); // 기본 값
 }
 
-void MouseMgr::Init(int w, int h/*, Camera& cam*/) {
-    MouseMgr::Instance()->SetWindowSize(w, h);
-    glutMouseFunc(MouseMgr::MouseCallback);
-}
-
-void MouseMgr::Update(/*Camera& cam*/) {
-    if (clicked) {
-        /*camera = cam;*/
+void MouseMgr::Init(int w, int h) {
+    setWindowSize(w, h);
+    for (int i = 0; i < static_cast<int>(MOUSE_TYPE::LAST); ++i) {
+        arrPos[i].clear();
     }
+
+    // GLUT 이벤트 연결
+    glutMouseFunc([](int button, int state, int x, int y) {
+        if (button == GLUT_LEFT_BUTTON) {
+            if (state == GLUT_DOWN)
+                MouseMgr::Instance()->handleMouseEvent(MOUSE_TYPE::LEFT_CLICK_DOWN, x, y);
+            else if (state == GLUT_UP)
+                MouseMgr::Instance()->handleMouseEvent(MOUSE_TYPE::LEFT_CLICK_UP, x, y);
+        }
+        else if (button == GLUT_RIGHT_BUTTON) {
+            if (state == GLUT_DOWN)
+                MouseMgr::Instance()->handleMouseEvent(MOUSE_TYPE::RIGHT_CLICK_DOWN, x, y);
+            else if (state == GLUT_UP)
+                MouseMgr::Instance()->handleMouseEvent(MOUSE_TYPE::RIGHT_CLICK_UP, x, y);
+        }
+        });
+
+    glutPassiveMotionFunc([](int x, int y) {
+        MouseMgr::Instance()->handleMouseEvent(MOUSE_TYPE::MOVE_HOVER, x, y);
+        });
+
+    glutMotionFunc([](int x, int y) {
+        MouseMgr::Instance()->handleMouseEvent(MOUSE_TYPE::MOVE_HOLD, x, y);
+        });
 }
 
-void MouseMgr::SetWindowSize(int w, int h) {
+void MouseMgr::Update() {
+    // 필요한 업데이트 로직 추가
+}
+
+void MouseMgr::setWindowSize(int w, int h) {
     width = w;
     height = h;
-}
-
-bool MouseMgr::WasClicked() {
-    bool wasClicked = clicked;
-    clicked = false;
-    return wasClicked;
 }

@@ -2,7 +2,7 @@
 class Model {
 protected:
 	GLenum renderMode;
-	GLuint VAO = 0, VBO = 0;
+	GLuint VAO = 0, VBO = 0, textureID = 0;
 	mat4 transform = mat4(1.0f);
 
 	vec3 rotationAxis = vec3(0.0f, 1.0f, 0.0f);
@@ -13,9 +13,12 @@ protected:
 	vec3 pivot = vec3(0.0f);  // ÇÇ¹þ Ãß°¡
 	vector<vec3> vertices;
 
-	void InitBuffer();
+	void	InitBuffer();
+	GLuint	LoadTexture(string filepath);
+	GLuint	LoadTextureForType(MODEL_TYPE type);
 public:
 	static std::unordered_map<MODEL_TYPE, const vector<vec3>> modelVertices;
+	static std::unordered_map<MODEL_TYPE, const vector<GLuint>> modelTextures;
 
 	Model(MODEL_TYPE type, GLenum mode = GL_TRIANGLES);
 	virtual ~Model();

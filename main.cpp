@@ -1,20 +1,11 @@
 #include "pch.h"
 #include "CCore.h"
-#include "MouseMgr.h"
-#include "Camera.h"
 
-#include "Model.h"
-
-
-static GLvoid Reshape(int w, int h) {
-    MouseMgr::Instance()->SetWindowSize(w, h);
-    CCore::Instance()->width = w; 
-    CCore::Instance()->height = (h == 0) ? 1 : h;
-    glViewport(0, 0, w, (h == 0) ? 1 : h);
-    Camera::Instance()->SetAspectRatio((float)CCore::Instance()->width, (float)CCore::Instance()->height);
-}
 static GLvoid Render() {
     CCore::Instance()->Render();
+}
+static GLvoid Reshape(int w, int h) {
+    CCore::Instance()->Reshape(w, h);
 }
 static GLvoid Update() {
     CCore::Instance()->Update();
@@ -31,7 +22,6 @@ int main(int argc, char** argv) {
 
     CCore::Instance()->Init();
 
-    
     static GLuint vertexShader, fragmentShader;
     make_shaderProgram(
         CCore::Instance()->shaderProgramID, 

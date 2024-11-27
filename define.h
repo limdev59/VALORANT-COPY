@@ -13,13 +13,9 @@ private:                            \
 #define fDT TimeMgr::Instance()->GetfDT()
 #define DT TimeMgr::Instance()->GetDT()
 
-
-
-#define LAMBDA(CONTENT) []() { CONTENT }
-
-constexpr GLint	WINDOW_WIDTH = 800;//1200;
-constexpr GLint	WINDOW_HEIGHT = 800;//768;
-constexpr int	MAXFPS = 60;
+constexpr GLint	WINDOW_WIDTH = 1200;
+constexpr GLint	WINDOW_HEIGHT = 768;
+constexpr int	MAXFPS = 100;
 
 enum class GROUP_TYPE {
 	DEFAULT,
@@ -28,7 +24,6 @@ enum class GROUP_TYPE {
 	//MONSTER,
 	END,
 };
-
 enum class SCENE_TYPE {
 	TOOL,
 	START,
@@ -37,20 +32,19 @@ enum class SCENE_TYPE {
 
 	END
 };
-
-enum class ProjectionMode {
-	Perspective,
-	Orthographic
+enum class PROJ_TYPE {
+	PERSPECTIVE,
+	ORTHOGRAPHIC
 };
-
 enum class MODEL_TYPE {
 	CUBE,
 	SPHERE,
-	AXIS,
+	AXIS_MODEL,
 	SQUARE,
+	JETT,
+	PEARL,
 	END,
 };
-
 
 static std::vector<glm::vec3> ReadObj(const std::string& filename)
 {
@@ -123,7 +117,6 @@ static std::vector<glm::vec3> ReadObj(const std::string& filename)
 	std::cout << filename << " File Read, " << data.size() / 2 << " Vertices Exists." << std::endl;
 	return data;
 }
-
 static string fileToBuf(string filename)
 {
 	std::ifstream in{ filename };

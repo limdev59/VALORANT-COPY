@@ -4,7 +4,9 @@ class CCore {
 public:
     GLuint  shaderProgramID;
     GLint   width, height;
-    void    Update();
-    void    Render();
-    void    Init();
+
+    GLvoid  Reshape(int w, int h);
+    GLvoid  Update();
+    GLvoid  Render();
+    GLvoid  Init();
 };

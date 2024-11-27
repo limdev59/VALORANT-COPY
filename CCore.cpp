@@ -4,28 +4,36 @@
 #include "TimeMgr.h"
 #include "KeyMgr.h"
 #include "SceneMgr.h"
-#include "CObject.h"
 #include "MouseMgr.h"
+#include "CameraMgr.h"
 
-#include "Camera.h"
+#include "CObject.h"
+#include "CCamera.h"
+
 
 CCore::CCore() {}
 
 CCore::~CCore() {}
 
-void CCore::Init() {
-    Camera::Instance()->Init();
+GLvoid CCore::Reshape(int w, int h) {
+    MouseMgr::Instance()->setWindowSize(w, h);
+    CCore::Instance()->width = w;
+    CCore::Instance()->height = (h == 0) ? 1 : h;
+    glViewport(0, 0, w, (h == 0) ? 1 : h);
+    CameraMgr::Instance()->getMainCamera()->setAspectRatio((float)width, (float)height);
+}
+
+GLvoid CCore::Init() {
     TimeMgr::Instance()->Init();
+    CameraMgr::Instance()->Init();
     KeyMgr::Instance()->Init();
     SceneMgr::Instance()->Init();
     MouseMgr::Instance()->Init(WINDOW_WIDTH, WINDOW_HEIGHT);
 }
 
-
-
-void CCore::Update() {
-    Camera::Instance()->Update();
+GLvoid CCore::Update() {
     TimeMgr::Instance()->Update();
+    CameraMgr::Instance()->Update();
     KeyMgr::Instance()->Update();
     SceneMgr::Instance()->Update();
     MouseMgr::Instance()->Update();
@@ -36,8 +44,8 @@ void CCore::Update() {
 void CCore::Render() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glUseProgram(shaderProgramID);
-    mat4 projection = Camera::Instance()->GetProjectionMatrix();
-    mat4 view = Camera::Instance()->GetViewMatrix();
+    mat4 projection = CameraMgr::Instance()->getMainCamera()->getProjectionMatrix();
+    mat4 view       = CameraMgr::Instance()->getMainCamera()->getViewMatrix();
 
     GLuint projectionLocation = glGetUniformLocation(shaderProgramID, "projection");
     GLuint viewLocation = glGetUniformLocation(shaderProgramID, "view");
