@@ -24,8 +24,8 @@ int main(int argc, char** argv) {
 
     static GLuint vertexShader, fragmentShader;
     make_shaderProgram(
-        CCore::Instance()->shaderProgramID, 
-        vertexShader, 
+        CCore::Instance()->shaderProgramID,
+        vertexShader,
         fragmentShader
     );
 

@@ -76,25 +76,38 @@ void KeyMgr::KeyboardUp(unsigned char key, int x, int y) {
 }
 
 void KeyMgr::SpecialDown(int key, int x, int y) {
-    // 기본 키 처리
+    // 화살표 키 처리
     for (int i = 0; i < (int)KEY::LAST; ++i) {
         if (arrVK[i] == key) {
             KeyMgr::Instance()->vecKey[i].prev = true;  // 눌림 상태로 설정
         }
     }
 
-    // Modifier Keys (CTRL, SHIFT, ALT) 확인
+    // Modifier 키 처리 (화살표 키와 독립적으로 동작하도록 수정)
     int modifiers = glutGetModifiers();
     if (modifiers & GLUT_ACTIVE_CTRL) {
-        KeyMgr::Instance()->vecKey[(int)KEY::CTRL].prev = true;  // CTRL 활성화
+        KeyMgr::Instance()->vecKey[(int)KEY::CTRL].prev = true;
     }
+    else {
+        KeyMgr::Instance()->vecKey[(int)KEY::CTRL].prev = false;
+    }
+
     if (modifiers & GLUT_ACTIVE_SHIFT) {
-        KeyMgr::Instance()->vecKey[(int)KEY::SHIFT].prev = true;  // SHIFT 활성화
+        KeyMgr::Instance()->vecKey[(int)KEY::SHIFT].prev = true;
     }
+    else {
+        KeyMgr::Instance()->vecKey[(int)KEY::SHIFT].prev = false;
+    }
+
     if (modifiers & GLUT_ACTIVE_ALT) {
-        KeyMgr::Instance()->vecKey[(int)KEY::ALT].prev = true;  // ALT 활성화
+        KeyMgr::Instance()->vecKey[(int)KEY::ALT].prev = true;
+    }
+    else {
+        KeyMgr::Instance()->vecKey[(int)KEY::ALT].prev = false;
     }
 }
+
+
 
 void KeyMgr::SpecialUp(int key, int x, int y) {
     for (int i = 0; i < (int)KEY::LAST; ++i) {
