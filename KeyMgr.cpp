@@ -1,8 +1,6 @@
 #include "pch.h"
 #include "KeyMgr.h"
 
-
-
 int arrVK[(int)KEY::LAST] = {
     GLUT_KEY_LEFT, GLUT_KEY_RIGHT, GLUT_KEY_UP, GLUT_KEY_DOWN, //방향키
     'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P',
@@ -77,10 +75,6 @@ void KeyMgr::KeyboardUp(unsigned char key, int x, int y) {
     }
 }
 
-
-#include <GL/freeglut.h>
-
-// 특수 키 매핑 (GLUT Modifiers 사용)
 void KeyMgr::SpecialDown(int key, int x, int y) {
     // 기본 키 처리
     for (int i = 0; i < (int)KEY::LAST; ++i) {
