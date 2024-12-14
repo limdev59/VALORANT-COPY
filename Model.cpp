@@ -38,6 +38,7 @@ std::unordered_map<MODEL_TYPE, const std::string> texturePaths = {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 }
+
  GLuint Model::LoadTexture(string filepath) {
 	 GLuint texture;
 	 glGenTextures(1, &texture);
