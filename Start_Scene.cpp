@@ -107,7 +107,6 @@ void Start_Scene::Update() {
 
     if (player->CheckCollision(*obj3)) {
         std::cout << "°´Ã¼ 3°ú ºÎµúÄ§!" << std::endl;
-        
     }
     //¿©±â±îÁö
        
