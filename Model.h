@@ -255,7 +255,6 @@ static vector<Group> ReadObj(const string& filename, const vector<Material>& mat
 		}
 	}
 
-	// 마지막 서브매쉬 추가
 	if (currentGroup != nullptr && !currentSubMesh.vertices.empty()) {
 		currentGroup->AddSubMesh(currentSubMesh);  // 마지막 서브매쉬를 그룹에 추가
 	}
@@ -294,6 +293,17 @@ protected:
 	const Material* FindMaterial(const std::string& name) const;
 public:
 	static std::unordered_map<MODEL_TYPE, const std::pair<vector<Material>, vector<Group>>>& modelPairArr;
+	vector<vec3> getCrashVetex() {
+		vector<vec3> vet{};
+		for (Group g : groups) {
+			for (const auto& v : g.subMeshes) {
+				for (size_t i{}; v.vertices.size(); i+=3) {
+					vet.push_back(v.vertices[i].position);
+				}
+			}
+
+		}
+	}
 	Model(MODEL_TYPE type, GLenum mode);
 	void setScale(const vec3& newScale);
 	void Render(GLuint shaderProgramID);

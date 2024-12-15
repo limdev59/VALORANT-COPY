@@ -4,11 +4,15 @@
 #include "KeyMgr.h"
 #include "TimeMgr.h"
 #include "MouseMgr.h"
+#include "CameraMgr.h"
+#include "CCamera.h"
 
 
 void Player::Update()
 {
     double dt = DT; // DT 값을 가져옵니다.
+    CCamera* cam = CameraMgr::Instance()->getMainCamera();
+    //cam->
     
     if (KeyMgr::Instance()->getKeyState(KEY::W) == KEY_TYPE::HOLD) {
         position.x -= 1.0 * dt;
@@ -41,9 +45,9 @@ void Player::Gravity(bool isGra) {
         velocity.y += gravity * dt;
         position.y += velocity.y * dt;  // y축에 속도를 더함
 
-        if (position.y <= 2.0f) {
+        if (position.y <= 0.0f) {
             
-            position.y = 2.0f;
+            position.y = 0.0f;
         }
 
         if (model) {
@@ -54,6 +58,6 @@ void Player::Gravity(bool isGra) {
     }
 
     else {
-        velocity.y = 2.0f;
+        velocity.y = 0.0f;
     }
 }

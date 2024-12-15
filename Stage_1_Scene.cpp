@@ -21,21 +21,21 @@ void Stage_1_Scene::Enter() {
         Model* map_floor_model = new Model(MODEL_TYPE::ASCENT, GL_TRIANGLES);
         map_floor->setModel(map_floor_model);
         map_floor->setScale(vec3(0.1));
-        map_floor->setPosition(vec3(39.0f, 5.0f, 80.0f));
+        map_floor->setPosition(vec3(0.0f, 0.0f, 0.0f));
 
         CObject* player = new Player();
         Model* player_model = new Model(MODEL_TYPE::JETT, GL_TRIANGLES);
         player->setModel(player_model);
-        player->setPosition(vec3(0.0f, 2.0f, 0.0f));
+        player->setPosition(vec3(0.0f, 0.0f, 0.0f));
         player->setScale(vec3(0.1f));
 
 
         std::vector<glm::vec3> enemyPositions = {
-            glm::vec3(-0.2f, 2.0f, -0.5f),
-            glm::vec3(1.5f, 2.0f, -0.5f),
-            glm::vec3(-0.2f, 2.0f, 1.8f),
-            glm::vec3(1.5f, 2.0f, 0.1f),
-            glm::vec3(1.2f, 2.0f, 1.8f),
+            glm::vec3(-0.2f, 0.0f, -0.5f),
+            glm::vec3(1.5f, 0.0f, -0.5f),
+            glm::vec3(-0.2f, 0.0f, 1.8f),
+            glm::vec3(1.5f, 0.0f, 0.1f),
+            glm::vec3(1.2f, 0.0f, 1.8f),
         };
 
         std::vector<CObject*> enemies; // 적 객체를 관리하는 컨테이너
