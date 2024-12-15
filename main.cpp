@@ -49,7 +49,7 @@ int main(int argc, char** argv) {
 
     
 
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     glFrontFace(GL_CCW);
     glEnable(GL_CULL_FACE);

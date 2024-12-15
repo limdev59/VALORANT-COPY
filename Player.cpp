@@ -4,36 +4,48 @@
 #include "KeyMgr.h"
 #include "TimeMgr.h"
 #include "MouseMgr.h"
+#include "CameraMgr.h"
+#include "CCamera.h"
 
 
 void Player::Update()
 {
     double dt = DT; // DT 값을 가져옵니다.
-    
+    CCamera* cam = CameraMgr::Instance()->getMainCamera();
+    glm::vec3 tar = cam->target;
+    glm::vec3 pos = cam->position;
+
+    glm::vec3 viewVec = tar - pos;
+    viewVec.y = 0.0f; // Y 성분 제거
+    viewVec = glm::normalize(viewVec);
+
+    glm::vec3 rightVec = glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), viewVec);
+    rightVec = glm::normalize(rightVec);
+
+    // 플레이어 이동 처리
     if (KeyMgr::Instance()->getKeyState(KEY::W) == KEY_TYPE::HOLD) {
-        position.x -= 1.0 * dt;
+        position += viewVec * static_cast<float>(dt * 1.0);
     }
     if (KeyMgr::Instance()->getKeyState(KEY::A) == KEY_TYPE::HOLD) {
-        position.z += 1.0 * dt;
+        position += rightVec * static_cast<float>(dt*1.0);
     }
     if (KeyMgr::Instance()->getKeyState(KEY::S) == KEY_TYPE::HOLD) {
-        position.x += 1.0 * dt;
+        position -= viewVec * static_cast<float>(dt*1.0);
     }
     if (KeyMgr::Instance()->getKeyState(KEY::D) == KEY_TYPE::HOLD) {
-        position.z -= 1.0 * dt;
+        position -= rightVec * static_cast<float>(dt * 1.0);
     }
-    if (KeyMgr::Instance()->getKeyState(KEY::Q) == KEY_TYPE::HOLD) {
-        position.y += 3.0 * dt;
-    }
-    if (KeyMgr::Instance()->getKeyState(KEY::E) == KEY_TYPE::HOLD) {
-        position.y -= 1.0 * dt;
-    }
+
+    // 모델 업데이트
     if (model) {
         model->Update(position, rotation, scale);
     }
+
+    // 히트박스 업데이트    
     hitboxCenter = position;
-    hitboxSize *= scale;
+    hitboxSize = scale;
 }
+
 
 void Player::Gravity(bool isGra) {
     double dt = DT;
@@ -41,9 +53,9 @@ void Player::Gravity(bool isGra) {
         velocity.y += gravity * dt;
         position.y += velocity.y * dt;  // y축에 속도를 더함
 
-        if (position.y <= 2.0f) {
+        if (position.y <= 0.0f) {
             
-            position.y = 2.0f;
+            position.y = 0.0f;
         }
 
         if (model) {
@@ -54,6 +66,6 @@ void Player::Gravity(bool isGra) {
     }
 
     else {
-        velocity.y = 2.0f;
+        velocity.y = 0.0f;
     }
 }

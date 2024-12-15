@@ -21,21 +21,21 @@ void Stage_1_Scene::Enter() {
         Model* map_floor_model = new Model(MODEL_TYPE::ASCENT, GL_TRIANGLES);
         map_floor->setModel(map_floor_model);
         map_floor->setScale(vec3(0.1));
-        map_floor->setPosition(vec3(39.0f, 5.0f, 80.0f));
+        map_floor->setPosition(vec3(0.0f, 0.0f, 0.0f));
 
         CObject* player = new Player();
         Model* player_model = new Model(MODEL_TYPE::JETT, GL_TRIANGLES);
         player->setModel(player_model);
-        player->setPosition(vec3(0.0f, 2.0f, 0.0f));
+        player->setPosition(vec3(0.0f, 0.0f, 0.0f));
         player->setScale(vec3(0.1f));
 
 
         std::vector<glm::vec3> enemyPositions = {
-            glm::vec3(-0.2f, 2.0f, -0.5f),
-            glm::vec3(1.5f, 2.0f, -0.5f),
-            glm::vec3(-0.2f, 2.0f, 1.8f),
-            glm::vec3(1.5f, 2.0f, 0.1f),
-            glm::vec3(1.2f, 2.0f, 1.8f),
+            glm::vec3(-0.2f, 0.0f, -0.5f),
+            glm::vec3(1.5f, 0.0f, -0.5f),
+            glm::vec3(-0.2f, 0.0f, 1.8f),
+            glm::vec3(1.5f, 0.0f, 0.1f),
+            glm::vec3(1.2f, 0.0f, 1.8f),
         };
 
         std::vector<CObject*> enemies; // 적 객체를 관리하는 컨테이너
@@ -81,31 +81,6 @@ void Stage_1_Scene::Update() {
         }
     }
 }
-//    // 마우스 클릭 처리
-//    vec3 mousePos = MouseMgr::Instance()->getMouseClick(MOUSE_TYPE::LEFT_CLICK_UP); // 마우스 클릭 위치 가져오기
-//    if (mousePos != vec3(0.0f, 0.0f, 0.0f)) {
-//        // 마우스 클릭 위치에 적이 있는지 확인
-//        for (CObject* enemy : enemies) {
-//            if (enemy && isCollisionWithEnemy(enemy, mousePos)) { // 적과 충돌이 발생하면
-//                Enemy* enemyPtr = dynamic_cast<Enemy*>(enemy);
-//                if (enemyPtr) {
-//                    enemyPtr->TakeDamage(10);  // 데미지 처리 (예: 10)
-//                    cout << "적에게 데미지를 주었습니다!" << endl;
-//                }
-//            }
-//        }
-//    }
-//}
-//
-//bool Stage_1_Scene::isCollisionWithEnemy(CObject* enemy, const vec3& clickPos) {
-//    // 클릭된 위치와 적 객체의 위치가 일정 범위 내에 있으면 충돌로 판단
-//    if (enemy) {
-//        vec3 enemyPos = enemy->getPosition();
-//        float distance = glm::distance(enemyPos, clickPos);
-//        return distance < 0.1f;  // 예: 0.1f 범위 내에 클릭된 위치가 있으면 충돌로 처리
-//    }
-//    return false;
-//}
 
 void Stage_1_Scene::Render()
 {
