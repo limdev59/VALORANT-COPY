@@ -22,6 +22,7 @@ constexpr int	MAXFPS = 100;
 enum class GROUP_TYPE {
 	DEFAULT,
 	PLAYER,
+	ENEMY,
 	//MISSILE,
 	//MONSTER,
 	END,
