@@ -115,16 +115,16 @@ int main(int argc, char** argv) {
         "animFragment.glsl"
     );
     modelPairs = {
-        {MODEL_TYPE::JETT, ReadModel("first")},
+        {MODEL_TYPE::JETT, ReadModel("jettTest")},
         {MODEL_TYPE::ASCENT, ReadModel("ascentB")},
     };
 
     mainModel = new AnimModel();
-    std::string modelPath = "JettTest";
+    std::string modelPath = "first";
     mainModel->LoadModel(modelPath);
     AnimModel* currModel = mainModel;
-    idleAnim = new Animation("Models/first/first.gltf", currModel);
-    runAnim = new Animation("Models/first/firstIdle.gltf", currModel);
+    idleAnim = new Animation("Models/first/firstIdle.gltf", currModel);
+    runAnim = new Animation("Models/first/first.gltf", currModel);
     animator = new Animator(nullptr);
 
 
