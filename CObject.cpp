@@ -32,7 +32,7 @@ void CObject::Update() {
         model->Update(position, rotation, scale);
     }
     hitboxCenter = position;
-    hitboxSize *= scale;
+    hitboxSize = scale;
 }
 void CObject::Render() {
     if (model) {
@@ -41,7 +41,7 @@ void CObject::Render() {
 }
 bool CObject::CheckCollision(const CObject& other) {
     if (colliderType == COLLIDER_TYPE::AABB && other.colliderType == COLLIDER_TYPE::AABB) {
-        // AABB 충돌 검사
+        
         return (abs(hitboxCenter.x - other.hitboxCenter.x) < (hitboxSize.x + other.hitboxSize.x) * 0.5f &&
             abs(hitboxCenter.y - other.hitboxCenter.y) < (hitboxSize.y + other.hitboxSize.y) * 0.5f &&
             abs(hitboxCenter.z - other.hitboxCenter.z) < (hitboxSize.z + other.hitboxSize.z) * 0.5f);
