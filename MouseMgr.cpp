@@ -2,31 +2,38 @@
 #include "MouseMgr.h"
 
 MouseMgr::MouseMgr()
-    : width(0), height(0), cursorPos(vec3(0.0f, 0.0f, 0.0f)) {}
+    : width(0), height(0), cursorPos(vec2(0.0f, 0.0f)) {}  // vec2로 변경
 
 MouseMgr::~MouseMgr() {}
 
-vec3 MouseMgr::getCursorPos(MOUSE_TYPE type) const {
-    if (!arrPos[static_cast<int>(type)].empty()) {
-        return arrPos[static_cast<int>(type)].back().cursorPos;
+vec2 MouseMgr::getCursorPos(MOUSE_TYPE type) const {
+    if (type == MOUSE_TYPE::LAST) {
+        return cursorPos;  // 기본적으로 마지막 좌표 반환
     }
-    return vec3(0.0f, 0.0f, 0.0f); // 기본 값
+    for (const auto& mouseInfo : arrPos[static_cast<int>(type)]) {
+        if (mouseInfo.clicked) {
+            return mouseInfo.cursorPos;  // 클릭된 좌표 반환
+        }
+    }
+    return cursorPos;  // 기본적으로 현재 커서 위치 반환
 }
 
 void MouseMgr::handleMouseEvent(MOUSE_TYPE event, int x, int y) {
     GLint vp[4];
     glGetIntegerv(GL_VIEWPORT, vp);
+
+    // Y 좌표는 화면 좌상단 기준으로 되어 있으므로, 이를 변환
     arrPos[static_cast<int>(event)].emplace_back(MouseInfo {
-        vec3(0.0f, static_cast<float>(vp[3] - y), static_cast<float>(x)),
+        vec3(static_cast<float>(x), static_cast<float>(vp[3] - y), 0.0f),  // vec3로 저장
             true
     });
 }
 
-vec3 MouseMgr::getMouseClick(MOUSE_TYPE event) {
+vec2 MouseMgr::getMouseClick(MOUSE_TYPE event) {
     if (!arrPos[static_cast<int>(event)].empty()) {
         return arrPos[static_cast<int>(event)].back().cursorPos;
     }
-    return vec3(0.0f, 0.0f, 0.0f); // 기본 값
+    return vec2(0.0f, 0.0f); // 기본 값
 }
 
 void MouseMgr::Init(int w, int h) {

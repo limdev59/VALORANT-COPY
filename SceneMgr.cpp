@@ -38,3 +38,8 @@ void SceneMgr::changeScene(SCENE_TYPE newScene) {
         currentScene->Enter();
 }
 
+CScene* SceneMgr::getScene()
+{
+    return currentScene;
+}
+

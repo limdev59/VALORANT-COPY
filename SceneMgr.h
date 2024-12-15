@@ -12,4 +12,5 @@ public:
     void Update();
     void Render();
     void changeScene(SCENE_TYPE newScene);
+    CScene* getScene();
 };

@@ -73,13 +73,6 @@ void Start_Scene::Update() {
         SceneMgr::Instance()->changeScene(SCENE_TYPE::STAGE_1);
     }
 
-    vec3 a = MouseMgr::Instance()->getCursorPos(MOUSE_TYPE::MOVE_HOVER);
-    float z_ndc = (a.z / 1200) * 2.0f - 1.0f;
-    float y_ndc = (a.y / 768) * 2.0f - 1.0f;
-    getObject(GROUP_TYPE::DEFAULT, 0).setPosition(vec3(0.0f, y_ndc * 3, z_ndc * 3));
-    z_ndc = 1.0f - (a.z / 1200) * 2.0f;
-    y_ndc = 1.0f - (a.y / 768) * 2.0f;
-    getObject(GROUP_TYPE::DEFAULT, 1).setPosition(vec3(0.0f, y_ndc * 3, z_ndc * 3));
 
 
     //충돌 확인용 유안이가 함

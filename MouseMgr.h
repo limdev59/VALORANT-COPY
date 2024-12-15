@@ -15,7 +15,7 @@ enum class MOUSE_TYPE {
 };
 
 struct MouseInfo {
-    vec3                cursorPos;
+    vec2                cursorPos;
     bool                clicked = false;
 };
 
@@ -25,7 +25,7 @@ class MouseMgr {
 private:
     int                 width;
     int                 height;
-    vec3                cursorPos;
+    vec2                cursorPos;
     vector<MouseInfo>   arrPos[static_cast<int>(MOUSE_TYPE::LAST)];
 
 public:
@@ -34,6 +34,8 @@ public:
     void setWindowSize(int w, int h);
 
     void handleMouseEvent(MOUSE_TYPE event, int x, int y);
-    vec3 getMouseClick(MOUSE_TYPE event);
-    vec3 getCursorPos(MOUSE_TYPE type) const;
+    vec2 getMouseClick(MOUSE_TYPE event);
+
+    // 마우스 좌표를 구하는 함수
+    vec2 getCursorPos(MOUSE_TYPE type) const;
 };
