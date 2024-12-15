@@ -17,7 +17,7 @@ constexpr GLint	WINDOW_WIDTH = 1200;
 constexpr GLint	WINDOW_HEIGHT = 768;
 constexpr int	MAX_BONE_INFLUENCE = 4;
 constexpr int	MAX_BONE_COUNT = 130;
-constexpr int	MAXFPS = 100;
+constexpr int	MAXFPS = 200;
 
 enum class GROUP_TYPE {
 	DEFAULT,
@@ -49,6 +49,7 @@ enum class MODEL_TYPE {
 	ASCENT,
 	END,
 };
+
 
 enum class ANIM_MODEL_TYPE {
 	JETT,

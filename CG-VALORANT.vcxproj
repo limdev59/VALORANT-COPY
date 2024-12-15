@@ -109,7 +109,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalOptions>glew32.lib freeglut.lib %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>glew32.lib freeglut.lib assimp-vc143-mtd.lib %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <Manifest>
       <AdditionalOptions>glew32.lib freeglut.lib assimp-vc143-mtd.lib %(AdditionalOptions)</AdditionalOptions>
@@ -132,7 +132,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AxisModel.cpp" />
+    <ClCompile Include="Sova.cpp" />
     <ClCompile Include="CCamera.cpp" />
     <ClCompile Include="CameraMgr.cpp" />
     <ClCompile Include="CCore.cpp" />
@@ -162,7 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimModel.h" />
-    <ClInclude Include="AxisModel.h" />
+    <ClInclude Include="Sova.h" />
     <ClInclude Include="CCamera.h" />
     <ClInclude Include="CameraMgr.h" />
     <ClInclude Include="CCore.h" />

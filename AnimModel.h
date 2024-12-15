@@ -1,8 +1,8 @@
 #pragma once
 #include "pch.h"
 #include "assimp/anim.h"
-#include "stb_image.h"
 #include <chrono>
+
 
 class AssimpGLMHelpers
 {
@@ -422,9 +422,7 @@ public:
 
 		Assimp::Importer importer;
 
-		const aiScene* scene = importer.ReadFile("Models/" + fileName + "/" + fileName + ".gltf",
-			aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices |
-			aiProcess_CalcTangentSpace);
+		const aiScene* scene = importer.ReadFile("Models/" + fileName + "/" + fileName + ".gltf",aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices | aiProcess_CalcTangentSpace);
 
 		if (!scene)
 		{
@@ -435,7 +433,8 @@ public:
 		LoadNode(scene->mRootNode, scene);
 		LoadMaterials(scene);
 	}
-	void RenderModel()
+
+	void Render()
 	{
 		std::vector<std::pair<Mesh*, unsigned int>> solidMeshList;
 		std::vector<std::pair<Mesh*, unsigned int>> transparentMeshList;

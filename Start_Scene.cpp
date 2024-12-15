@@ -9,7 +9,7 @@
 
 #include "Player.h"
 #include "Sphere.h"
-#include "AxisModel.h"
+#include "Sova.h"
 
 Start_Scene::Start_Scene() {
 }
@@ -24,7 +24,7 @@ void Start_Scene::Enter() {
         obj->setModel(model);
         obj->setScale(vec3(0.3f)); 
 
-        CObject* obj4 = new AxisModel();
+        CObject* obj4 = new Sova();
         Model* model4 = new Model(MODEL_TYPE::ASCENT, GL_LINES);
         obj4->setPosition(vec3(-40,-5, 80));
         

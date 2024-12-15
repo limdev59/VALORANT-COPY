@@ -1,9 +1,6 @@
 #include "pch.h"
 #include "Model.h"
 
-
-
-
 void Model::InitBuffer(SubMesh& subMesh) {
 	glGenVertexArrays(1, &subMesh.VAO);
 	glGenBuffers(1, &subMesh.VBO);

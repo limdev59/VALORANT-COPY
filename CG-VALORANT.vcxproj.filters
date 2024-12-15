@@ -67,11 +67,11 @@
     <Filter Include="소스 파일\Object\Pearl">
       <UniqueIdentifier>{200b9982-82dd-4081-8eed-a9aa358f41c1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Object\AxisModel">
-      <UniqueIdentifier>{2050e6b0-6dd0-469e-82da-33660bb2aa1d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\stb_image">
       <UniqueIdentifier>{07e254b4-d60f-4a24-bb63-e6b494deb03d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object\Sova">
+      <UniqueIdentifier>{2050e6b0-6dd0-469e-82da-33660bb2aa1d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -114,8 +114,8 @@
     <ClCompile Include="Sphere.cpp">
       <Filter>소스 파일\Object\Sphere</Filter>
     </ClCompile>
-    <ClCompile Include="AxisModel.cpp">
-      <Filter>소스 파일\Object\AxisModel</Filter>
+    <ClCompile Include="Sova.cpp">
+      <Filter>소스 파일\Object\Sova</Filter>
     </ClCompile>
     <ClCompile Include="CameraMgr.cpp">
       <Filter>소스 파일\Manager\Camera</Filter>
@@ -188,8 +188,8 @@
     <ClInclude Include="Sphere.h">
       <Filter>소스 파일\Object\Sphere</Filter>
     </ClInclude>
-    <ClInclude Include="AxisModel.h">
-      <Filter>소스 파일\Object\AxisModel</Filter>
+    <ClInclude Include="Sova.h">
+      <Filter>소스 파일\Object\Sova</Filter>
     </ClInclude>
     <ClInclude Include="CameraMgr.h">
       <Filter>소스 파일\Manager\Camera</Filter>

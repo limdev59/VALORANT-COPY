@@ -26,16 +26,16 @@ void Stage_1_Scene::Enter() {
         CObject* player = new Player();
         Model* player_model = new Model(MODEL_TYPE::JETT, GL_TRIANGLES);
         player->setModel(player_model);
-        player->setPosition(vec3(0.0f, 0.0f, 0.0f));
+        player->setPosition(vec3(0.0f, 0.125f, 0.0f));
         player->setScale(vec3(0.1f));
-
+        
 
         std::vector<glm::vec3> enemyPositions = {
-            glm::vec3(-0.2f, 0.0f, -0.5f),
-            glm::vec3(1.5f, 0.0f, -0.5f),
-            glm::vec3(-0.2f, 0.0f, 1.8f),
-            glm::vec3(1.5f, 0.0f, 0.1f),
-            glm::vec3(1.2f, 0.0f, 1.8f),
+            glm::vec3(-1.6, 0.115f, -5.4f),
+            glm::vec3(1.5f, 0.125f, -0.5f),
+            glm::vec3(-0.2f, 0.125f, 1.8f),
+            glm::vec3(1.5f, 0.125f, 0.1f),
+            glm::vec3(1.2f, 0.125f, 1.8f),
         };
 
         std::vector<CObject*> enemies; // 적 객체를 관리하는 컨테이너
@@ -64,13 +64,13 @@ void Stage_1_Scene::Update() {
     // 기존 업데이트 작업
     CScene::Update();
     CObject& player = getObject(GROUP_TYPE::PLAYER, 0);
-
+    cout << player.getPosition().x << ' ' << player.getPosition().y << ' ' << player.getPosition().z << endl;
     CObject& mapFloor = getObject(GROUP_TYPE::DEFAULT, 0);
 
     Player* playerPtr = dynamic_cast<Player*>(&player);
 
     if (player.CheckCollision(mapFloor)) {
-        cout << "충돌중" << endl;
+        //cout << "충돌중" << endl;
         if (playerPtr) {
             playerPtr->Gravity(false);  // 중력 적용안되니?
         }
