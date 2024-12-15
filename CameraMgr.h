@@ -1,4 +1,5 @@
 #pragma once
+#include "AnimModel.h"
 enum class CAM_IDX {
     START,
     DEBUG,
@@ -14,8 +15,8 @@ private:
 
 public:
     CCamera* getMainCamera();
-
-    void Update();
+    AnimModel* mainModel;
+    void Update(AnimModel* mainModel);
     void Init();
     void switchMainCam(SCENE_TYPE newScene);
 };

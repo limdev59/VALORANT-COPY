@@ -522,12 +522,11 @@ public:
 		glm::mat4 S = glm::scale(glm::mat4(1.f), glm::vec3(scale[0], scale[1], scale[2]));
 		return modelMat = T * R * S;
 	}
-	void UpdateTransform(glm::mat4 newModelMat)
+	void UpdateTransform(vec3 tr, vec3 rt, vec3 sc)
 	{
-		glm::vec3 translation, rotation, scale;
-		SetTranslate(translation);
-		SetRotate(rotation);
-		SetScale(scale);
+		SetTranslate(tr);
+		SetRotate(rt);
+		SetScale(sc);
 	}
 private:
 	void LoadMesh(aiMesh* mesh, const aiScene* scene)

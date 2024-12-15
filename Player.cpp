@@ -38,7 +38,7 @@ void Player::Update()
 
     // 모델 업데이트
     if (model) {
-        model->Update(position, rotation, scale);
+        model->UpdateTransform(position, rotation, scale);
     }
 
     // 히트박스 업데이트    
@@ -46,6 +46,11 @@ void Player::Update()
     hitboxSize = scale;
 }
 
+void Player::Render() {
+    if (model) {
+        model->Render();
+    }
+}
 
 void Player::Gravity(bool isGra) {
     double dt = DT;
@@ -59,7 +64,7 @@ void Player::Gravity(bool isGra) {
         }
 
         if (model) {
-            model->Update(position, rotation, scale);
+            model->UpdateTransform(position, rotation, scale);
         }
         hitboxCenter = position;
         hitboxSize *= scale;
