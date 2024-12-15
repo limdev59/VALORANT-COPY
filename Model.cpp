@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Model.h"
+#include "stb_image.h"
 
 std::unordered_map<MODEL_TYPE, const std::vector<vec3>> Model::modelVertices = {
 	{MODEL_TYPE::CUBE,   ReadObj("cube.obj")},
@@ -15,6 +16,7 @@ std::unordered_map<MODEL_TYPE, const std::string> texturePaths = {
 	{MODEL_TYPE::JETT,   "TP_Wushu_S0_DF.png"},
 	{MODEL_TYPE::PEARL,  "textures/Pearl.png"},
 };
+
 
 
 

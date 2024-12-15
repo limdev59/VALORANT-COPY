@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CCore.h"
 
+
 static GLvoid Render() {
     CCore::Instance()->Render();
 }
@@ -26,7 +27,16 @@ int main(int argc, char** argv) {
     make_shaderProgram(
         CCore::Instance()->shaderProgramID,
         vertexShader,
-        fragmentShader
+        fragmentShader,
+        "vertex.glsl",
+        "fragment.glsl"
+    );
+    make_shaderProgram(
+        CCore::Instance()->shaderProgramID2,
+        vertexShader,
+        fragmentShader,
+        "animVertex.glsl",
+        "animFragment.glsl"
     );
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);

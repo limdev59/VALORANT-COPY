@@ -15,6 +15,8 @@ private:                            \
 
 constexpr GLint	WINDOW_WIDTH = 1200;
 constexpr GLint	WINDOW_HEIGHT = 768;
+constexpr int	MAX_BONE_INFLUENCE = 4;
+constexpr int	MAX_BONE_COUNT = 130;
 constexpr int	MAXFPS = 100;
 
 enum class GROUP_TYPE {
@@ -133,9 +135,9 @@ static string fileToBuf(string filename)
 
 	return str;
 };
-static void make_vertexShaders(GLuint& vertexShader)
+static void make_vertexShaders(GLuint& vertexShader, const string& vertexName)
 {
-	std::string vertexSourceStr = fileToBuf("vertex.glsl");
+	std::string vertexSourceStr = fileToBuf(vertexName.c_str());
 	const char* vertexSource = vertexSourceStr.c_str();
 
 	vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -150,9 +152,9 @@ static void make_vertexShaders(GLuint& vertexShader)
 		return;
 	}
 }
-static void make_fragmentShaders(GLuint& fragmentShader)
+static void make_fragmentShaders(GLuint& fragmentShader, const string& fragmentName)
 {
-	string fragmentSourceStr = fileToBuf("fragment.glsl");
+	string fragmentSourceStr = fileToBuf(fragmentName);
 	const char* fragmentSource = fragmentSourceStr.c_str();
 	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fragmentShader, 1, &fragmentSource, NULL);
@@ -166,10 +168,10 @@ static void make_fragmentShaders(GLuint& fragmentShader)
 		return;
 	}
 }
-static void make_shaderProgram(GLuint& shaderProgramID, GLuint& vertexShader, GLuint& fragmentShader)
+static void make_shaderProgram(GLuint& shaderProgramID, GLuint& vertexShader, GLuint& fragmentShader , const string& vertexName, const string& fragmentName)
 {
-	make_vertexShaders(vertexShader);
-	make_fragmentShaders(fragmentShader);
+	make_vertexShaders(vertexShader, vertexName);
+	make_fragmentShaders(fragmentShader, fragmentName);
 
 	shaderProgramID = glCreateProgram();
 	glAttachShader(shaderProgramID, vertexShader);

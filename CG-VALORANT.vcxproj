@@ -111,6 +111,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalOptions>glew32.lib freeglut.lib %(AdditionalOptions)</AdditionalOptions>
     </Link>
+    <Manifest>
+      <AdditionalOptions>glew32.lib freeglut.lib assimp-vc143-mtd.lib %(AdditionalOptions)</AdditionalOptions>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -147,14 +150,16 @@
     <ClCompile Include="Stage_1_Scene.cpp" />
     <ClCompile Include="Start_Camera.cpp" />
     <ClCompile Include="Start_Scene.cpp" />
-    <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="TimeMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="animFragment.glsl" />
+    <None Include="animVertex.glsl" />
     <None Include="fragment.glsl" />
     <None Include="vertex.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AnimModel.h" />
     <ClInclude Include="AxisModel.h" />
     <ClInclude Include="CCamera.h" />
     <ClInclude Include="CameraMgr.h" />
