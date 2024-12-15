@@ -42,6 +42,7 @@ const Material* Model::FindMaterial(const std::string& name) const {
 Model::Model(MODEL_TYPE type, GLenum mode)
 	: renderMode(mode), transform(mat4(1.0f)) {
 	materials = modelPairArr[type].first;
+	cout << modelPairArr[type].second.size()<<endl;
 	groups = modelPairArr[type].second;
 	for (auto& material : materials) {
 		Group group(material.strName);

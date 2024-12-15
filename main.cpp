@@ -23,8 +23,6 @@ int main(int argc, char** argv) {
     glewExperimental = GL_TRUE;
     glewInit();
 
-    CCore::Instance()->Init();
-
     static GLuint vertexShader, fragmentShader;
     make_shaderProgram(
         CCore::Instance()->shaderProgramID,
@@ -33,14 +31,14 @@ int main(int argc, char** argv) {
         "vertex.glsl",
         "fragment.glsl"
     );
+    static GLuint vertexShader2, fragmentShader2;
     make_shaderProgram(
         CCore::Instance()->shaderProgramID2,
-        vertexShader,
-        fragmentShader,
+        vertexShader2,
+        fragmentShader2,
         "animVertex.glsl",
         "animFragment.glsl"
     );
-
     modelPairs = {
         {MODEL_TYPE::CUBE, ReadModel("cube")},
         {MODEL_TYPE::JETT, ReadModel("jettTest")},
@@ -49,6 +47,11 @@ int main(int argc, char** argv) {
         {MODEL_TYPE::PEARL, ReadModel("Pearl")},
         {MODEL_TYPE::ASCENT, ReadModel("ascentB")},
     };
+    CCore::Instance()->Init();
+
+    
+
+    
 
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 

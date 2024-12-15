@@ -23,7 +23,7 @@ void Player::Update()
         position.z -= 1.0 * dt;
     }
     if (KeyMgr::Instance()->getKeyState(KEY::Q) == KEY_TYPE::HOLD) {
-        position.y += 2.0 * dt;
+        position.y += 3.0 * dt;
     }
     if (KeyMgr::Instance()->getKeyState(KEY::E) == KEY_TYPE::HOLD) {
         position.y -= 1.0 * dt;
@@ -41,13 +41,19 @@ void Player::Gravity(bool isGra) {
         velocity.y += gravity * dt;
         position.y += velocity.y * dt;  // y축에 속도를 더함
 
+        if (position.y <= 2.0f) {
+            
+            position.y = 2.0f;
+        }
+
         if (model) {
             model->Update(position, rotation, scale);
         }
         hitboxCenter = position;
         hitboxSize *= scale;
     }
+
     else {
-        velocity.y = 0.0f;
+        velocity.y = 2.0f;
     }
 }
