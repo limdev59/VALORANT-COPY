@@ -7,20 +7,22 @@
 #include "CObject.h"
 #include "MouseMgr.h"
 
+float Lerp(float a, float b, float t) {
+    return a + (b - a) * t;
+}
+
 void Start_Camera::Update() {
-    // 마우스 정보 업데이트
-    MouseMgr::Instance()->Update();
+    auto mousePos = MouseMgr::Instance()->getCursorPos();
 
-    // 최신 마우스 좌표 가져오기
-    auto mousePos = MouseMgr::Instance()->getCursorPos(MOUSE_TYPE::MOVE_HOVER);
-
-    // 마우스 좌표가 잘 바뀌는지 로그로 확인
     std::cout << "Mouse Position: " << mousePos.x << ", " << mousePos.y << std::endl;
 
     constexpr float screenWidth = 1200.0f;
     constexpr float screenHeight = 768.0f;
 
-    // 현재 씬과 플레이어 객체 가져오기
+    constexpr float sensitivityX = 0.007f; // X축 감도
+    constexpr float sensitivityY = 0.007f; // Y축 감도
+    constexpr float lerpFactor = 0.1f; // LERP 비율 (0.0~1.0, 클수록 빠르게 움직임)
+
     CScene* cur = SceneMgr::Instance()->getScene();
     CObject& pl = cur->getObject(GROUP_TYPE::PLAYER, 0);
 
@@ -30,6 +32,26 @@ void Start_Camera::Update() {
     vec3 plPos = pl.getPosition();
     cam->position = plPos;
 
-    // 마우스 위치를 기준으로 카메라 타겟 설정
-    cam->target = vec3(plPos.x + sinf(mousePos.x), plPos.y, plPos.z + cosf(mousePos.y));
+    float deltaX = (mousePos.x - screenWidth / 2) * sensitivityX;
+    float deltaY = (mousePos.y - screenHeight / 2) * sensitivityY;
+
+    static float sumx{};
+    static float sumy{};
+
+    sumx -= deltaX;
+    sumy += deltaY;
+
+    // 목표 타겟 계산
+    vec3 target(
+        plPos.x + sinf(sumx),
+        plPos.y + sumy, // Y축 조절
+        plPos.z + cosf(sumx)
+    );
+
+    // LERP로 부드럽게 이동
+    cam->target.x = Lerp(cam->target.x, target.x, lerpFactor);
+    cam->target.y = Lerp(cam->target.y, tanf(target.y), lerpFactor);
+    cam->target.z = Lerp(cam->target.z, target.z, lerpFactor);
+
+    MouseMgr::Instance()->setCursorPos(screenWidth / 2, screenHeight / 2);
 }

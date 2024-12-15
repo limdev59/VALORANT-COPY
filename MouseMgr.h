@@ -1,41 +1,36 @@
 #pragma once
-
-enum class MOUSE_TYPE {
-    MOVE_HOVER = 0,
-    MOVE_HOLD = 1,
-    LEFT_CLICK_DOWN = 2,
-    LEFT_CLICK_UP = 3,
-    RIGHT_CLICK_DOWN = 4,
-    RIGHT_CLICK_UP = 5,
-    THUMB_BUTTON_1_DOWN = 6,
-    THUMB_BUTTON_1_UP = 7,
-    THUMB_BUTTON_2_DOWN = 8,
-    THUMB_BUTTON_2_UP = 9,
-    LAST = 10,
-};
-
-struct MouseInfo {
-    vec2                cursorPos;
-    bool                clicked = false;
-};
-
 class MouseMgr {
-    SINGLE(MouseMgr)
-
-private:
-    int                 width;
-    int                 height;
-    vec2                cursorPos;
-    vector<MouseInfo>   arrPos[static_cast<int>(MOUSE_TYPE::LAST)];
-
 public:
-    void Init(int w, int h);
-    void Update();
+    static MouseMgr* Instance() {
+        static MouseMgr instance;
+        return &instance;
+    }
+
+    // 마우스 상태 반환 함수
+    vec2 getCursorPos() const;                // 현재 마우스 위치 반환
+    void setCursorPos(float x, float y);
+
+    bool getLeftClickState() const;           // 왼쪽 버튼 클릭 상태 반환
+    bool getRightClickState() const;          // 오른쪽 버튼 클릭 상태 반환
+
+    // 초기화 및 업데이트
+    void Init(int w, int h);                  // 창 크기 초기화 및 이벤트 등록
+    void Update();                            // 주기적 업데이트 (현재는 비어 있음)
+
+    // 창 크기 설정
     void setWindowSize(int w, int h);
 
-    void handleMouseEvent(MOUSE_TYPE event, int x, int y);
-    vec2 getMouseClick(MOUSE_TYPE event);
+private:
+    MouseMgr();                               // 생성자
+    ~MouseMgr();                              // 소멸자
 
-    // 마우스 좌표를 구하는 함수
-    vec2 getCursorPos(MOUSE_TYPE type) const;
+    // GLUT 이벤트 핸들러
+    void handleMouseClick(int button, int state, int x, int y);
+    void handleMouseMove(int x, int y);
+
+    // 멤버 변수
+    int width, height;                        // 창 크기
+    vec2 cursorPos;                           // 현재 마우스 위치
+    bool isLeftClick;                         // 왼쪽 버튼 클릭 상태
+    bool isRightClick;                        // 오른쪽 버튼 클릭 상태
 };

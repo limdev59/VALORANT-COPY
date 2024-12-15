@@ -1,19 +1,19 @@
 #version 330 core
+layout (location = 0) in vec3 aPos;
+layout (location = 1) in vec3 aNormal;
+layout (location = 2) in vec2 aTexCoord;
 
-layout (location=0) in vec3 vPos;     // 위치
-layout(location = 1) in vec3 vColor;   // 색상
-layout(location = 2) in vec2 vTexCoord; // 텍스처 좌표 추가
-
-out vec3 fragColor;  // 색상
-out vec2 fragTexCoord; // 텍스처 좌표
+out vec3 FragPos;
+out vec3 Normal;
+out vec2 TexCoords;
 
 uniform mat4 modelTransform;
-uniform mat4 view;
-uniform mat4 projection;
+uniform mat4 viewTransform;
+uniform mat4 projectionTransform;
 
-void main()
-{
-    gl_Position = projection * view * modelTransform * vec4(vPos, 1.0);
-    fragColor = vColor;
-    fragTexCoord = vTexCoord;  // 텍스처 좌표 전달
+void main() {
+    gl_Position = projectionTransform * viewTransform * modelTransform * vec4(aPos, 1.0);
+    FragPos = vec3(modelTransform * vec4(aPos, 1.0)); // 월드 좌표로 변환
+    Normal = mat3(transpose(inverse(modelTransform))) * aNormal; // 법선 변환
+    TexCoords = aTexCoord; // 텍스처 좌표 전달
 }

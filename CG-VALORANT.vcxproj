@@ -151,6 +151,7 @@
     <ClCompile Include="Stage_1_Scene.cpp" />
     <ClCompile Include="Start_Camera.cpp" />
     <ClCompile Include="Start_Scene.cpp" />
+    <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="TimeMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
