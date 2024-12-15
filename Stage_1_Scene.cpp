@@ -31,11 +31,11 @@ void Stage_1_Scene::Enter() {
         
 
         std::vector<glm::vec3> enemyPositions = {
-            glm::vec3(-1.6, 0.115f, -5.4f),
-            glm::vec3(1.5f, 0.125f, -0.5f),
-            glm::vec3(-0.2f, 0.125f, 1.8f),
-            glm::vec3(1.5f, 0.125f, 0.1f),
-            glm::vec3(1.2f, 0.125f, 1.8f),
+            glm::vec3(-1.49554f, 0.125f,-5.42878),
+            glm::vec3(-3.76336f, 0.125f, -6.6219f),  //백사위
+            glm::vec3(-0.518212f, 0.125f, -6.9495f), 
+            glm::vec3(-1.4714f, 0.125f, -9.09569), //ct
+            glm::vec3(-4.81171f, -0.1f, -8.39536f),  //백사오른
         };
 
         std::vector<CObject*> enemies; // 적 객체를 관리하는 컨테이너
