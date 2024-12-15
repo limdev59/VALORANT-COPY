@@ -14,8 +14,8 @@ float Lerp(float a, float b, float t) {
 void Start_Camera::Update() {
     auto mousePos = MouseMgr::Instance()->getCursorPos();
 
-    constexpr float screenWidth = 1200.0f;
-    constexpr float screenHeight = 768.0f;
+    constexpr float screenWidth = 1920;
+    constexpr float screenHeight = 1080;
 
     constexpr float sensitivityX = 0.007f; // X축 감도
     constexpr float sensitivityY = 0.007f; // Y축 감도

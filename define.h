@@ -13,8 +13,8 @@ private:                            \
 #define fDT TimeMgr::Instance()->GetfDT()
 #define DT TimeMgr::Instance()->GetDT()
 
-constexpr GLint	WINDOW_WIDTH = 1200;
-constexpr GLint	WINDOW_HEIGHT = 768;
+constexpr GLint	WINDOW_WIDTH = 1920;
+constexpr GLint	WINDOW_HEIGHT = 1080;
 constexpr int	MAX_BONE_INFLUENCE = 4;
 constexpr int	MAX_BONE_COUNT = 130;
 constexpr int	MAXFPS = 200;

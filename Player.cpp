@@ -15,6 +15,7 @@ void Player::Update()
     glm::vec3 tar = cam->target;
     glm::vec3 pos = cam->position;
 
+
     glm::vec3 viewVec = tar - pos;
     viewVec.y = 0.0f; // Y 성분 제거
     viewVec = glm::normalize(viewVec);
@@ -35,11 +36,7 @@ void Player::Update()
     if (KeyMgr::Instance()->getKeyState(KEY::D) == KEY_TYPE::HOLD) {
         position -= rightVec * static_cast<float>(dt * 1.0);
     }
-
-    // 모델 업데이트
-    if (model) {
-        model->UpdateTransform(position, rotation, scale);
-    }
+  
 
     // 히트박스 업데이트    
     hitboxCenter = position;
@@ -58,14 +55,17 @@ void Player::Gravity(bool isGra) {
         velocity.y += gravity * dt;
         position.y += velocity.y * dt;  // y축에 속도를 더함
 
-        if (position.y <= 0.0f) {
-            
-            position.y = 0.0f;
-        }
+        if (position.x < -2.31563 && position.z < -6.84576) {
+            if (position.y <= -0.5f) {
+                position.y = -0.5f;
+            }
 
-        if (model) {
-            model->UpdateTransform(position, rotation, scale);
         }
+        else if (position.y <= -0.25f) {
+            
+            position.y = -0.25f;
+        }
+        
         hitboxCenter = position;
         hitboxSize *= scale;
     }

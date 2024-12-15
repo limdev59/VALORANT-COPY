@@ -6,6 +6,10 @@
 #include "KeyMgr.h"
 #include "CameraMgr.h"
 #include "CCamera.h"
+#include "SceneMgr.h"
+#include "CObject.h"
+#include "CScene.h"
+#include "MouseMgr.h"
 
 
 
@@ -67,23 +71,36 @@ static GLvoid Reshape(int w, int h) {
     CCore::Instance()->Reshape(w, h);
 }
 static GLvoid Update() {
-    CCore::Instance()->Update(mainModel);
+    CCore::Instance()->Update();
     TimeMgr::Instance()->Update();
-    if (KeyMgr::Instance()->getKeyState(KEY::SPACE) == KEY_TYPE::HOLD) {
-        for (size_t i{}; i < 3; ++i) {
+    if (KeyMgr::Instance()->getKeyState(KEY::Q) == KEY_TYPE::HOLD) {
             if (animator->GetCurrAnimation() != idleAnim)
                 animator->PlayAnimation(idleAnim);
-        }
     }
     else {
-        for (size_t i{}; i < 3; ++i) {
             if (animator->GetCurrAnimation() != runAnim)
                 animator->PlayAnimation(runAnim);
-        }
     }
-    for (size_t i{}; i < 3; ++i) {
         animator->UpdateAnimation(DT);
-    }
+        if (mainModel) {
+            // 카메라의 현재 위치와 타겟
+            glm::vec3 cameraPosition = CameraMgr::Instance()->getMainCamera()->position;
+            glm::vec3 cameraTarget = CameraMgr::Instance()->getMainCamera()->target;
+
+            // 모델이 카메라를 바라보도록 방향 벡터 계산
+            glm::vec3 directionToTarget = glm::normalize(cameraTarget - cameraPosition);
+
+            // Yaw 계산 (XZ 평면에서의 방향)
+            float yaw = atan2(directionToTarget.z, directionToTarget.x); // 라디안 단위
+
+            // 모델 위치를 카메라 위치에서 약간 아래로 설정
+            glm::vec3 adjustedPosition = cameraPosition - glm::vec3(0.0f, 0.2f, 0.0f);
+            mainModel->SetTranslate(adjustedPosition);
+            
+        }
+
+        
+
 }
 std::unordered_map<MODEL_TYPE, const std::pair<vector<Material>, vector<Group>>> modelPairs;
 std::unordered_map<MODEL_TYPE, const std::pair<vector<Material>, vector<Group>>>&  Model::modelPairArr = modelPairs;
@@ -91,7 +108,7 @@ std::unordered_map<MODEL_TYPE, const std::pair<vector<Material>, vector<Group>>>
 int main(int argc, char** argv) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-    glutInitWindowPosition(300, 100);
+    glutInitWindowPosition(0, 0);
     glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
     glutCreateWindow("OpenGL Application");
     glewExperimental = GL_TRUE;

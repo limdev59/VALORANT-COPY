@@ -9,7 +9,7 @@ public:
     GLint   width, height;
     
     GLvoid  Reshape(int w, int h);
-    GLvoid  Update(AnimModel* mainModel);
+    GLvoid  Update();
     GLvoid  Render();
     GLvoid  Init();
 };
