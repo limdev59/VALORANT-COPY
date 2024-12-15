@@ -1,0 +1,2232 @@
+newmtl Windows_1_75w75h_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Windows_1_M0_75w75h_DF.tga
+map_Bump Windows_1_M0_75w75h_NM.png
+
+newmtl Spice_0_M0_Container_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Spice_0_M0_ContainerB_DF.tga
+map_Bump Spice_0_M0_Container_NM.png
+
+newmtl Wood_M4_FlatMild_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Wood_M4_FlatMild_DF.tga
+map_Bump Wood_M4_FlatMild_NM.png
+
+newmtl Awning_1_M0_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Awning_1_M0_BlueStripes_DF.png
+map_Bump Awning_1_M0_NM.png
+
+newmtl TrashGround_0_M0_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd TrashGround_0_M0_DF.tga
+map_Bump TrashGround_0_M0_NM.png
+
+newmtl Rainpipe_0_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Rainpipe_0_M0_DF.tga
+map_Bump Rainpipe_0_M0_NM.png
+
+newmtl red_brick_x_lighter_plaster
+Ns 180.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.265646 0.255644 0.236234
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd StoneBrickWall_M1_BasicBrickOld_DF.png
+map_Bump StoneBrickWall_M1_BasicBrickRed_NM.png
+
+newmtl market_cloth
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.203334 0.172753 0.174400
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd ABuilding_0_M0_Tile_DF.png
+map_Bump ABuilding_0_M0_Tile_NM.png
+
+newmtl CameraSecurity_0_M0_A_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd CameraSecurity_0_M0_A_DF.tga
+map_Bump CameraSecurity_0_M0_A_NM.png
+
+newmtl WallSupport_0_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd WallSupport_0_M0_DF.tga
+map_Bump WallSupport_0_M0_NM.png
+
+newmtl red_brick_x_orange_plaster
+Ns 180.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.265646 0.255644 0.236234
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd StoneBrickWall_M1_BasicBrickOld_DF.png
+map_Bump StoneBrickWall_M1_BasicBrickRed_NM.png
+
+newmtl Wood_M3_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Wood_M3_DF.tga
+map_Bump Wood_M3_NM.png
+
+newmtl BMainArchway_0_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd BMainArchway_0_M0_DF.tga
+map_Bump BMainArchway_0_M0_NM.png
+
+newmtl CrateTop_0_M0_FilledOranges_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd CrateTop_0_M0_FilledOranges_DF.tga
+map_Bump CrateTop_0_M0_FilledOranges_NM.png
+
+newmtl Plushie_0_M0_TacticalBear_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Plushie_0_M0_TacticalBear_DF.tga
+map_Bump Plushie_0_M0_TacticalBear_NM.png
+
+newmtl Papers_0_M0_AntiKingdom_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.265646 0.255644 0.236234
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Papers_0_M0_AntiKingdom_DF.tga
+map_Bump Papers_0_M0_AntiKingdom_NM.png
+
+newmtl Wood_M3_Slats_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Wood_M3_Slats_DF.tga
+map_Bump Wood_M3_Slats_NM.png
+
+newmtl Papers_0_M0_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Papers_1_M0_DF.tga
+
+newmtl Cart_0_M0_Covered_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Cart_0_M0_Covered_DF.tga
+map_Bump Cart_0_M0_Covered_NM.png
+
+newmtl Wires_0_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Wires_0_M0_DF.tga
+map_Bump Wires_0_M0_NM.png
+
+newmtl Bell_0_M0_BombsiteB_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Bell_0_M0_BombsiteB_DF.tga
+map_Bump Bell_0_M0_BombsiteB_NM.png
+
+newmtl Stone_M2_MI.mat
+Ns 180.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Stone_M2_DF.tga
+map_Bump Stone_M2_NM.png
+
+newmtl ABuilding_0_M0_TrimKitA_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd ABuilding_0_M0_TrimKitA_DF.tga
+map_Bump ABuilding_0_M0_TrimKitA_NM.png
+
+newmtl Windows_1_Open100w175_MI.mat.002
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Windows_1_M0_Open100w175h_DF.tga
+map_Bump Windows_1_M0_Open100w175h_NM.tga
+
+newmtl Metal_M1_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Metal_M1_DF.tga
+map_Bump Metal_M1_NM.png
+
+newmtl SewerGrate_2_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd SewerGrate_2_M0_DF.tga
+map_Bump SewerGrate_2_M0_NM.png
+
+newmtl Stone_M2_StepsGrey_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Stone_M2_Steps_DF.tga
+map_Bump Stone_M2_Steps_NM.png
+
+newmtl Wood_M3_Dark_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Wood_M3_DF.tga
+map_Bump Wood_M3_NM.png
+
+newmtl FTDoor_0_M0_A_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd FTDoor_0_M0_A_DF.tga
+map_Bump FTDoor_0_M0_A_NM.png
+
+newmtl Concrete_M0_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd GreySwatch.png
+
+newmtl ACUnit_0_M0_A_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd ACUnit_0_M0_A_DF.tga
+map_Bump ACUnit_0_M0_A_NM.png
+
+newmtl Brick_M5_BrokenOrder_MI.mat.002
+Ns 180.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.325079 0.328988 0.321225
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Stone_M0_Old_Floor_DF.png
+map_Bump Stone_M0_Old_Floor_NM.png
+
+newmtl Moped_0_M0_A_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Moped_0_M0_A_DF.tga
+map_Bump Moped_0_M0_A_NM.png
+
+newmtl ColorPalette_M0_BPrimary_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.265646 0.255644 0.236234
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+
+newmtl WindowFrameKit_0_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd WindowFrameKit_0_M0_DF.tga
+map_Bump WindowFrameKit_0_M0_NM.png
+
+newmtl Wires_0_M0_Box_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Wires_0_M0_Box_DF.tga
+map_Bump Wires_0_M0_Box_NM.png
+
+newmtl ModernTech_6_M0_VentSystem_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd ModernTech_6_M0_VentSystem_DF.tga
+map_Bump ModernTech_6_M0_VentSystem_NM.png
+
+newmtl AScaffold_4_M0_ClothWrapC_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd AScaffold_4_M0_ClothWrapC_DF.tga
+map_Bump AScaffold_4_M0_ClothWrapC_NM.png
+
+newmtl worn_plaster
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.225870 0.209099 0.196933
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Plaster_M0_OldWorn_DF.tga
+map_Bump Plaster_M0_OldWorn_NM.tga
+
+newmtl Cloth_0_M0_HangingA_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd AScaffold_4_M0_ClothWrapB_DF.tga
+map_Bump AScaffold_4_M0_ClothWrapB_NM.png
+
+newmtl WallElectricBox_0.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd WallElectricBox_0_M0_DF.tga
+map_Bump WallElectricBox_0_M0_NM.png
+
+newmtl WindowFrameKit_0_M4_RoundFancy_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd WindowFrameKit_0_M4_RoundFancy_DF.tga
+map_Bump WindowFrameKit_0_M4_RoundFancy_NM.png
+
+newmtl Floater_1_M0_EdgeDestructionDecal_MI.mat.002
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.198491 0.190694 0.183524
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Floater_1_M0_EdgeDestructionDecal_DF.tga
+map_Bump Floater_1_M0_EdgeDestructionDecal_NM.png
+
+newmtl Wood_M2_SlattedWood_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Wood_M2_SlattedWood_DF.tga
+map_Bump Wood_M2_SlattedWood_NM.png
+
+newmtl ModernTech_3_M2_ElectricalBoxKitC_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd ModernTech_3_M2_ElectricalBoxKitC_DF.tga
+map_Bump ModernTech_3_M2_ElectricalBoxKitC_NM.png
+
+newmtl ModernTech_10_M5_PanelRectangleMedium_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.265646 0.255644 0.236234
+Ks 1.000000 1.000000 1.000000
+Ke 1.000000 0.839681 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd ModernTech_10_M5_PanelRectangleMedium_DF.tga
+map_Bump ModernTech_10_M5_PanelRectangleMedium_NM.png
+
+newmtl Crate_3_M0_MilkCrate_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Crate_3_M0_MilkCrate_DF.tga
+map_Bump Crate_3_M0_MilkCrate_NM.png
+
+newmtl WorldGridMaterial.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.204790 0.194055 0.186229
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+
+newmtl WorldGridMaterial.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.204790 0.194055 0.186229
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Kingdom_0_M0_Metal_DF.png
+map_Bump Kingdom_0_M0_Metal_NM.png
+
+newmtl Terracotta_M0_RoofTileGrey_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.209837 0.172993 0.173159
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Terracotta_M0_RoofTileTint_DF.tga
+map_Bump Terracotta_M0_RoofTile_NM.tga
+
+newmtl Wires_0_Ofset_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Wires_0_M0_Ofset_DF.tga
+map_Bump Wires_0_M0_Ofset_NM.png
+
+newmtl Mud_M3_MudAlphaBlend_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Mud_M0_A_DF.tga
+
+newmtl Wood_M2_Broken_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Wood_M2_Broken_DF.tga
+map_Bump Wood_M2_Broken_NM.png
+
+newmtl SewerGrate_1_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd SewerGrate_1_M0_DF.tga
+map_Bump SewerGrate_1_M0_NM.png
+
+newmtl ColorPalette_M0_BonsaiBaseLGreen_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.226981 0.267125 0.238665
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Plaster_M0_FlatWall_DF.tga
+
+newmtl Puddle_2_M0_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.265646 0.255644 0.236234
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Puddle_0_M0_DF.tga
+map_Bump Puddle_0_M0_NM.png
+
+newmtl Statue_0_M0_Lion_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Statue_0_M0_Lion_DF.tga
+map_Bump Statue_0_M0_Lion_NM.png
+
+newmtl Metal_M0_SlatedDoor_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Metal_M0_SlatedDoor_DF.tga
+map_Bump Metal_M0_SlatedDoor_NM.png
+
+newmtl TechElement_22_M0_FansA_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd TechElement_22_M0_FansA_DF.tga
+map_Bump TechElement_22_M0_FansA_NM.png
+
+newmtl Windows_1_75w125h_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Windows_1_M0_75w125h_DF.tga
+map_Bump Windows_1_M0_75w125h_NM.png
+
+newmtl ModernTech_3_M0_ElectricalBoxKitA_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.173660 0.174016 0.174754
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd ModernTech_3_M0_ElectricalBoxKitA_DF.tga
+map_Bump ModernTech_3_M0_ElectricalBoxKitA_NM.png
+
+newmtl Door_0_M0_Panel_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.375407 0.281006 0.223703
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Door_0_M0_Panel_DF.tga
+map_Bump Door_0_M0_Panel_NM.png
+
+newmtl Crate_0_Wood_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Crate_0_M0_Wood_DF.tga
+map_Bump Crate_0_M0_Wood_NM.png
+
+newmtl Rug_0_M0_FloorRectangleB_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Rug_0_M0_FloorRectangleB_DF.tga
+map_Bump Rug_0_M0_FloorRectangleB_NM.png
+
+newmtl Decal_0_M2_FruitMural_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.265646 0.255644 0.236234
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Decal_0_M2_FruitMural_DF.tga
+
+newmtl BMain_M0_StoreSign_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Decal_0_M2_ProduceMarketSign_DF.png
+map_Bump Decal_0_M2_ProduceMarketSign_NM.png
+
+newmtl TrashBag_0_M0_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd TrashBag_0_M0_DF.tga
+map_Bump TrashBag_0_M0_NM.png
+
+newmtl Metal_M0_SlatedDoorIndoor_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Metal_M0_SlatedDoor_DF.tga
+map_Bump Metal_M0_SlatedDoor_NM.png
+
+newmtl Vino_1_M0_WineBarrel_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Vino_1_M0_WineBarrel_DF.tga
+map_Bump Vino_1_M0_WineBarrel_NM.png
+
+newmtl Wood_M2_SlattedWood_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Wood_M2_SlattedWood_DF.tga
+map_Bump Wood_M2_SlattedWood_NM.png
+
+newmtl SewerGrate_2_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd SewerGrate_2_M0_DF.tga
+map_Bump SewerGrate_2_M0_NM.png
+
+newmtl Plaster_M0_ASiteWallPeeling_MI.mat.002
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.370907 0.386906 0.418490
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Bump Plaster_M2_FlatBasicMat_NM.png
+
+newmtl Papers_0_M0_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.265646 0.255644 0.236234
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Papers_0_M0_DF.tga
+map_Bump Papers_0_M0_AntiKingdom_NM.png
+
+newmtl worn_plaster_orange
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.242402 0.207054 0.178963
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Plaster_M0_OldWorn_DF.tga
+map_Bump Plaster_M0_OldWorn_NM.tga
+
+newmtl StoneBrickWall_M4_CanalVenice_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd StoneBrickWall_M4_CanalVenice_DF.tga
+map_Bump StoneBrickWall_M4_CanalVenice_NM.png
+
+newmtl TrashGround_0_M0_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd TrashGround_0_M0_DF.tga
+map_Bump TrashGround_0_M0_NM.png
+
+newmtl CanalPole_0_M1_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd CanalPole_0_M1_DF.tga
+map_Bump CanalPole_0_M1_NM.png
+
+newmtl Trim_2_M0_WallA_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.411649 0.426700 0.356568
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Trim_2_M0_WallA_DF.tga
+map_Bump Trim_2_M0_WallA_NM.png
+
+newmtl Metal_M0_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Metal_M0_DF.tga
+map_Bump Metal_M0_NM.png
+
+newmtl Wires_0_M0_Box_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Wires_0_M0_Box_DF.tga
+map_Bump Wires_0_M0_Box_NM.png
+
+newmtl Wood_M2_SlattedWood_MI.mat.002
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Wood_M2_SlattedWood_DF.tga
+map_Bump Wood_M2_SlattedWood_NM.png
+
+newmtl Awning_1_M0_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Awning_1_M0_DF.tga
+map_Bump Awning_1_M0_NM.png
+
+newmtl GondolaBlueprint_0_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd GondolaBlueprint_0_M0_DF.tga
+
+newmtl Windows_1_75wx75wd_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Windows_1_M0_75wx75wd_DF.tga
+map_Bump Windows_1_M0_75wx75wd_NM.png
+
+newmtl WallSconce_0_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd WallSconce_0_M0_DF.tga
+map_Bump WallSconce_0_M0_NM.png
+
+newmtl CanalPole_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd CanalPole_0_M0_DF.tga
+map_Bump CanalPole_0_M0_NM.png
+
+newmtl Bucket_0_Metal_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Bucket_0_M0_Metal_DF.tga
+map_Bump Bucket_0_M0_Metal_NM.png
+
+newmtl worn_plaster.002
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.223703 0.205306 0.201938
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Plaster_M0_OldWorn_DF.tga
+map_Bump Plaster_M0_OldWorn_NM.tga
+
+newmtl Metal_M5_KingdomMetalTrim_Light_Int_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Metal_M5_KingdomMetalTrim_DF.tga
+map_Bump Metal_M5_KingdomMetalTrim_NM.png
+
+newmtl DefArch_2_M0_Door_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd DefArch_2_M0_Door_DF.tga
+map_Bump DefArch_2_M0_Door_NM.png
+
+newmtl Boat_1_M0_BoxSternedRowboat_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Boat_1_M0_BoxSternedRowboat_DF.tga
+map_Bump Boat_1_M0_BoxSternedRowboat_NM.png
+
+newmtl ModernTech_3_M2_ElectricalBoxKitC_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd ModernTech_3_M2_ElectricalBoxKitC_DF.tga
+map_Bump ModernTech_3_M2_ElectricalBoxKitC_NM.png
+
+newmtl Foliage_9_M0_Ivy_MI.mat.002
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.265646 0.255644 0.236234
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Foliage_9_M0_Ivy_DF.tga
+map_Bump Foliage_9_M0_Ivy_N.png
+
+newmtl SwitchRoom_0_Boat_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd SwitchRoom_0_M0_Boat_DF.tga
+map_Bump SwitchRoom_0_M0_Boat_NM.png
+
+newmtl DefArch_1_M0_Grate_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd DefArch_1_M0_Grate_DF.tga
+map_Bump DefArch_1_M0_Grate_NM.png
+
+newmtl Plushie_0_M0_TacticalBear_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Plushie_0_M0_TacticalBear_DF.tga
+map_Bump Plushie_0_M0_TacticalBear_NM.png
+
+newmtl brick_x_pink
+Ns 180.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.284231 0.224784 0.238665
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd StoneBrickWall_M1_BasicBrickOld_DF.png
+map_Bump StoneBrickWall_M1_BasicBrickRed_NM.png
+
+newmtl SwitchRoom_0_Tarp_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd SwitchRoom_0_M0_Tarp_DF.tga
+map_Bump SwitchRoom_0_M0_Tarp_NM.png
+
+newmtl WorldGridMaterial.mat.004
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Kingdom_0_M0_MetalLight_DF.png
+map_Bump Kingdom_0_M0_Metal_NM.png
+
+newmtl Boat_2_M0_DrakeRowboat_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Boat_2_M0_DrakeRowboat_DF.tga
+map_Bump Boat_2_M0_DrakeRowboat_NM.png
+
+newmtl Tools_0_M0_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Tools_0_M0_DF.tga
+map_Bump Tools_0_M0_NM.png
+
+newmtl mud_x_stone
+Ns 180.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.265646 0.255644 0.236234
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Stone_M6_LargeBricks_DF.png
+map_Bump Stone_M6_LargeBricks_NM.png
+
+newmtl Plaster_M0_ASiteWallPeeling_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.370907 0.386906 0.418490
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Bump Plaster_M2_FlatBasicMat_NM.png
+
+newmtl CameraSecurity_0_M0_A_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd CameraSecurity_0_M0_A_DF.tga
+map_Bump CameraSecurity_0_M0_A_NM.png
+
+newmtl Material
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.265646 0.255644 0.236234
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd ColumnWall_M0_DF.png
+map_Bump ColumnWall_M0_NM.png
+
+newmtl BoatShop_1_M0_WoodStorage_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd BoatShop_1_M0_WoodStorage_DF.tga
+map_Bump BoatShop_1_M0_WoodStorage_NM.png
+
+newmtl ModernTech_3_M1_ElectricalBoxKitB_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd ModernTech_3_M1_ElectricalBoxKitB_DF.tga
+map_Bump ModernTech_3_M1_ElectricalBoxKitB_NM.png
+
+newmtl Material.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd BaitShop_0_M0_Sign_DF.png
+
+newmtl Furniture_4_M0_ParlorChairDamaged_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Furniture_4_M0_ParlorChairDamaged_DF.tga
+map_Bump Furniture_4_M0_ParlorChairDamaged_NM.png
+
+newmtl Plaster_M0_ASiteWallPeeling_MIaat.003
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.226366 0.230918 0.239880
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Bump Plaster_M2_FlatBasicMat_NM.png
+
+newmtl Foliage_8_M0_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.265646 0.255644 0.236234
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Foliage_8_M0_DF.tga
+
+newmtl LightFixtureGlass_1_M2_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd LightFixture_1_M2_DF.tga
+map_Bump LightFixture_1_M2_NM.png
+
+newmtl WindowFrameKit_0_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd WindowFrameKit_0_M0_DF.tga
+map_Bump WindowFrameKit_0_M0_NM.png
+
+newmtl Gondola_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Gondola_0_M0_DF.tga
+map_Bump Gondola_0_M0_NM.png
+
+newmtl Material.002
+Ns 180.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.449842 0.391606 0.391606
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Asphalt_M1_WornStreet_DF.png
+map_Bump Asphalt_M1_WornStreet_NM.png
+
+newmtl SewerGrate_1_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd SewerGrate_1_M0_DF.tga
+map_Bump SewerGrate_1_M0_NM.png
+
+newmtl Mud_M0_MI.mat
+Ns 180.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.228097 0.200318 0.186385
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Mud_M0_DF.png
+map_Bump Mud_M0_NM.png
+
+newmtl Stucco_M0_White_MI.mat
+Ns 180.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Stucco_M0_White_DF.tga
+map_Bump Stucco_M0_White_NM.png
+
+newmtl CanalGate_0_M0_Wood_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd CanalGate_0_M0_Wood_DF.tga
+map_Bump CanalGate_0_M0_Wood_NM.png
+
+newmtl ModernTech_2_M0_WallGenerator_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd ModernTech_2_M0_WallGenerator_DF.tga
+map_Bump ModernTech_2_M0_WallGenerator_NM.png
+
+newmtl TechElement_25_M0_SmallTank_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd TechElement_25_M0_SmallTank_DF.tga
+map_Bump TechElement_25_M0_SmallTank_NM.png
+
+newmtl Decal_0_M4_BSite_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.265646 0.255644 0.236234
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Decal_0_M4_BSite_DF.tga
+
+newmtl Concrete_Trim_M0_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Concrete_M0_DF.tga
+map_Bump Concrete_M0_NM.png
+
+newmtl Crate_1_M0_Wood_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Crate_1_M0_DF.tga
+map_Bump Crate_1_M0_NM.png
+
+newmtl reder_brick_x_lighter_brick
+Ns 180.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.284670 0.224437 0.239232
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd StoneBrickWall_M1_BasicBrickOld_DF.png
+map_Bump StoneBrickWall_M1_BasicBrickRed_NM.png
+
+newmtl WallElectricBox_0.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd WallElectricBox_0_M0_DF.tga
+map_Bump WallElectricBox_0_M0_NM.png
+
+newmtl brick_x_pink.001
+Ns 180.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.284231 0.224784 0.238665
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd StoneBrickWall_M1_BasicBrickOld_DF.png
+map_Bump StoneBrickWall_M1_BasicBrickRed_NM.png
+
+newmtl Door_0_M0_Panel_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.299380 0.239781 0.203368
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Door_0_M0_Panel_DF.tga
+map_Bump Door_0_M0_Panel_NM.png
+
+newmtl Plaster_M0_ASiteWallPeeling_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.370907 0.386906 0.418490
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Bump Plaster_M2_FlatBasicMat_NM.png
+
+newmtl Papers_0_M0_MI.mat.002
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.265646 0.255644 0.236234
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Papers_0_M0_DF.tga
+map_Bump Papers_0_M0_AntiKingdom_NM.png
+
+newmtl ModernTech_3_M0_ElectricalBoxKitA_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd ModernTech_3_M0_ElectricalBoxKitA_DF.tga
+map_Bump ModernTech_3_M0_ElectricalBoxKitA_NM.png
+
+newmtl Windows_1_100w175h_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Windows_1_M0_100w175h_DF.tga
+map_Bump Windows_1_M0_100w175h_NM.png
+
+newmtl Metal_M1_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Metal_M1_DF.tga
+map_Bump Metal_M1_NM.png
+
+newmtl Decal_0_M2_FishSignA_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.265646 0.255644 0.236234
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Decal_0_M2_FishSignA_DF.tga
+
+newmtl Wires_0_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Wires_0_M0_DF.tga
+map_Bump Wires_0_M0_NM.png
+
+newmtl ModernTech_9_M0_GreebleKitA_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd ModernTech_9_M0_GreebleKitA_DF.tga
+map_Bump ModernTech_9_M0_GreebleKitA_NM.png
+
+newmtl ModernTech_10_M7_PanelSquareSmall_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd ModernTech_10_M7_PanelSquareSmall_DF.tga
+map_Bump ModernTech_10_M7_PanelSquareSmall_NM.png
+
+newmtl Concrete_Trim_M0_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Concrete_M0_DF.tga
+map_Bump Concrete_M0_NM.png
+
+newmtl ModernTech_10_M8_PanelBracket_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd ModernTech_10_M8_PanelBracketB_DF.tga
+map_Bump ModernTech_10_M8_PanelBracketB_NM.png
+
+newmtl Papers_0_M0_MI.mat.003
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.265646 0.255644 0.236234
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Papers_0_M0_DF.tga
+map_Bump Papers_0_M0_AntiKingdom_NM.png
+
+newmtl WallSconce_0_MI.mat.002
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd WallSconce_0_M0_DF.tga
+map_Bump WallSconce_0_M0_NM.png
+
+newmtl Concrete_M0_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd GreySwatch.png
+
+newmtl ModernTech_9_M2_GreebleKitC_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd ModernTech_9_M2_GreebleKitC_DF.tga
+map_Bump ModernTech_9_M2_GreebleKitC_NM.png
+
+newmtl ModernTech_3_M0_ElectricalBoxKitA_MI.mat.002
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.192062 0.192062 0.192062
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd ModernTech_3_M0_ElectricalBoxKitA_DF.tga
+map_Bump ModernTech_3_M0_ElectricalBoxKitA_NM.png
+
+newmtl ModernTech_10_M5_PanelRectangleMedium_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.495000 0.495000 0.495000
+Ks 1.000000 1.000000 1.000000
+Ke 1.000000 0.839681 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd ModernTech_10_M5_PanelRectangleMedium_DF.tga
+map_Bump ModernTech_10_M5_PanelRectangleMedium_NM.png
+
+newmtl Rainpipe_0_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Rainpipe_0_M0_DF.tga
+map_Bump Rainpipe_0_M0_NM.png
+
+newmtl Wood_M1_Trim_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Wood_M1_Trim_DF.tga
+map_Bump Wood_M1_Trim_NM.png
+
+newmtl ModernTech_3_M2_ElectricalBoxKitC_MI.mat.002
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd ModernTech_3_M2_ElectricalBoxKitC_DF.tga
+map_Bump ModernTech_3_M2_ElectricalBoxKitC_NM.png
+
+newmtl ModernTech_9_M1_GreebleKitB_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd ModernTech_9_M1_GreebleKitB_DF.tga
+map_Bump ModernTech_9_M1_GreebleKitB_NM.png
+
+newmtl TechElement_25_M0_SmallTank_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd TechElement_25_M0_SmallTank_DF.tga
+map_Bump TechElement_25_M0_SmallTank_NM.png
+
+newmtl Wood_M2_SlattedWoodPurple_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Wood_M2_SlattedWood_DF.tga
+map_Bump Wood_M2_SlattedWood_NM.png
+
+newmtl WallSupport_0_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd WallSupport_0_M0_DF.tga
+map_Bump WallSupport_0_M0_NM.png
+
+newmtl Wood_M2_SlattedWood_MI.mat.003
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Wood_M2_SlattedWood_DF.tga
+map_Bump Wood_M2_SlattedWood_NM.png
+
+newmtl Wires_0_M0_Box_MI.mat.002
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Wires_0_M0_Box_DF.tga
+map_Bump Wires_0_M0_Box_NM.png
+
+newmtl Concrete_M5_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd GreySwatch.png
+
+newmtl TechElement_47_M0_CylinderDome_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd TechElement_47_M0_CylinderDome_DF.tga
+map_Bump TechElement_47_M0_CylinderDome_NM.png
+
+newmtl Windows_1_75w75h_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Windows_1_M0_75w75h_DF.tga
+map_Bump Windows_1_M0_75w75h_NM.png
+
+newmtl Fish_BloodCard_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.265646 0.255644 0.236234
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Fish_0_M0_BloodCard_DF.tga
+
+newmtl Market_0_M0_Peach_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Market_0_M0_Peach_DF.tga
+map_Bump Market_0_M0_Peach_NM.png
+
+newmtl BMainArchway_0_MI.mat.002
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd BMainArchway_0_M0_DF.tga
+map_Bump BMainArchway_0_M0_NM.png
+
+newmtl Vent_0_M0_TechUnit_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Vent_0_M0_TechUnit_DF.tga
+map_Bump Vent_0_M0_TechUnit_NM.png
+
+newmtl Fish_0_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Fish_0_M0_DF.tga
+map_Bump Fish_0_M0_NM.png
+
+newmtl Crate_1_M0_Wood_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Crate_1_M0_DF.tga
+map_Bump Crate_1_M0_NM.png
+
+newmtl ModernTech_2_M0_WallGenerator_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd ModernTech_2_M0_WallGenerator_DF.tga
+map_Bump ModernTech_2_M0_WallGenerator_NM.png
+
+newmtl ModernTech_6_M2_GeneratorA_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd ModernTech_6_M2_GeneratorA_DF.tga
+map_Bump ModernTech_6_M2_GeneratorA_NM.png
+
+newmtl WorldGridMaterial.mat.003
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Billboard_1_M4_DF.png
+
+newmtl Metal_M5_KingdomMetalTrim_Light_Int_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Metal_M5_KingdomMetalTrim_DF.tga
+map_Bump Metal_M5_KingdomMetalTrim_NM.png
+
+newmtl ModernTech_6_M0_VentSystem_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.182438 0.182438 0.182438
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd ModernTech_6_M0_VentSystem_DF.tga
+map_Bump ModernTech_6_M0_VentSystem_NM.png
+
+newmtl TechElement_38_M0_CylinderDomeA_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd TechElement_38_M0_CylinderDomeA_DF.tga
+map_Bump TechElement_38_M0_CylinderDomeA_NM.png
+
+newmtl Stone_M1_SquareTiles_MI.mat.002
+Ns 180.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Stone_M1_SquareTiles_DF.tga
+map_Bump Stone_M1_SquareTiles_NM.png
+
+newmtl Floater_1_M0_EdgeDestructionDecal_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.202275 0.193824 0.180576
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Floater_1_M0_EdgeDestructionDecal_DF.tga
+map_Bump Floater_1_M0_EdgeDestructionDecal_NM.png
+
+newmtl Generator_0_M2_TechUnitA_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Generator_0_M2_TechUnitA_DF.tga
+map_Bump Generator_0_M2_TechUnitA_NM.png
+
+newmtl Bucket_0_Metal_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Bucket_0_M0_Metal_DF.tga
+map_Bump Bucket_0_M0_Metal_NM.png
+
+newmtl water
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.185433 0.186308 0.192439
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Puddle_0_M0_DF.tga
+map_Bump Puddle_0_M0_NM.png
+
+newmtl FTDoor_0_M0_A_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd FTDoor_0_M0_A_DF.tga
+map_Bump FTDoor_0_M0_A_NM.tga
+
+newmtl GlassShard_0_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.265646 0.255644 0.236234
+Ks 1.000000 1.000000 1.000000
+Ke 0.090842 0.407240 0.181164
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd GREENGlassShard_0_M0_DF.tga
+map_Bump GlassShard_0_M0_NM.png
+
+newmtl BMainArchway_0_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd BMainArchway_0_M0_DF.tga
+map_Bump BMainArchway_0_M0_NM.tga
+
+newmtl ColumnWall_M0_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd ColumnWall_M0_DF.tga
+map_Bump ColumnWall_M0_NM.tga
+
+newmtl Wood_M2_SlattedWood_MI.mat.004
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Wood_M2_SlattedWood_DF.tga
+map_Bump Wood_M2_SlattedWood_NM.tga
+
+newmtl Wood_M2_SlattedWood_MI.mat.005
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Wood_M2_SlattedWood_DF.tga
+map_Bump Wood_M2_SlattedWood_NM.tga
+
+newmtl Glass_M0D_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+
+newmtl BMainArchway_0_MI.mat.003
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd BMainArchway_0_M0_DF.tga
+map_Bump BMainArchway_0_M0_NM.tga
+
+newmtl Crate_1_M0_Wood_MI.mat.002
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Crate_1_M0_DF.tga
+map_Bump Crate_1_M0_NM.tga
+
+newmtl Stone_M2_MI.mat.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.265646 0.255644 0.236234
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Stone_M2_DF.tga
+map_Bump Stone_M2_NM.tga
+
+newmtl Metal_M1_MI.mat.002
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Metal_M1_DF.tga
+map_Bump Metal_M1_NM.tga
+
+newmtl Windows_1_75w75h_MI.mat.002
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Windows_1_M0_75w75h_DF.tga
+map_Bump Windows_1_M0_75w75h_NM.tga
+
+newmtl Decal_0_M4_LionMural_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.265646 0.255644 0.236234
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Decal_0_M4_LionMural_DF.tga
+map_Bump Plaster_M2_FlatBasicMat_NM.tga
+
+newmtl Windows_6_M0_100w250h_MI.mat
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.700000
+d 1.000000
+illum 2
+map_Kd Windows_6_M0_100w250h_DF.tga
+map_Bump Windows_6_M0_100w250h_NM.tga
+

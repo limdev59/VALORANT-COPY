@@ -139,6 +139,7 @@
     <ClCompile Include="CObject.cpp" />
     <ClCompile Include="CScene.cpp" />
     <ClCompile Include="Debug_Camera.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="KeyMgr.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Model.cpp" />
@@ -150,6 +151,7 @@
     <ClCompile Include="Stage_1_Scene.cpp" />
     <ClCompile Include="Start_Camera.cpp" />
     <ClCompile Include="Start_Scene.cpp" />
+    <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="TimeMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -168,6 +170,7 @@
     <ClInclude Include="CScene.h" />
     <ClInclude Include="Debug_Camera.h" />
     <ClInclude Include="define.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="KeyMgr.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="MouseMgr.h" />

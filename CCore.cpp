@@ -47,8 +47,21 @@ void CCore::Render() {
     mat4 projection = CameraMgr::Instance()->getMainCamera()->getProjectionMatrix();
     mat4 view       = CameraMgr::Instance()->getMainCamera()->getViewMatrix();
 
-    GLuint projectionLocation = glGetUniformLocation(shaderProgramID, "projection");
-    GLuint viewLocation = glGetUniformLocation(shaderProgramID, "view");
+
+    glm::vec3 lightPos = glm::vec3(1.2f, 1.0f, 2.0f);
+    glm::vec3 lightColor = glm::vec3(0.9f, 0.83f, 0.83f);
+    glm::vec3 cameraPosition = CameraMgr::Instance()->getMainCamera()->position;
+
+    GLuint lightPosLoc = glGetUniformLocation(shaderProgramID, "lightPos");
+    GLuint lightColorLoc = glGetUniformLocation(shaderProgramID, "lightColor");
+    GLuint viewPosLoc = glGetUniformLocation(shaderProgramID, "viewPos");
+
+    glUniform3fv(lightPosLoc, 1, glm::value_ptr(lightPos));
+    glUniform3fv(lightColorLoc, 1, glm::value_ptr(lightColor));
+    glUniform3fv(viewPosLoc, 1, glm::value_ptr(cameraPosition));
+
+    GLuint projectionLocation = glGetUniformLocation(shaderProgramID, "projectionTransform");
+    GLuint viewLocation = glGetUniformLocation(shaderProgramID, "viewTransform");
     glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
     glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(view));
     TimeMgr::Instance()->Render();

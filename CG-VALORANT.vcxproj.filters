@@ -132,6 +132,12 @@
     <ClCompile Include="Pearl.cpp">
       <Filter>소스 파일\Object\Pearl</Filter>
     </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="stb_image.cpp">
+      <Filter>소스 파일\stb_image</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="vertex.glsl" />
@@ -205,6 +211,9 @@
     </ClInclude>
     <ClInclude Include="AnimModel.h">
       <Filter>소스 파일\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
