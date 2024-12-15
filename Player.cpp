@@ -53,10 +53,17 @@ void Player::Gravity(bool isGra) {
         velocity.y += gravity * dt;
         position.y += velocity.y * dt;  // y축에 속도를 더함
 
-        if (position.y <= 0.0f) {
-            
-            position.y = 0.0f;
+        if (position.x < -2.31563 && position.z < -6.84576) {
+            if (position.y <= -0.5f) {
+                position.y = -0.5f;
+            }
+
         }
+        else if (position.y <= -0.25f) {
+            
+            position.y = -0.25f;
+        }
+        
 
         if (model) {
             model->Update(position, rotation, scale);
