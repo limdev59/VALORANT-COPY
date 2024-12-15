@@ -14,8 +14,6 @@ float Lerp(float a, float b, float t) {
 void Start_Camera::Update() {
     auto mousePos = MouseMgr::Instance()->getCursorPos();
 
-    std::cout << "Mouse Position: " << mousePos.x << ", " << mousePos.y << std::endl;
-
     constexpr float screenWidth = 1200.0f;
     constexpr float screenHeight = 768.0f;
 
@@ -30,7 +28,7 @@ void Start_Camera::Update() {
     CCamera* cam = CameraMgr::Instance()->getMainCamera();
 
     vec3 plPos = pl.getPosition();
-    cam->position = plPos+vec3(0.0f,0.3f,0.0f);
+    cam->position = plPos+vec3(0.0f,0.5f,0.0f);
 
     float deltaX = (mousePos.x - screenWidth / 2) * sensitivityX;
     float deltaY = (mousePos.y - screenHeight / 2) * sensitivityY;
