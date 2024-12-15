@@ -22,6 +22,12 @@ void Player::Update()
     if (KeyMgr::Instance()->getKeyState(KEY::D) == KEY_TYPE::HOLD) {
         position.z -= 1.0 * dt;
     }
+    if (KeyMgr::Instance()->getKeyState(KEY::Q) == KEY_TYPE::HOLD) {
+        position.y += 1.0 * dt;
+    }
+    if (KeyMgr::Instance()->getKeyState(KEY::E) == KEY_TYPE::HOLD) {
+        position.y -= 1.0 * dt;
+    }
     if (model) {
         model->Update(position, rotation, scale);
     }
