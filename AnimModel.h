@@ -44,7 +44,7 @@ struct KeyScale
 	glm::vec3 scale;
 	float timeStamp;
 };
-struct Vertex
+struct AnimVertex
 {
 	glm::vec3 Position;
 	glm::vec2 TexCoords;
@@ -66,7 +66,7 @@ public:
 		name = "";
 	}
 
-	void CreateMesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, std::string name)
+	void CreateMesh(std::vector<AnimVertex>& vertices, std::vector<unsigned int>& indices, std::string name)
 	{
 		this->name = name;
 
@@ -81,34 +81,34 @@ public:
 
 		glGenBuffers(1, &VBO);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(AnimVertex) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
 
 		// position
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(AnimVertex), 0);
 		glEnableVertexAttribArray(0);
 
 		// texcoord
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(offsetof(Vertex, TexCoords)));
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(AnimVertex), (void*)(offsetof(AnimVertex, TexCoords)));
 		glEnableVertexAttribArray(1);
 
 		// normal
-		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(offsetof(Vertex, Normal)));
+		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(AnimVertex), (void*)(offsetof(AnimVertex, Normal)));
 		glEnableVertexAttribArray(2);
 
 		// tangent
-		glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(offsetof(Vertex, Tangent)));
+		glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(AnimVertex), (void*)(offsetof(AnimVertex, Tangent)));
 		glEnableVertexAttribArray(3);
 
 		// bitangent
-		glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(offsetof(Vertex, Bitangent)));
+		glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(AnimVertex), (void*)(offsetof(AnimVertex, Bitangent)));
 		glEnableVertexAttribArray(4);
 
 		// ids
-		glVertexAttribIPointer(5, 4, GL_INT, sizeof(Vertex), (void*)offsetof(Vertex, m_BoneIDs));
+		glVertexAttribIPointer(5, 4, GL_INT, sizeof(AnimVertex), (void*)offsetof(AnimVertex, m_BoneIDs));
 		glEnableVertexAttribArray(5);
 
 		// weights
-		glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, m_Weights));
+		glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(AnimVertex), (void*)offsetof(AnimVertex, m_Weights));
 		glEnableVertexAttribArray(6);
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -159,10 +159,10 @@ private:
 	GLsizei indexCount;
 	std::string name;
 };
-class Material
+class AnimMaterial
 {
 public:
-	Material(GLfloat map_Ks, GLfloat map_Ns) : map_Ks(map_Ks), map_Ns(map_Ns) {}
+	AnimMaterial(GLfloat map_Ks, GLfloat map_Ns) : map_Ks(map_Ks), map_Ns(map_Ns) {}
 	GLfloat map_Ks; //specular
 	GLfloat map_Ns; //shininess
 };
@@ -512,7 +512,7 @@ public:
 	void SetTranslate(glm::vec3 translate) { this->translate = translate; }
 	void SetRotate(glm::vec3 rotate) { this->rotate = rotate; }
 	void SetScale(glm::vec3 scale) { this->scale = scale; }
-	Material* GetMaterial() { return material; }
+	AnimMaterial* GetMaterial() { return material; }
 	std::map<std::string, BoneInfo>& GetBoneInfoMap() { return boneInfoMap; }
 	int& GetBoneCount() { return boneCounter; }
 	glm::mat4 GetModelMat()
@@ -534,10 +534,10 @@ private:
 	void LoadMesh(aiMesh* mesh, const aiScene* scene)
 	{
 
-		std::vector<Vertex> vertices;
+		std::vector<AnimVertex> vertices;
 		std::vector<GLuint> indices;
 		for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
-			Vertex vertex;
+			AnimVertex vertex;
 			for (int i = 0; i < MAX_BONE_INFLUENCE; i++)
 			{
 				vertex.m_BoneIDs[i] = -1;
@@ -646,7 +646,7 @@ private:
 			LoadNormalMaps(material, i);
 		}
 
-		material = new Material(0.3f, 64.f);
+		material = new AnimMaterial(0.3f, 64.f);
 	}
 	std::unordered_map<std::string, Texture*> textureCache;
 
@@ -721,7 +721,7 @@ private:
 	glm::vec3   rotate;		// R
 	glm::vec3   scale;      // S
 
-	Material* material;
+	AnimMaterial* material;
 
 	std::map<std::string, BoneInfo> boneInfoMap;
 	int boneCounter = 0;

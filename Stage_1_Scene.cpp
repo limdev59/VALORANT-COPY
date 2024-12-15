@@ -21,10 +21,10 @@ void Stage_1_Scene::Enter() {
         Model* map_floor_model = new Model(MODEL_TYPE::PEARL, GL_TRIANGLES);
         map_floor->setModel(map_floor_model);
         map_floor->setScale(vec3(0.1));
-        map_floor->setPosition(vec3(0.0f, 1.0f, 0.0f));
+        map_floor->setPosition(vec3(39.0f, 5.0f, 80.0f));
 
         CObject* player = new Player();
-        Model* player_model = new Model(MODEL_TYPE::JETT, GL_TRIANGLES);
+        Model* player_model = new Model(MODEL_TYPE::ASCENT, GL_TRIANGLES);
         player->setModel(player_model);
         player->setPosition(vec3(0.0f, 2.0f, 0.0f));
         player->setScale(vec3(0.1f));
@@ -42,7 +42,7 @@ void Stage_1_Scene::Enter() {
 
         for (const auto& position : enemyPositions) {
             Enemy* enemy = new Enemy();
-            Model* enemy_model = new Model(MODEL_TYPE::JETT, GL_TRIANGLES); // ENEMY 타입 모델
+            Model* enemy_model = new Model(MODEL_TYPE::ASCENT, GL_TRIANGLES); // ENEMY 타입 모델
             enemy->setModel(enemy_model);
             enemy->setPosition(position); // 적의 위치 설정
             enemy->setScale(glm::vec3(0.1f));
