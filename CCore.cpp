@@ -32,9 +32,9 @@ GLvoid CCore::Init() {
     MouseMgr::Instance()->Init(WINDOW_WIDTH, WINDOW_HEIGHT);
 }
 
-GLvoid CCore::Update(AnimModel* mainModel) {
+GLvoid CCore::Update() {
     
-    CameraMgr::Instance()->Update(mainModel);
+    CameraMgr::Instance()->Update();
     KeyMgr::Instance()->Update();
     SceneMgr::Instance()->Update();
     MouseMgr::Instance()->Update();

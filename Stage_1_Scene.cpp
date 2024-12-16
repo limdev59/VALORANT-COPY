@@ -26,7 +26,7 @@ void Stage_1_Scene::Enter() {
         CObject* player = new Player();
         Model* player_model = new Model(MODEL_TYPE::JETT, GL_TRIANGLES);
         player->setModel(player_model);
-        player->setPosition(vec3(0.0f, 0.125f, 0.0f));
+        player->setPosition(vec3(-2.56633, 0.125f, -4.68781));
         player->setScale(vec3(0.1f));
         
 

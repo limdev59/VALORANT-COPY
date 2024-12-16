@@ -18,6 +18,7 @@ void Player::Update()
     glm::vec3 tar = cam->target;
     glm::vec3 pos = cam->position;
 
+
     glm::vec3 viewVec = tar - pos;
     viewVec.y = 0.0f; // Y 성분 제거
     viewVec = glm::normalize(viewVec);
@@ -38,6 +39,7 @@ void Player::Update()
     if (KeyMgr::Instance()->getKeyState(KEY::D) == KEY_TYPE::HOLD) {
         position -= rightVec * static_cast<float>(dt * 1.0);
     }
+  
     if (KeyMgr::Instance()->getKeyState(KEY::SPACE) == KEY_TYPE::HOLD && !isJumping) {
         isJumping = true;
         velocity.y = jumpVelocity; // 초기 점프 속도를 적용
@@ -78,6 +80,7 @@ void Player::Gravity(bool isGra) {
             velocity.y = 0.0f;
             isJumping = false; // 점프 종료
         }
+        
 
         if (model) {
             model->UpdateTransform(position, rotation, scale);
