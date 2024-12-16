@@ -10,7 +10,6 @@
 
 
 AnimModel* mainModel;
-AnimModel* mapModel;
 Animator* animator;
 Animation* idleAnim;
 Animation* runAnim;
@@ -68,18 +67,18 @@ static GLvoid Reshape(int w, int h) {
     CCore::Instance()->Reshape(w, h);
 }
 static GLvoid Update() {
-    CCore::Instance()->Update();
+    CCore::Instance()->Update(mainModel);
     TimeMgr::Instance()->Update();
     if (KeyMgr::Instance()->getKeyState(KEY::SPACE) == KEY_TYPE::HOLD) {
         for (size_t i{}; i < 3; ++i) {
-            if (animator->GetCurrAnimation() != runAnim)
-                animator->PlayAnimation(runAnim);
+            if (animator->GetCurrAnimation() != idleAnim)
+                animator->PlayAnimation(idleAnim);
         }
     }
     else {
         for (size_t i{}; i < 3; ++i) {
-            if (animator->GetCurrAnimation() != idleAnim)
-                animator->PlayAnimation(idleAnim);
+            if (animator->GetCurrAnimation() != runAnim)
+                animator->PlayAnimation(runAnim);
         }
     }
     for (size_t i{}; i < 3; ++i) {
@@ -120,19 +119,15 @@ int main(int argc, char** argv) {
     };
 
     mainModel = new AnimModel();
-    std::string modelPath = "first";
+    std::string modelPath = "first2";
     mainModel->LoadModel(modelPath);
     AnimModel* currModel = mainModel;
-    idleAnim = new Animation("Models/first/firstIdle.gltf", currModel);
-    runAnim = new Animation("Models/first/first.gltf", currModel);
+    idleAnim = new Animation("Models/first2/firstIdle.gltf", currModel);
+    runAnim = new Animation("Models/first2/first.gltf", currModel);
     animator = new Animator(nullptr);
 
 
     CCore::Instance()->Init();
-
-    
-
-    
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 

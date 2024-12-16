@@ -4,6 +4,7 @@
 
 #include "Start_Camera.h"
 #include "Debug_Camera.h"
+#include "AnimModel.h"
 
 CameraMgr::CameraMgr() {
 }
@@ -15,7 +16,7 @@ CCamera* CameraMgr::getMainCamera() {
     return mainCamera;
 }
 
-void CameraMgr::Update() {
+void CameraMgr::Update(AnimModel* mainModel) {
     mainCamera->Update();
 }
 
