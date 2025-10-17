@@ -1,4 +1,7 @@
 # CG-VALORANT
+모델링, 애니메이션
+https://drive.google.com/drive/folders/1Ykh2xKYvb3uEuEFtnA4DjwILwpcWTBPl?usp=sharing
+
 실행 exe파일
 https://drive.google.com/file/d/1WaBKKFhCXQ8Da0RR77ufmbIg7fqlqWie/view
 
