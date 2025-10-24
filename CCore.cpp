@@ -24,7 +24,7 @@ GLvoid CCore::Reshape(int w, int h) {
 }
 
 GLvoid CCore::Init() {
-
+    
     TimeMgr::Instance()->Init();
     CameraMgr::Instance()->Init();
     KeyMgr::Instance()->Init();

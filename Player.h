@@ -10,6 +10,7 @@ private:
     bool isOnGround = false;     // 바닥과 충돌 여부
     AnimModel* model;
 public:
+	Player();
     virtual void Update() override;
     virtual void Render() override;
     void Gravity(bool);  // 중력 처리 함수

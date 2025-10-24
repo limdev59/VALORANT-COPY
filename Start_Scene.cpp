@@ -22,14 +22,17 @@ void Start_Scene::Enter() {
         CObject* obj = new Player();
         Model* model = new Model(MODEL_TYPE::JETT, GL_TRIANGLES);
         obj->setModel(model);
-        obj->setScale(vec3(0.3f)); 
+        obj->setScale(vec3(0.1f));
+        obj->setPosition(vec3(0.0f, 0.0f, 0.0f));
+        obj->setRotation(vec3(0.0f));
 
         CObject* obj4 = new Sova();
         Model* model4 = new Model(MODEL_TYPE::ASCENT, GL_LINES);
-        obj4->setPosition(vec3(-40,-5, 80));
-        
-        obj4->setScale(vec3(2.0f));
         obj4->setModel(model4);
+        obj4->setPosition(vec3(-40,-5, 80));
+        obj4->setScale(vec3(2.0f));
+        obj4->setRotation(vec3(0.0f));
+        
 
         addObject(obj, GROUP_TYPE::PLAYER);
         addObject(obj4, GROUP_TYPE::DEFAULT);

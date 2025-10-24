@@ -52,5 +52,10 @@ void CCamera::Update() {
 }
 
 void CCamera::setAspectRatio(float width, float height) {
-    aspectRatio = width / height;
+    if (height == 0.0f) {
+        aspectRatio = 1.0f;
+    }
+    else {
+        aspectRatio = width / height;
+    }
 }
