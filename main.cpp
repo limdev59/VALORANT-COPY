@@ -45,20 +45,7 @@ static GLvoid Render() {
         glUniformMatrix4fv(loc_modelMat, 1, GL_FALSE, glm::value_ptr(modelMat));
         glUniformMatrix4fv(loc_PVM, 1, GL_FALSE, glm::value_ptr(PVM));
         glUniformMatrix3fv(loc_normalMat, 1, GL_FALSE, glm::value_ptr(normalMat));
-       
-        {
-            glm::vec3 lightPos = glm::vec3(1.2f, 1.0f, 2.0f);
-            glm::vec3 lightColor = glm::vec3(0.9f, 0.83f, 0.83f);
-            glm::vec3 cameraPosition = CameraMgr::Instance()->getMainCamera()->position;
 
-            GLuint lightPosLoc = glGetUniformLocation(CCore::Instance()->shaderProgramID2, "lightPos");
-            GLuint lightColorLoc = glGetUniformLocation(CCore::Instance()->shaderProgramID2, "lightColor");
-            GLuint viewPosLoc = glGetUniformLocation(CCore::Instance()->shaderProgramID2, "viewPos");
-
-            glUniform3fv(lightPosLoc, 1, glm::value_ptr(lightPos));
-            glUniform3fv(lightColorLoc, 1, glm::value_ptr(lightColor));
-            glUniform3fv(viewPosLoc, 1, glm::value_ptr(cameraPosition));
-        }
 
         const auto& transforms = animator->GetFinalBoneMatrices();
         GLuint finalBonesMatricesLoc = glGetUniformLocation(CCore::Instance()->shaderProgramID2, "finalBonesMatrices");

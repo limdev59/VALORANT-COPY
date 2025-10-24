@@ -11,15 +11,6 @@ bool isJumping = false; // 점프 상태를 나타냄
 float jumpVelocity = 3.0f; // 초기 점프 속도
 //float maxJumpHeight = 0.75f; // 최대 점프 높이
 
-Player::Player()
-	: CObject(), model(nullptr)
-{
-    velocity = glm::vec3(0.0f);
-    gravity = -9.8f;
-	rotation = glm::vec3(0.0f);
-    scale = glm::vec3(0.1f);
-}
-
 void Player::Update()
 {
     double dt = DT; // DT 값을 가져옵니다.
@@ -30,24 +21,10 @@ void Player::Update()
 
     glm::vec3 viewVec = tar - pos;
     viewVec.y = 0.0f; // Y 성분 제거
-    if (glm::length(viewVec) > 0.0001f)
-    {
-        viewVec = glm::normalize(viewVec);
-    }
-    else
-    {
-        viewVec = glm::vec3(0.0f);
-    }
+    viewVec = glm::normalize(viewVec);
 
     glm::vec3 rightVec = glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), viewVec);
-    if (glm::length(rightVec) > 0.0001f)
-    {
-        rightVec = glm::normalize(rightVec);
-    }
-    else
-    {
-        rightVec = glm::vec3(0.0f); // A/D 이동 방지
-    }
+    rightVec = glm::normalize(rightVec);
 
     // 플레이어 이동 처리
     if (KeyMgr::Instance()->getKeyState(KEY::W) == KEY_TYPE::HOLD) {
@@ -68,11 +45,13 @@ void Player::Update()
         velocity.y = jumpVelocity; // 초기 점프 속도를 적용
     }
     // 모델 업데이트
-    /*if (model) {
+    if (model) {
         model->UpdateTransform(position, rotation, scale);
     }
+
+    // 히트박스 업데이트    
     hitboxCenter = position;
-    hitboxSize = scale;*/
+    hitboxSize = scale;
 }
 
 void Player::Render() {
@@ -104,18 +83,13 @@ void Player::Gravity(bool isGra) {
         
 
         if (model) {
-           model->UpdateTransform(position, rotation, scale);
+            model->UpdateTransform(position, rotation, scale);
         }
 
         hitboxCenter = position;
-        hitboxSize = scale;
+        hitboxSize *= scale;
     }
     else {
         velocity.y = 0.0f;
-        if (model) {
-            model->UpdateTransform(position, rotation, scale);
-        }
-        hitboxCenter = position;
-        hitboxSize = scale;
     }
 }
