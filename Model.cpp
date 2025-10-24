@@ -37,7 +37,10 @@ const Material* Model::FindMaterial(const std::string& name) const {
 }
 
 Model::Model(MODEL_TYPE type, GLenum mode)
-	: renderMode(mode), transform(mat4(1.0f)) {
+	: renderMode(mode), transform(mat4(1.0f)),
+	pivot(vec3(0.0f)),
+	rotationAtAngle(0.0f),
+	rotationAtAxis(vec3(0.0f, 1.0f, 0.0f)) {
 	materials = modelPairArr[type].first;
 	cout << modelPairArr[type].second.size()<<endl;
 	groups = modelPairArr[type].second;
