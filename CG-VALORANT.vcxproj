@@ -214,7 +214,6 @@
     <ClInclude Include="Headers\Stage_1_Scene.h" />
     <ClInclude Include="Headers\Start_Camera.h" />
     <ClInclude Include="Headers\Start_Scene.h" />
-    <ClInclude Include="Libs\stb_image\stb_image.h" />
     <ClInclude Include="Headers\TimeMgr.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

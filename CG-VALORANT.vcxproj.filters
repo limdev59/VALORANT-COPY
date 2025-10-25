@@ -67,11 +67,11 @@
     <Filter Include="소스 파일\Object\Pearl">
       <UniqueIdentifier>{200b9982-82dd-4081-8eed-a9aa358f41c1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\stb_image">
-      <UniqueIdentifier>{07e254b4-d60f-4a24-bb63-e6b494deb03d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\Object\Sova">
       <UniqueIdentifier>{2050e6b0-6dd0-469e-82da-33660bb2aa1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object\Enemy">
+      <UniqueIdentifier>{54914ff7-2a8e-436b-9109-734d42e31636}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -133,7 +133,7 @@
       <Filter>소스 파일\Object\Pearl</Filter>
     </ClCompile>
     <ClCompile Include="Sources\Objects\Enemy.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Object\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -203,14 +203,11 @@
     <ClInclude Include="Headers\Pearl.h">
       <Filter>소스 파일\Object\Pearl</Filter>
     </ClInclude>
-    <ClInclude Include="Libs\stb_image\stb_image.h">
-      <Filter>소스 파일\stb_image</Filter>
-    </ClInclude>
     <ClInclude Include="Headers\AnimModel.h">
       <Filter>소스 파일\Model</Filter>
     </ClInclude>
     <ClInclude Include="Headers\Enemy.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>소스 파일\Object\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
