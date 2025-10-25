@@ -10,6 +10,9 @@ public:
     glm::vec3       target;
     glm::vec3       up;
 
+    glm::vec3       front;
+    glm::vec3       right;
+
     float           fov;
     float           aspectRatio;
     float           nearClip;

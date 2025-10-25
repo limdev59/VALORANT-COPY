@@ -1,5 +1,6 @@
 #pragma once
 #include "pch.h"
+#include "IModel.h"
 
 struct Vertex {
 	glm::vec3 position;
@@ -277,7 +278,7 @@ static std::pair<vector<Material>, vector<Group>> ReadModel(const string& filena
 	return modelPair;
 }
 
-class Model {
+class Model : public IModel {
 protected:
 	GLenum renderMode;
 	mat4 transform = mat4(1.0f);

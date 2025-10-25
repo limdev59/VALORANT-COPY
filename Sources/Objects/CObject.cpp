@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "CObject.h"
-#include "CCore.h"
 
 CObject::CObject()
     : position(0.0f), rotation(0.0f), scale(1.0f),
@@ -36,7 +35,7 @@ void CObject::Update() {
 }
 void CObject::Render() {
     if (model) {
-        model->Render(CCore::Instance()->shaderProgramID);
+        model->Render(m_shaderProgramID);
     }
 }
 bool CObject::CheckCollision(const CObject& other) {

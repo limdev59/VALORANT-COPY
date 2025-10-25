@@ -215,6 +215,7 @@
     <ClInclude Include="Headers\Start_Camera.h" />
     <ClInclude Include="Headers\Start_Scene.h" />
     <ClInclude Include="Headers\TimeMgr.h" />
+    <ClInclude Include="Headers\IModel.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
