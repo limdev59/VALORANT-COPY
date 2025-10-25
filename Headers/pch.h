@@ -11,6 +11,7 @@
 #include <functional>
 #include <chrono>
 #include <thread>
+
 #include <gl/glew.h>
 #include <gl/freeglut.h>
 #include <gl/freeglut_ext.h>
@@ -20,8 +21,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
-
-#include "stb_image.h"
+#include <stb_image/stb_image.h>
 
 using std::vector;
 using std::string;

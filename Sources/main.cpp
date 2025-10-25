@@ -1,3 +1,4 @@
+#define STB_IMAGE_IMPLEMENTATION
 #include "pch.h"
 #include "CCore.h"
 #include "Model.h"
@@ -119,16 +120,16 @@ int main(int argc, char** argv) {
         CCore::Instance()->shaderProgramID,
         vertexShader,
         fragmentShader,
-        "vertex.glsl",
-        "fragment.glsl"
+        "Shaders/vertex.glsl",
+        "Shaders/fragment.glsl"
     );
     static GLuint vertexShader2, fragmentShader2;
     make_shaderProgram(
         CCore::Instance()->shaderProgramID2,
         vertexShader2,
         fragmentShader2,
-        "animVertex.glsl",
-        "animFragment.glsl"
+        "Shaders/animVertex.glsl",
+        "Shaders/animFragment.glsl"
     );
     modelPairs = {
         {MODEL_TYPE::JETT, ReadModel("jettTest")},

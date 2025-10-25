@@ -75,144 +75,141 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="Sources\main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="CCore.cpp">
+    <ClCompile Include="Sources\CCore.cpp">
       <Filter>소스 파일\CCore</Filter>
     </ClCompile>
-    <ClCompile Include="KeyMgr.cpp">
+    <ClCompile Include="Sources\Managers\KeyMgr.cpp">
       <Filter>소스 파일\Manager\Key</Filter>
     </ClCompile>
-    <ClCompile Include="SceneMgr.cpp">
+    <ClCompile Include="Sources\Managers\SceneMgr.cpp">
       <Filter>소스 파일\Manager\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Start_Scene.cpp">
+    <ClCompile Include="Sources\Scenes\Start_Scene.cpp">
       <Filter>소스 파일\Scene\Start_Scene</Filter>
     </ClCompile>
-    <ClCompile Include="TimeMgr.cpp">
+    <ClCompile Include="Sources\Managers\TimeMgr.cpp">
       <Filter>소스 파일\Manager\Time</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
+    <ClCompile Include="Sources\Objects\Player.cpp">
       <Filter>소스 파일\Object\Player</Filter>
     </ClCompile>
-    <ClCompile Include="CObject.cpp">
+    <ClCompile Include="Sources\Objects\CObject.cpp">
       <Filter>소스 파일\Object</Filter>
     </ClCompile>
-    <ClCompile Include="CScene.cpp">
+    <ClCompile Include="Sources\Scenes\CScene.cpp">
       <Filter>소스 파일\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="MouseMgr.cpp">
+    <ClCompile Include="Sources\Managers\MouseMgr.cpp">
       <Filter>소스 파일\Manager\Mouse</Filter>
     </ClCompile>
-    <ClCompile Include="Model.cpp">
+    <ClCompile Include="Sources\Model\Model.cpp">
       <Filter>소스 파일\Model</Filter>
     </ClCompile>
-    <ClCompile Include="Stage_1_Scene.cpp">
+    <ClCompile Include="Sources\Scenes\Stage_1_Scene.cpp">
       <Filter>소스 파일\Scene\Stage_1_Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Sphere.cpp">
+    <ClCompile Include="Sources\Objects\Sphere.cpp">
       <Filter>소스 파일\Object\Sphere</Filter>
     </ClCompile>
-    <ClCompile Include="Sova.cpp">
+    <ClCompile Include="Sources\Objects\Sova.cpp">
       <Filter>소스 파일\Object\Sova</Filter>
     </ClCompile>
-    <ClCompile Include="CameraMgr.cpp">
+    <ClCompile Include="Sources\Managers\CameraMgr.cpp">
       <Filter>소스 파일\Manager\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="CCamera.cpp">
+    <ClCompile Include="Sources\Camera\CCamera.cpp">
       <Filter>소스 파일\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Debug_Camera.cpp">
+    <ClCompile Include="Sources\Camera\Debug_Camera.cpp">
       <Filter>소스 파일\Camera\Debug_Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Start_Camera.cpp">
+    <ClCompile Include="Sources\Camera\Start_Camera.cpp">
       <Filter>소스 파일\Camera\Start_Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Pearl.cpp">
+    <ClCompile Include="Sources\Objects\Pearl.cpp">
       <Filter>소스 파일\Object\Pearl</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy.cpp">
+    <ClCompile Include="Sources\Objects\Enemy.cpp">
       <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="stb_image.cpp">
-      <Filter>소스 파일\stb_image</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="vertex.glsl" />
-    <None Include="fragment.glsl" />
-    <None Include="animVertex.glsl" />
-    <None Include="animFragment.glsl" />
+    <None Include="Shaders\vertex.glsl" />
+    <None Include="Shaders\fragment.glsl" />
+    <None Include="Shaders\animVertex.glsl" />
+    <None Include="Shaders\animFragment.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="define.h">
+    <ClInclude Include="Headers\define.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="pch.h">
+    <ClInclude Include="Headers\pch.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="CCore.h">
+    <ClInclude Include="Headers\CCore.h">
       <Filter>소스 파일\CCore</Filter>
     </ClInclude>
-    <ClInclude Include="TimeMgr.h">
+    <ClInclude Include="Headers\TimeMgr.h">
       <Filter>소스 파일\Manager\Time</Filter>
     </ClInclude>
-    <ClInclude Include="Start_Scene.h">
+    <ClInclude Include="Headers\Start_Scene.h">
       <Filter>소스 파일\Scene\Start_Scene</Filter>
     </ClInclude>
-    <ClInclude Include="SceneMgr.h">
+    <ClInclude Include="Headers\SceneMgr.h">
       <Filter>소스 파일\Manager\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="KeyMgr.h">
+    <ClInclude Include="Headers\KeyMgr.h">
       <Filter>소스 파일\Manager\Key</Filter>
     </ClInclude>
-    <ClInclude Include="CScene.h">
+    <ClInclude Include="Headers\CScene.h">
       <Filter>소스 파일\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="CObject.h">
+    <ClInclude Include="Headers\CObject.h">
       <Filter>소스 파일\Object</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
+    <ClInclude Include="Headers\Player.h">
       <Filter>소스 파일\Object\Player</Filter>
     </ClInclude>
-    <ClInclude Include="MouseMgr.h">
+    <ClInclude Include="Headers\MouseMgr.h">
       <Filter>소스 파일\Manager\Mouse</Filter>
     </ClInclude>
-    <ClInclude Include="Model.h">
+    <ClInclude Include="Headers\Model.h">
       <Filter>소스 파일\Model</Filter>
     </ClInclude>
-    <ClInclude Include="Stage_1_Scene.h">
+    <ClInclude Include="Headers\Stage_1_Scene.h">
       <Filter>소스 파일\Scene\Stage_1_Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Sphere.h">
+    <ClInclude Include="Headers\Sphere.h">
       <Filter>소스 파일\Object\Sphere</Filter>
     </ClInclude>
-    <ClInclude Include="Sova.h">
+    <ClInclude Include="Headers\Sova.h">
       <Filter>소스 파일\Object\Sova</Filter>
     </ClInclude>
-    <ClInclude Include="CameraMgr.h">
+    <ClInclude Include="Headers\CameraMgr.h">
       <Filter>소스 파일\Manager\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="CCamera.h">
+    <ClInclude Include="Headers\CCamera.h">
       <Filter>소스 파일\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Debug_Camera.h">
+    <ClInclude Include="Headers\Debug_Camera.h">
       <Filter>소스 파일\Camera\Debug_Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Start_Camera.h">
+    <ClInclude Include="Headers\Start_Camera.h">
       <Filter>소스 파일\Camera\Start_Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Pearl.h">
+    <ClInclude Include="Headers\Pearl.h">
       <Filter>소스 파일\Object\Pearl</Filter>
     </ClInclude>
-    <ClInclude Include="stb_image.h">
+    <ClInclude Include="Libs\stb_image\stb_image.h">
       <Filter>소스 파일\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="AnimModel.h">
+    <ClInclude Include="Headers\AnimModel.h">
       <Filter>소스 파일\Model</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy.h">
+    <ClInclude Include="Headers\Enemy.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
