@@ -43,11 +43,10 @@ void main() {
 
 
 
-    float shininess = 16.0f;
+    float shininess = (Ns < 2.0f) ? 16.0f : Ns;
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
     vec3 specular = Ks  * lightColor * spec;
 
-    // 최종 색상
-    vec3 result = (ambient*1.05 + diffuse * Kd+ specular*0.7) * texColor*1.3 ;
+    vec3 result = (ambient*1.05 + diffuse*1.4 * Kd+ specular*0.7) * texColor*1.3 ;
     FragColor = vec4(result, 1.0);
 }
