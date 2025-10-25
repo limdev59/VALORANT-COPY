@@ -1,5 +1,5 @@
 #pragma once
-
+#include "pch.h"
 
 struct Vertex {
 	glm::vec3 position;
@@ -297,11 +297,10 @@ public:
 		vector<vec3> vet{};
 		for (Group g : groups) {
 			for (const auto& v : g.subMeshes) {
-				for (size_t i{}; v.vertices.size(); i+=3) {
+				for (size_t i{}; i < v.vertices.size(); i += 3) {
 					vet.push_back(v.vertices[i].position);
 				}
 			}
-
 		}
 	}
 	Model(MODEL_TYPE type, GLenum mode);

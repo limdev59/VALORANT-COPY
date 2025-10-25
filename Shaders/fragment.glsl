@@ -41,8 +41,6 @@ void main() {
     float diff = max(dot(norm, lightDir), 0.0);
     vec3 diffuse =  diff * lightColor ;
 
-
-
     float shininess = (Ns < 2.0f) ? 16.0f : Ns;
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
     vec3 specular = Ks  * lightColor * spec;
