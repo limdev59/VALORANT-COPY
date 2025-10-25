@@ -529,6 +529,8 @@ public:
 		SetScale(sc);
 	}
 private:
+	// AnimModel.h
+
 	void LoadMesh(aiMesh* mesh, const aiScene* scene)
 	{
 
@@ -567,7 +569,7 @@ private:
 			}
 		}
 
-		// [수정 1] 'vertices' 배열에 모든 본 가중치를 먼저 채웁니다.
+		// [수정] 이 루프가 이제 'this->boneInfoMap'과 'this->boneCounter' (클래스 멤버)를 사용합니다.
 		for (unsigned int boneIndex = 0; boneIndex < mesh->mNumBones; boneIndex++) {
 			int boneID = -1;
 			std::string boneName = mesh->mBones[boneIndex]->mName.C_Str();
@@ -606,30 +608,10 @@ private:
 					}
 				}
 			}
-		} // [수정 1] 본(bone) 루프가 여기서 닫힙니다. (중복 생성 버그 해결)
 
+		} // [해결 1] 본(bone) 루프가 여기서 닫힙니다. (중복 생성 버그 해결)
 
-		// [수정 2] "실처럼 보이는" 버텍스(가중치 합=0)를 여기서 처리합니다.
-		// 모든 'vertices'를 검사하여 가중치 합이 0인 버텍스를 찾습니다.
-		for (auto& vertex : vertices)
-		{
-			float totalWeight = 0.f;
-			for (int i = 0; i < MAX_BONE_INFLUENCE; i++)
-			{
-				totalWeight += vertex.m_Weights[i];
-			}
-
-			// 가중치 합이 0에 가까우면 (유효한 ID가 있더라도)
-			// ID를 -1로 되돌려서 셰이더가 "가중치 없음"으로 인식하게 만듭니다.
-			if (totalWeight < 0.001f)
-			{
-				vertex.m_BoneIDs[0] = -1;
-			}
-		}
-		// [수정 2] 끝
-
-
-		// [수정 1] 메쉬 생성 코드를 루프 밖(이 위치)으로 이동
+		// [해결 1] 메쉬 생성 코드를 루프 밖(이 위치)으로 이동
 		Mesh* newMesh = new Mesh();
 		newMesh->CreateMesh(vertices, indices, mesh->mName.C_Str()); // GPU의 VBO, IBO로 버텍스 정보를 쏴준다.
 		meshList.push_back(newMesh);
@@ -638,8 +620,10 @@ private:
 		// 이렇게 meshList와 meshToTex를 나란히 채워줌으로써 mesh와 맞는 material을 손쉽게 찾을 수 있다.
 		meshToTex.push_back(mesh->mMaterialIndex);
 
-		int boneCounter = 0;
-		std::map<std::string, BoneInfo>  boneInfoMap;
+		// [해결 2] "먼 위치로 빠져나가는" 버그의 원인이었던
+		// 아래의 두 지역 변수 선언을 삭제합니다.
+		// int boneCounter = 0; 
+		// std::map<std::string, BoneInfo>  boneInfoMap;
 
 	}
 	void LoadNode(aiNode* node, const aiScene* scene)
