@@ -14,18 +14,21 @@
 
 
 
-//AnimModel* mainModel;
-//Animator* animator;
-//Animation* idleAnim;
-//Animation* runAnim;
+AnimModel* mainModel;
+Animator* animator;
+Animation* idleAnim;
+Animation* runAnim;
 
 
 
-
+glm::mat3 GetNormalMat(glm::mat4& modelMat)
+{
+    return glm::mat3(glm::transpose(glm::inverse(modelMat)));
+}
 static GLvoid Render() {
     CCore::Instance()->Render();
    
-    /*glUseProgram(CCore::Instance()->shaderProgramID2);
+    glUseProgram(CCore::Instance()->shaderProgramID2);
     {
         AnimModel* currModel = mainModel;
         glm::mat4 modelMat = glm::mat4(1.0f);
@@ -62,7 +65,7 @@ static GLvoid Render() {
         if (error != GL_NO_ERROR)
             std::cout << "error : " << error << std::endl;
 
-    }*/
+    }
     glutSwapBuffers();
 }
 static GLvoid Reshape(int w, int h) {
@@ -71,31 +74,31 @@ static GLvoid Reshape(int w, int h) {
 static GLvoid Update() {
     CCore::Instance()->Update();
     TimeMgr::Instance()->Update();
-    //if (KeyMgr::Instance()->getKeyState(KEY::Q) == KEY_TYPE::HOLD) {
-    //        if (animator->GetCurrAnimation() != idleAnim)
-    //            animator->PlayAnimation(idleAnim);
-    //}
-    //else {
-    //        if (animator->GetCurrAnimation() != runAnim)
-    //            animator->PlayAnimation(runAnim);
-    //}
-    //    animator->UpdateAnimation(DT);
-    //    if (mainModel) {
-    //        // 카메라의 현재 위치와 타겟
-    //        glm::vec3 cameraPosition = CameraMgr::Instance()->getMainCamera()->position;
-    //        glm::vec3 cameraTarget = CameraMgr::Instance()->getMainCamera()->target;
+    if (KeyMgr::Instance()->getKeyState(KEY::Q) == KEY_TYPE::HOLD) {
+            if (animator->GetCurrAnimation() != idleAnim)
+                animator->PlayAnimation(idleAnim);
+    }
+    else {
+            if (animator->GetCurrAnimation() != runAnim)
+                animator->PlayAnimation(runAnim);
+    }
+        animator->UpdateAnimation(DT);
+        if (mainModel) {
+            // 카메라의 현재 위치와 타겟
+            glm::vec3 cameraPosition = CameraMgr::Instance()->getMainCamera()->position;
+            glm::vec3 cameraTarget = CameraMgr::Instance()->getMainCamera()->target;
 
-    //        // 모델이 카메라를 바라보도록 방향 벡터 계산
-    //        glm::vec3 directionToTarget = glm::normalize(cameraTarget - cameraPosition);
+            // 모델이 카메라를 바라보도록 방향 벡터 계산
+            glm::vec3 directionToTarget = glm::normalize(cameraTarget - cameraPosition);
 
-    //        // Yaw 계산 (XZ 평면에서의 방향)
-    //        float yaw = atan2(directionToTarget.z, directionToTarget.x); // 라디안 단위
+            // Yaw 계산 (XZ 평면에서의 방향)
+            float yaw = atan2(directionToTarget.z, directionToTarget.x); // 라디안 단위
 
-    //        // 모델 위치를 카메라 위치에서 약간 아래로 설정
-    //        glm::vec3 adjustedPosition = cameraPosition - glm::vec3(0.0f, 0.2f, 0.0f);
-    //        mainModel->SetTranslate(adjustedPosition);
-    //        
-    //    }
+            // 모델 위치를 카메라 위치에서 약간 아래로 설정
+            glm::vec3 adjustedPosition = cameraPosition - glm::vec3(0.0f, 0.2f, 0.0f);
+            mainModel->SetTranslate(adjustedPosition);
+            
+        }
 
         
 
@@ -133,13 +136,13 @@ int main(int argc, char** argv) {
         {MODEL_TYPE::ASCENT, ReadModel("ascentB")},
     };
 
-    //mainModel = new AnimModel();
-    //std::string modelPath = "first2";
-    //mainModel->LoadModel(modelPath);
-    //AnimModel* currModel = mainModel;
-    //idleAnim = new Animation("Models/first2/firstIdle.gltf", currModel);
-    //runAnim = new Animation("Models/first2/first.gltf", currModel);
-    //animator = new Animator(nullptr);
+    mainModel = new AnimModel();
+    std::string modelPath = "first2";
+    mainModel->LoadModel(modelPath);
+    AnimModel* currModel = mainModel;
+    idleAnim = new Animation("Models/first2/firstIdle.gltf", currModel);
+    runAnim = new Animation("Models/first2/first.gltf", currModel);
+    animator = new Animator(nullptr);
 
 
     CCore::Instance()->Init();

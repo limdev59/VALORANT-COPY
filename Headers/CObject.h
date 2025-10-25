@@ -1,6 +1,5 @@
 #pragma once
 #include "Model.h"
-#include "IModel.h"
 
 enum class COLLIDER_TYPE {
     NONE,
@@ -19,8 +18,7 @@ protected:
     glm::vec3       hitboxSize;
     COLLIDER_TYPE   colliderType;
 
-    GLuint  m_shaderProgramID = 0;
-    IModel* model;
+    Model* model;
 
 public:
     CObject();

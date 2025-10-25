@@ -21,6 +21,6 @@ void Sova::Update() {
 }
 void Sova::Render() {
     if (model) {
-        model->Render(m_shaderProgramID);
+        model->Render();
     }
 }

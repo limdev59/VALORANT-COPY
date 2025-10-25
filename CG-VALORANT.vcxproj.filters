@@ -209,8 +209,5 @@
     <ClInclude Include="Headers\Enemy.h">
       <Filter>소스 파일\Object\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\IModel.h">
-      <Filter>소스 파일\Model</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

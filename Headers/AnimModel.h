@@ -2,7 +2,6 @@
 #include "pch.h"
 #include "assimp/anim.h"
 #include <chrono>
-#include "IModel.h"
 
 
 class AssimpGLMHelpers
@@ -404,7 +403,7 @@ private:
 	const char* fileLocation;
 	unsigned char* texData;
 };
-class AnimModel : public IModel {
+class AnimModel {
 public:
 	AnimModel()
 	{
@@ -435,19 +434,8 @@ public:
 		LoadMaterials(scene);
 	}
 
-	virtual void Render(GLuint shaderProgramID) override
+	void Render()
 	{
-		// 1. 셰이더 활성화 (main.cpp에서 이동)
-		glUseProgram(shaderProgramID);
-
-		// 2. 텍스처 유닛(Sampler) 설정 (main.cpp에서 이동)
-		GLint loc_diffuseSampler = glGetUniformLocation(shaderProgramID, "diffuseTexture");
-		GLint loc_normalSampler = glGetUniformLocation(shaderProgramID, "normalMap");
-
-		glUniform1i(loc_diffuseSampler, 0); // 텍스처 유닛 0번
-		glUniform1i(loc_normalSampler, 1);  // 텍스처 유닛 1번
-
-		// 3. 기존 AnimModel::Render()의 렌더링 로직 (그리기)
 		std::vector<std::pair<Mesh*, unsigned int>> solidMeshList;
 		std::vector<std::pair<Mesh*, unsigned int>> transparentMeshList;
 
@@ -469,9 +457,9 @@ public:
 			Mesh* mesh = item.first;
 
 			if (materialIndex < diffuseMaps.size() && diffuseMaps[materialIndex])
-				diffuseMaps[materialIndex]->UseTexture(GL_TEXTURE0); // 0번 유닛에 바인딩
+				diffuseMaps[materialIndex]->UseTexture(GL_TEXTURE0);
 			if (materialIndex < normalMaps.size() && normalMaps[materialIndex])
-				normalMaps[materialIndex]->UseTexture(GL_TEXTURE1); // 1번 유닛에 바인딩
+				normalMaps[materialIndex]->UseTexture(GL_TEXTURE1);
 
 			mesh->RenderMesh();
 		}
@@ -534,7 +522,7 @@ public:
 		glm::mat4 S = glm::scale(glm::mat4(1.f), glm::vec3(scale[0], scale[1], scale[2]));
 		return modelMat = T * R * S;
 	}
-	virtual void Update(vec3 tr, vec3 rt, vec3 sc) override
+	void UpdateTransform(vec3 tr, vec3 rt, vec3 sc)
 	{
 		SetTranslate(tr);
 		SetRotate(rt);
