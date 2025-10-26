@@ -14,10 +14,10 @@
 
 
 
-AnimModel* mainModel;
-Animator* animator;
-Animation* idleAnim;
-Animation* runAnim;
+//AnimModel* mainModel;
+//Animator* animator;
+//Animation* idleAnim;
+//Animation* runAnim;
 
 
 
@@ -27,7 +27,7 @@ glm::mat3 GetNormalMat(glm::mat4& modelMat)
 }
 static GLvoid Render() {
     CCore::Instance()->Render();
-   
+	/*
     glUseProgram(CCore::Instance()->shaderProgramID2);
     {
         AnimModel* currModel = mainModel;
@@ -66,6 +66,7 @@ static GLvoid Render() {
             std::cout << "error : " << error << std::endl;
 
     }
+    */
     glutSwapBuffers();
 }
 static GLvoid Reshape(int w, int h) {
@@ -74,6 +75,8 @@ static GLvoid Reshape(int w, int h) {
 static GLvoid Update() {
     CCore::Instance()->Update();
     TimeMgr::Instance()->Update();
+
+    /*
     if (KeyMgr::Instance()->getKeyState(KEY::Q) == KEY_TYPE::HOLD) {
             if (animator->GetCurrAnimation() != idleAnim)
                 animator->PlayAnimation(idleAnim);
@@ -99,8 +102,7 @@ static GLvoid Update() {
             mainModel->SetTranslate(adjustedPosition);
             
         }
-
-        
+    */
 
 }
 std::unordered_map<MODEL_TYPE, const std::pair<vector<Material>, vector<Group>>> modelPairs;
@@ -136,6 +138,7 @@ int main(int argc, char** argv) {
         {MODEL_TYPE::ASCENT, ReadModel("ascentB")},
     };
 
+    /*
     mainModel = new AnimModel();
     std::string modelPath = "first2";
     mainModel->LoadModel(modelPath);
@@ -143,6 +146,7 @@ int main(int argc, char** argv) {
     idleAnim = new Animation("Models/first2/firstIdle.gltf", currModel);
     runAnim = new Animation("Models/first2/first.gltf", currModel);
     animator = new Animator(nullptr);
+    */
 
 
     CCore::Instance()->Init();

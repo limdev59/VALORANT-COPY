@@ -17,13 +17,9 @@ protected:
     glm::vec3       hitboxCenter;
     glm::vec3       hitboxSize;
     COLLIDER_TYPE   colliderType;
-
-    Model* model;
-
 public:
     CObject();
-
-    ~CObject();
+    virtual ~CObject();
 
     void setPosition(const glm::vec3& pos);
     void setRotation(const glm::vec3& rot);
@@ -39,8 +35,7 @@ public:
     glm::vec3 getHitboxSize() const;
     COLLIDER_TYPE getColliderType() const;
 
-    void setModel(Model* _model);
-    virtual void Update();
-    virtual void Render();
+    virtual void Update() = 0;
+    virtual void Render() = 0;
     virtual bool CheckCollision(const CObject& other);
 };

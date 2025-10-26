@@ -194,6 +194,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headers\AnimModel.h" />
+    <ClInclude Include="Headers\IModel.h" />
     <ClInclude Include="Headers\Sova.h" />
     <ClInclude Include="Headers\CCamera.h" />
     <ClInclude Include="Headers\CameraMgr.h" />

@@ -1,33 +1,44 @@
 #include "pch.h"
-#include "enemy.h"
+#include "Enemy.h"
+#include "IModel.h"
+#include "CCore.h"
+#include "define.h"
 
+Enemy::Enemy()
+    : CObject() {
+    m_pModel = new IModel<Model>(MODEL_TYPE::JETT, GL_TRIANGLES);
+}
 
+Enemy::~Enemy() {
+    if (m_pModel) delete m_pModel; // 래퍼가 내부의 Model*을 자동 delete 합니다.
+}
 
-void Enemy::Update()
-{
-    if (model) {
-        model->Update(position, rotation, scale);
+void Enemy::Update() {
+    if (m_pModel) {
+        m_pModel->GetModel()->Update(position, rotation, scale);
+    }
+
+    // 히트박스
+    hitboxCenter = position;
+    hitboxSize = scale;
+}
+
+void Enemy::Render() {
+    if (m_pModel) {
+        glUseProgram(CCore::Instance()->shaderProgramID);
+        m_pModel->GetModel()->Render(CCore::Instance()->shaderProgramID);
     }
 }
 
-void Enemy::TakeDamage(int damage)
-{
-    hp -= damage; // 데미지만큼 체력을 감소
-    if (hp < 0) {
-        hp = 0; // 체력은 0 이하로 내려가지 않음
-    }
-
-    // 체력이 0이 되었을 때 추가 동작 (예: 사망 처리)
-    if (hp == 0) {
+void Enemy::TakeDamage(int damage) {
+    hp -= damage;
+    if (hp <= 0) {
         OnDeath();
     }
 }
 
-void Enemy::OnDeath()
-{
-    // 사망 시 처리할 로직 (예: 제거, 애니메이션 재생)
-    // 현재는 단순히 로그 출력
-    position.y = -100;
-    std::cout << "Enemy has died!" << std::endl;
+void Enemy::OnDeath() {
+    std::cout << "Enemy died!" << std::endl;
 }
+
 

@@ -1,17 +1,31 @@
 #pragma once
 #include "CObject.h"
-#include "AnimModel.h"
+#include "IModel.h"
 
+class AnimModel;
+class Animator;
+class Animation;
+template <typename T>
+class IModel;
 
 class Sova : public CObject {
 protected:
-    AnimModel* model;
+    IModel<AnimModel>* m_pModel;
+
+    Animator* m_pAnimator; 
+
+    Animation* m_pIdleAnim;
+
+    float   m_gravity = -9.81f;
+    vec3    m_velocity = vec3(0.0f);
+    bool    m_isOnGround = false;
+    float   m_jumpVelocity = 2.0f;
 
 public:
     Sova();
-    ~Sova();
+    virtual ~Sova();
 
-    void setModel(AnimModel* _model);
-    virtual void Update();
-    virtual void Render();
+    virtual void Update() override;
+    virtual void Render() override;
+    void ApplyGravity();
 };
