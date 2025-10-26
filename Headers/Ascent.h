@@ -7,13 +7,13 @@ class Model;
 template <typename T>
 class IModel;
 
-class Pearl : public CObject {
+class Ascent : public CObject {
 private:
     IModel<Model>* m_pModel;
 
 public:
-    Pearl();
-    virtual ~Pearl();
+    Ascent();
+    virtual ~Ascent();
 
     virtual void Update() override;
     virtual void Render() override;

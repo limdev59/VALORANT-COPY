@@ -177,7 +177,7 @@
     <ClCompile Include="Sources\main.cpp" />
     <ClCompile Include="Sources\Model\Model.cpp" />
     <ClCompile Include="Sources\Managers\MouseMgr.cpp" />
-    <ClCompile Include="Sources\Objects\Pearl.cpp" />
+    <ClCompile Include="Sources\Objects\Ascent.cpp" />
     <ClCompile Include="Sources\Objects\Player.cpp" />
     <ClCompile Include="Sources\Managers\SceneMgr.cpp" />
     <ClCompile Include="Sources\Objects\Sphere.cpp" />
@@ -208,7 +208,7 @@
     <ClInclude Include="Headers\Model.h" />
     <ClInclude Include="Headers\MouseMgr.h" />
     <ClInclude Include="Headers\pch.h" />
-    <ClInclude Include="Headers\Pearl.h" />
+    <ClInclude Include="Headers\Ascent.h" />
     <ClInclude Include="Headers\Player.h" />
     <ClInclude Include="Headers\SceneMgr.h" />
     <ClInclude Include="Headers\Sphere.h" />

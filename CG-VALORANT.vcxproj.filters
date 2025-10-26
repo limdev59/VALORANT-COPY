@@ -64,14 +64,14 @@
     <Filter Include="소스 파일\Camera\Debug_Camera">
       <UniqueIdentifier>{64ccad62-0258-4aea-82a3-0bb8c0c91fcc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Object\Pearl">
-      <UniqueIdentifier>{200b9982-82dd-4081-8eed-a9aa358f41c1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\Object\Sova">
       <UniqueIdentifier>{2050e6b0-6dd0-469e-82da-33660bb2aa1d}</UniqueIdentifier>
     </Filter>
     <Filter Include="소스 파일\Object\Enemy">
       <UniqueIdentifier>{54914ff7-2a8e-436b-9109-734d42e31636}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object\Ascent">
+      <UniqueIdentifier>{200b9982-82dd-4081-8eed-a9aa358f41c1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -129,8 +129,8 @@
     <ClCompile Include="Sources\Camera\Start_Camera.cpp">
       <Filter>소스 파일\Camera\Start_Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\Objects\Pearl.cpp">
-      <Filter>소스 파일\Object\Pearl</Filter>
+    <ClCompile Include="Sources\Objects\Ascent.cpp">
+      <Filter>소스 파일\Object\Ascent</Filter>
     </ClCompile>
     <ClCompile Include="Sources\Objects\Enemy.cpp">
       <Filter>소스 파일\Object\Enemy</Filter>
@@ -200,8 +200,8 @@
     <ClInclude Include="Headers\Start_Camera.h">
       <Filter>소스 파일\Camera\Start_Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\Pearl.h">
-      <Filter>소스 파일\Object\Pearl</Filter>
+    <ClInclude Include="Headers\Ascent.h">
+      <Filter>소스 파일\Object\Ascent</Filter>
     </ClInclude>
     <ClInclude Include="Headers\AnimModel.h">
       <Filter>소스 파일\Model</Filter>

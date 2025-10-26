@@ -38,6 +38,7 @@ GLvoid CCore::Update() {
     KeyMgr::Instance()->Update();
     SceneMgr::Instance()->Update();
     MouseMgr::Instance()->Update();
+    TimeMgr::Instance()->Update();
     glutPostRedisplay();
 }
 

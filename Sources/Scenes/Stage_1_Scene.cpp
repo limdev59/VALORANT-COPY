@@ -7,7 +7,7 @@
 // [제거] 씬은 더 이상 Model을 직접 생성하지 않습니다.
 // #include "Model.h" 
 #include "Player.h"
-#include "Pearl.h"
+#include "Ascent.h"
 #include "Enemy.h"
 
 Stage_1_Scene::Stage_1_Scene() {
@@ -19,8 +19,8 @@ Stage_1_Scene::~Stage_1_Scene() {
 void Stage_1_Scene::Enter() {
     if (!loaded) {
         // --- 1. 맵 생성 ---
-        // Pearl() 생성자가 IModel<Model>을 통해 스스로 맵 모델을 로드합니다.
-        CObject* map_floor = new Pearl();
+        // Ascent() 생성자가 IModel<Model>을 통해 스스로 맵 모델을 로드합니다.
+        CObject* map_floor = new Ascent();
         // Model* map_floor_model = new Model(MODEL_TYPE::ASCENT, GL_TRIANGLES); [제거]
         // map_floor->setModel(map_floor_model); [제거]
         map_floor->setScale(vec3(0.1));

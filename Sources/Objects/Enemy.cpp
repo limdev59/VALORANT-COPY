@@ -10,7 +10,7 @@ Enemy::Enemy()
 }
 
 Enemy::~Enemy() {
-    if (m_pModel) delete m_pModel; // 래퍼가 내부의 Model*을 자동 delete 합니다.
+    if (m_pModel) delete m_pModel;
 }
 
 void Enemy::Update() {

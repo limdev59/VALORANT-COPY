@@ -23,12 +23,9 @@ enum class GROUP_TYPE {
 	DEFAULT,
 	PLAYER,
 	ENEMY,
-	//MISSILE,
-	//MONSTER,
 	END,
 };
 enum class SCENE_TYPE {
-	TOOL,
 	START,
 	STAGE_1,
 	STAGE_2,
@@ -40,12 +37,7 @@ enum class PROJ_TYPE {
 	ORTHOGRAPHIC
 };
 enum class MODEL_TYPE {
-	CUBE,
-	SPHERE,
 	JETT,
-	AXIS_MODEL,
-	SQUARE,
-	PEARL,
 	ASCENT,
 	END,
 };

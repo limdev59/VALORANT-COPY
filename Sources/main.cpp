@@ -74,7 +74,7 @@ static GLvoid Reshape(int w, int h) {
 }
 static GLvoid Update() {
     CCore::Instance()->Update();
-    TimeMgr::Instance()->Update();
+    
 
     /*
     if (KeyMgr::Instance()->getKeyState(KEY::Q) == KEY_TYPE::HOLD) {
