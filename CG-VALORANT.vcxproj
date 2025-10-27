@@ -83,16 +83,16 @@
       <PreprocessorDefinitions>
       </PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Libs</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Libs;$(SolutionDir)Headers;$(SolutionDir)Sources;$(SolutionDir)Shaders</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)Libs\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32.lib;freeglut.lib;assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Libs\lib_debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;freeglut.lib;assimp-vc143-mtd.lib;</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>xcopy "$(SolutionDir)dlls\*.dll" "$(TargetDir)" /Y /I /D</Command>
+      <Command>xcopy "$(SolutionDir)dlls_debug\*.dll" "$(TargetDir)" /Y /I /D</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -104,18 +104,18 @@
       <PreprocessorDefinitions>
       </PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Libs</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Libs;$(SolutionDir)Headers;$(SolutionDir)Sources;$(SolutionDir)Shaders</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)Libs\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32.lib;freeglut.lib;assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Libs\lib_release</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;freeglut.lib;assimp-vc143-mt.lib;</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>xcopy "$(SolutionDir)dlls\*.dll" "$(TargetDir)" /Y /I /D</Command>
+      <Command>xcopy "$(SolutionDir)dlls_release\*.dll" "$(TargetDir)" /Y /I /D</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -126,19 +126,19 @@
       </PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Libs</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Libs;$(SolutionDir)Headers;$(SolutionDir)Sources;$(SolutionDir)Shaders</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)Libs\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32.lib;freeglut.lib;assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Libs\lib_debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;freeglut.lib;assimp-vc143-mtd.lib;</AdditionalDependencies>
     </Link>
     <Manifest>
       <AdditionalOptions>glew32.lib freeglut.lib assimp-vc143-mtd.lib %(AdditionalOptions)</AdditionalOptions>
     </Manifest>
     <PreBuildEvent>
-      <Command>xcopy "$(SolutionDir)dlls\*.dll" "$(TargetDir)" /Y /I /D</Command>
+      <Command>xcopy "$(SolutionDir)dlls_debug\*.dll" "$(TargetDir)" /Y /I /D</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -150,73 +150,72 @@
       <PreprocessorDefinitions>
       </PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Libs</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Libs;$(SolutionDir)Headers;$(SolutionDir)Sources;$(SolutionDir)Shaders</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)Libs\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32.lib;freeglut.lib;assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Libs\lib_release</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;freeglut.lib;assimp-vc143-mt.lib;</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>xcopy "$(SolutionDir)dlls\*.dll" "$(TargetDir)" /Y /I /D</Command>
+      <Command>xcopy "$(SolutionDir)dlls_release\*.dll" "$(TargetDir)" /Y /I /D</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Sova.cpp" />
-    <ClCompile Include="CCamera.cpp" />
-    <ClCompile Include="CameraMgr.cpp" />
-    <ClCompile Include="CCore.cpp" />
-    <ClCompile Include="CObject.cpp" />
-    <ClCompile Include="CScene.cpp" />
-    <ClCompile Include="Debug_Camera.cpp" />
-    <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="KeyMgr.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Model.cpp" />
-    <ClCompile Include="MouseMgr.cpp" />
-    <ClCompile Include="Pearl.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="SceneMgr.cpp" />
-    <ClCompile Include="Sphere.cpp" />
-    <ClCompile Include="Stage_1_Scene.cpp" />
-    <ClCompile Include="Start_Camera.cpp" />
-    <ClCompile Include="Start_Scene.cpp" />
-    <ClCompile Include="stb_image.cpp" />
-    <ClCompile Include="TimeMgr.cpp" />
+    <ClCompile Include="Sources\Objects\Sova.cpp" />
+    <ClCompile Include="Sources\Camera\CCamera.cpp" />
+    <ClCompile Include="Sources\Managers\CameraMgr.cpp" />
+    <ClCompile Include="Sources\CCore.cpp" />
+    <ClCompile Include="Sources\Objects\CObject.cpp" />
+    <ClCompile Include="Sources\Scenes\CScene.cpp" />
+    <ClCompile Include="Sources\Camera\Debug_Camera.cpp" />
+    <ClCompile Include="Sources\Objects\Enemy.cpp" />
+    <ClCompile Include="Sources\Managers\KeyMgr.cpp" />
+    <ClCompile Include="Sources\main.cpp" />
+    <ClCompile Include="Sources\Model\Model.cpp" />
+    <ClCompile Include="Sources\Managers\MouseMgr.cpp" />
+    <ClCompile Include="Sources\Objects\Ascent.cpp" />
+    <ClCompile Include="Sources\Objects\Player.cpp" />
+    <ClCompile Include="Sources\Managers\SceneMgr.cpp" />
+    <ClCompile Include="Sources\Objects\Sphere.cpp" />
+    <ClCompile Include="Sources\Scenes\Stage_1_Scene.cpp" />
+    <ClCompile Include="Sources\Camera\Start_Camera.cpp" />
+    <ClCompile Include="Sources\Scenes\Start_Scene.cpp" />
+    <ClCompile Include="Sources\Managers\TimeMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="animFragment.glsl" />
-    <None Include="animVertex.glsl" />
-    <None Include="fragment.glsl" />
-    <None Include="vertex.glsl" />
+    <None Include="Shaders\animFragment.glsl" />
+    <None Include="Shaders\animVertex.glsl" />
+    <None Include="Shaders\fragment.glsl" />
+    <None Include="Shaders\vertex.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AnimModel.h" />
-    <ClInclude Include="Sova.h" />
-    <ClInclude Include="CCamera.h" />
-    <ClInclude Include="CameraMgr.h" />
-    <ClInclude Include="CCore.h" />
-    <ClInclude Include="CObject.h" />
-    <ClInclude Include="CScene.h" />
-    <ClInclude Include="Debug_Camera.h" />
-    <ClInclude Include="define.h" />
-    <ClInclude Include="Enemy.h" />
-    <ClInclude Include="KeyMgr.h" />
-    <ClInclude Include="Model.h" />
-    <ClInclude Include="MouseMgr.h" />
-    <ClInclude Include="pch.h" />
-    <ClInclude Include="Pearl.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="SceneMgr.h" />
-    <ClInclude Include="Sphere.h" />
-    <ClInclude Include="Stage_1_Scene.h" />
-    <ClInclude Include="Start_Camera.h" />
-    <ClInclude Include="Start_Scene.h" />
-    <ClInclude Include="stb_image.h" />
-    <ClInclude Include="TimeMgr.h" />
+    <ClInclude Include="Headers\AnimModel.h" />
+    <ClInclude Include="Headers\IModel.h" />
+    <ClInclude Include="Headers\Sova.h" />
+    <ClInclude Include="Headers\CCamera.h" />
+    <ClInclude Include="Headers\CameraMgr.h" />
+    <ClInclude Include="Headers\CCore.h" />
+    <ClInclude Include="Headers\CObject.h" />
+    <ClInclude Include="Headers\CScene.h" />
+    <ClInclude Include="Headers\Debug_Camera.h" />
+    <ClInclude Include="Headers\define.h" />
+    <ClInclude Include="Headers\Enemy.h" />
+    <ClInclude Include="Headers\KeyMgr.h" />
+    <ClInclude Include="Headers\Model.h" />
+    <ClInclude Include="Headers\MouseMgr.h" />
+    <ClInclude Include="Headers\pch.h" />
+    <ClInclude Include="Headers\Ascent.h" />
+    <ClInclude Include="Headers\Player.h" />
+    <ClInclude Include="Headers\SceneMgr.h" />
+    <ClInclude Include="Headers\Sphere.h" />
+    <ClInclude Include="Headers\Stage_1_Scene.h" />
+    <ClInclude Include="Headers\Start_Camera.h" />
+    <ClInclude Include="Headers\Start_Scene.h" />
+    <ClInclude Include="Headers\TimeMgr.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
