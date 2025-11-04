@@ -23,7 +23,6 @@
 #include <assimp/postprocess.h>
 #include <stb_image/stb_image.h>
 
-#include "PacketDefs.h"
 #include <WinSock2.h>
 #include <WS2tcpip.h>
 
