@@ -4,37 +4,12 @@
 #include <string>
 #include <vector>
 #include <cstdint>
-
-// --- 임시 구조체 선언 ---
-// TODO: 나중에 실제 패킷 정의로 대체
+#include "PacketDefs.h"
 
 /**
  * @brief @brief를 사용해 각 구조체와 클래스에 대한 간단한 설명을 추가하면
  * @brief 가독성이 좋아짐 읽어보길 바람
  */
-
-struct MovementPacket {
-    // C2S_MOVEMENT_UPDATE 필드
-    uint32_t msgSeq;
-    uint64_t playerId;
-
-    // ... 기타 필드 (position, rotation, velocity, clientTime)
-}; // 슝민
-
-struct FirePacket {
-    // C2S_FIRE_ACTION 필드
-    uint32_t msgSeq;
-    uint64_t playerId;
-
-    // ... 기타 필드 (fireOrigin, fireDirection, clientTime)
-};// 슝민
-
-struct PlayerSnapshot {
-    // S2C_SNAPSHOT_STATE 내 players 배열 요소
-    uint64_t playerId;
-
-    // ... 기타 상태 필드 (position, rotation, hp 등)
-};// 슝민
 
 /**
  * @brief 서버와의 모든 TCP/UDP 통신을 관리하는 클래스
@@ -59,13 +34,13 @@ public:
      * @brief 서버로 이동 패킷(C2S_MOVEMENT_UPDATE)을 UDP로 전송합니다.
      * @param pkt Player 클래스에서 생성된 이동 패킷
      */
-    void SendMovement(const MovementPacket& pkt);// 슝민
+    void SendMovement(const C2S_MovementUpdate& pkt);// 슝민
 
     /**
      * @brief 서버로 발사 패킷(C2S_FIRE_ACTION)을 UDP로 전송합니다.
      * @param pkt Player 클래스에서 생성된 발사 패킷
      */
-    void SendFire(const FirePacket& pkt);// 슝민
+    void SendFire(const C2S_FireAction& pkt);// 슝민
 
     /**
      * @brief 비동기 수신된 패킷 큐를 확인하고 처리합니다. (주로 S2C_SNAPSHOT_STATE)

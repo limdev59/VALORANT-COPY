@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "ClientNetwork.h"
+#include "PacketDefs.h"
 
 // ¿œ¥‹ »§Ω√ ∏Ù∂Û ¡÷ºÆ¿∏∑Œ √ﬂ∞°
 // #include <WinSock2.h>
@@ -23,12 +24,12 @@ bool ClientNetwork::ConnectToServer(const std::string& ip, uint16_t tcpPort, uin
     return false; 
 }
 
-void ClientNetwork::SendMovement(const MovementPacket& pkt) // ΩππŒ
+void ClientNetwork::SendMovement(const C2S_MovementUpdate& pkt) // ΩππŒ
 {
     std::cout << "¿Ãµø ∆–≈∂ ¿¸º€ (æ∆¡˜ πÃ±∏«ˆ)" << std::endl;
 }
 
-void ClientNetwork::SendFire(const FirePacket& pkt) // ΩππŒ
+void ClientNetwork::SendFire(const C2S_FireAction& pkt) // ΩππŒ
 {
     std::cout << "πﬂªÁ ∆–≈∂ ¿¸º€ (æ∆¡˜ πÃ±∏«ˆ)" << std::endl;
 }
