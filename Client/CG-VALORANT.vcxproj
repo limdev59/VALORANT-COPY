@@ -165,6 +165,7 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Sources\ClientNetwork\ClientNetwork.cpp" />
     <ClCompile Include="Sources\Objects\Sova.cpp" />
     <ClCompile Include="Sources\Camera\CCamera.cpp" />
     <ClCompile Include="Sources\Managers\CameraMgr.cpp" />
@@ -194,6 +195,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headers\AnimModel.h" />
+    <ClInclude Include="Headers\ClientNetwork.h" />
     <ClInclude Include="Headers\IModel.h" />
     <ClInclude Include="Headers\Sova.h" />
     <ClInclude Include="Headers\CCamera.h" />

@@ -135,6 +135,9 @@
     <ClCompile Include="Sources\Objects\Enemy.cpp">
       <Filter>소스 파일\Object\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="Sources\ClientNetwork\ClientNetwork.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\vertex.glsl" />
@@ -211,6 +214,9 @@
     </ClInclude>
     <ClInclude Include="Headers\IModel.h">
       <Filter>소스 파일\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\ClientNetwork.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
