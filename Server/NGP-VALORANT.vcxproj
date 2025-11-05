@@ -29,6 +29,7 @@
     <ClInclude Include="PacketDefs.h" />
     <ClInclude Include="PlayerState.h" />
     <ClInclude Include="ThreadQueue.h" />
+    <ClInclude Include="WorldEvent.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
