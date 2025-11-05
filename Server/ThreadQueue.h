@@ -32,8 +32,8 @@ public:
     }
 
     // 클래스 복사를 막는 안전장치
-    ThreadSafeQueue(const ThreadSafeQueue&) = delete;
-    ThreadSafeQueue& operator=(const ThreadSafeQueue&) = delete;
+    ThreadQueue(const ThreadSafeQueue&) = delete;
+    ThreadQueue& operator=(const ThreadSafeQueue&) = delete;
 
     /**
      * @brief 큐의 뒤에 아이템 추가
