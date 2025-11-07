@@ -19,4 +19,5 @@ public:
     void                                            UpdateFPS();
     double                                          GetDT() { return dDT; }
     double                                          GetfDT() { return (float)dDT; }
+    double                                          getCurrTime() { return dAcc; }
 };

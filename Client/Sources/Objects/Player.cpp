@@ -11,28 +11,28 @@
 Player::Player()
     : CObject() {
 
-    // --- 1. Model / Animation ·Îµù (ÀÌÀü Player ·ÎÁ÷) ---
+    // --- 1. Model / Animation ï¿½Îµï¿½ (ï¿½ï¿½ï¿½ï¿½ Player ï¿½ï¿½ï¿½ï¿½) ---
     string modelPath = "first2";
     m_pModel = new IModel<AnimModel>(modelPath); // [Refactored]
 
-    AnimModel* currModel = m_pModel->GetModel(); // ·¡ÆÛ¿¡¼­ ½ÇÁ¦ ¸ðµ¨ Æ÷ÀÎÅÍ °¡Á®¿À±â
+    AnimModel* currModel = m_pModel->GetModel(); // ï¿½ï¿½ï¿½Û¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
     m_pIdleAnim = new Animation("Models/first2/firstIdle.gltf", currModel);
     m_pRunAnim = new Animation("Models/first2/first.gltf", currModel);
     
     m_pAnimator = new Animator(m_pIdleAnim);
 
-    // --- 2. Physics º¯¼ö ÃÊ±âÈ­ (½Å±Ô Player ·ÎÁ÷) ---
+    // --- 2. Physics ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­ (ï¿½Å±ï¿½ Player ï¿½ï¿½ï¿½ï¿½) ---
     m_gravity = -9.81f;
     m_velocity = vec3(0.0f);
-    m_isOnGround = true; // (¹Ù´Ú¿¡¼­ ½ÃÀÛÇÑ´Ù°í °¡Á¤)
+    m_isOnGround = true; // (ï¿½Ù´Ú¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´Ù°ï¿½ ï¿½ï¿½ï¿½ï¿½)
     m_jumpVelocity = 3.0f;
 
-    // --- 3. CObject ±âº»°ª ¼³Á¤ (ÀÌÀü Render ·ÎÁ÷¿¡¼­ ÃßÃâ) ---
-    // main.cppÀÇ ÇÏµåÄÚµùµÈ °ªÀ» CObjectÀÇ ±âº»°ªÀ¸·Î ¼³Á¤
+    // --- 3. CObject ï¿½âº»ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ Render ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½) ---
+    // main.cppï¿½ï¿½ ï¿½Ïµï¿½ï¿½Úµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ CObjectï¿½ï¿½ ï¿½âº»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     setScale(vec3(0.3f, 0.3f, 0.3f));
-    setRotation(vec3(0, 0.0f, 0.0f)); // XÃà 90µµ È¸Àü
-    // (translate(0, -1, 0)Àº position.y¿Í Áß·ÂÀ¸·Î Ã³¸®)
+    setRotation(vec3(0, 0.0f, 0.0f)); // Xï¿½ï¿½ 90ï¿½ï¿½ È¸ï¿½ï¿½
+    // (translate(0, -1, 0)ï¿½ï¿½ position.yï¿½ï¿½ ï¿½ß·ï¿½ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½)
 }
 
 Player::~Player() {
@@ -49,7 +49,7 @@ void Player::Update()
     glm::vec3 tar = cam->target;
     glm::vec3 pos = cam->position;
 
-    // --- 1. ÀÌµ¿ ·ÎÁ÷ (½Å±Ô Player.cpp) ---
+    // --- 1. ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½Å±ï¿½ Player.cpp) ---
     glm::vec3 viewVec = tar - pos;
     viewVec.y = 0.0f;
     viewVec = glm::normalize(viewVec);
@@ -74,17 +74,89 @@ void Player::Update()
         isMoving = true;
     }
 
-    // --- 2. Á¡ÇÁ ¹× ¹°¸® ·ÎÁ÷ (½Å±Ô Player.cpp) ---
-    // (isJumping ´ë½Å m_isOnGround ¸â¹ö º¯¼ö »ç¿ë)
+    // --- 2. ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½Å±ï¿½ Player.cpp) ---
+    // (isJumping ï¿½ï¿½ï¿½ m_isOnGround ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½)
     if (KeyMgr::Instance()->getKeyState(KEY::SPACE) == KEY_TYPE::HOLD && m_isOnGround) {
         m_isOnGround = false;
         m_velocity.y = m_jumpVelocity;
     }
 
-    // ¸Å ÇÁ·¹ÀÓ Áß·Â Àû¿ë (Gravity() ÇÔ¼ö ³»¿ë)
+
+    // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß·ï¿½ ï¿½ï¿½ï¿½ï¿½ (Gravity() ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½ï¿½)
     ApplyGravity();
 
-    // --- 3. ¾Ö´Ï¸ÞÀÌ¼Ç »óÅÂ º¯°æ (ÀÌÀü Player ·ÎÁ÷) ---
+    // --- 3. ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ Player ï¿½ï¿½ï¿½ï¿½) ---
+    glm::vec3 nextPosition = this->position + (m_velocity * (float)dt);
+
+    // --- 5. ï¿½æµ¹ Ã³ï¿½ï¿½ (CSceneï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½) ---
+    CScene* pCurScene = SceneMgr::Instance()->getScene();
+    if (!pCurScene) return;
+    // (ï¿½ï¿½ï¿½ï¿½) std::vector<CObject*> collidables = m_pCurrentScene->GetCollidables();
+
+    const vector<CObject*>& mapObjects = pCurScene->GetObjects(GROUP_TYPE::DEFAULT);
+    const vector<CObject*>& enemyObjects = pCurScene->GetObjects(GROUP_TYPE::ENEMY);
+
+    glm::vec3 originalPos = this->position;
+    bool isGroundedThisFrame = false;
+
+    // Yï¿½ï¿½(ï¿½ß·ï¿½/ï¿½ï¿½ï¿½ï¿½) ï¿½æµ¹ ï¿½ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½
+    this->setPosition(glm::vec3(originalPos.x, nextPosition.y, originalPos.z));
+
+    for (CObject* other : mapObjects) {
+        if (this->CheckCollision(*other)) {
+            if (m_velocity.y < 0) {
+                isGroundedThisFrame = true;
+            }
+            m_velocity.y = 0;
+            nextPosition.y = originalPos.y;
+            break;
+        }
+    }
+
+    // m_isOnGround ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
+    m_isOnGround = isGroundedThisFrame;
+
+    // Xï¿½ï¿½(ï¿½Â¿ï¿½) ï¿½æµ¹ ï¿½Ë»ï¿½
+    this->setPosition(glm::vec3(nextPosition.x, originalPos.y, originalPos.z));
+    for (CObject* other : mapObjects) { // ï¿½Ê°ï¿½ Xï¿½ï¿½ ï¿½Ë»ï¿½
+        if (this->CheckCollision(*other)) {
+            m_velocity.x = 0;
+            nextPosition.x = originalPos.x;
+            break;
+        }
+    }
+    for (CObject* other : enemyObjects) { // ï¿½ï¿½ï¿½ï¿½ Xï¿½ï¿½ ï¿½Ë»ï¿½
+        if (this->CheckCollision(*other)) {
+            m_velocity.x = 0;
+            nextPosition.x = originalPos.x;
+            break;
+        }
+    }
+
+    // Zï¿½ï¿½(ï¿½Õµï¿½) ï¿½æµ¹ ï¿½Ë»ï¿½
+    this->setPosition(glm::vec3(originalPos.x, originalPos.y, nextPosition.z));
+    for (CObject* other : mapObjects) { // ï¿½Ê°ï¿½ Zï¿½ï¿½ ï¿½Ë»ï¿½
+        if (this->CheckCollision(*other)) {
+            m_velocity.z = 0;
+            nextPosition.z = originalPos.z;
+            break;
+        }
+    }
+    for (CObject* other : enemyObjects) { // ï¿½ï¿½ï¿½ï¿½ Zï¿½ï¿½ ï¿½Ë»ï¿½
+        if (this->CheckCollision(*other)) {
+            m_velocity.z = 0;
+            nextPosition.z = originalPos.z;
+            break;
+        }
+    }
+
+    // ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    this->setPosition(originalPos);
+
+    setPosition(nextPosition);
+
+    C2S_MovementUpdate movementPkt = BuildMovementPacket();
+
     if (isMoving && m_isOnGround) {
         if (m_pAnimator->GetCurrAnimation() != m_pRunAnim)
             m_pAnimator->PlayAnimation(m_pRunAnim);
@@ -93,16 +165,15 @@ void Player::Update()
         if (m_pAnimator->GetCurrAnimation() != m_pIdleAnim)
             m_pAnimator->PlayAnimation(m_pIdleAnim);
     }
-    // (Âü°í: Á¡ÇÁ ¾Ö´Ï¸ÞÀÌ¼Ç »óÅÂµµ Ãß°¡ ÇÊ¿ä)
+    // (ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½Âµï¿½ ï¿½ß°ï¿½ ï¿½Ê¿ï¿½)
     if (m_pAnimator) {
         m_pAnimator->UpdateAnimation(DT);
     }
 
-    // --- 4. È÷Æ®¹Ú½º ¾÷µ¥ÀÌÆ® (½Å±Ô Player.cpp) ---
+    // --- 4. ï¿½ï¿½Æ®ï¿½Ú½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® (ï¿½Å±ï¿½ Player.cpp) ---
     hitboxCenter = position;
     hitboxSize = scale;
 
-}
 
 void Player::Render() {
     if (m_pModel) { // [Refactored]
@@ -110,17 +181,17 @@ void Player::Render() {
         {
             AnimModel* currModel = m_pModel->GetModel(); // [Refactored]
 
-            // CObjectÀÇ P, R, S·Î Model Matrix °è»ê
+            // CObjectï¿½ï¿½ P, R, Sï¿½ï¿½ Model Matrix ï¿½ï¿½ï¿½
             glm::mat4 modelMat = glm::mat4(1.0f);
             glm::mat4 T = glm::translate(glm::mat4(1.f), position);
             glm::mat4 R = glm::mat4_cast(glm::quat(glm::vec3(glm::radians(rotation.x), glm::radians(rotation.y), glm::radians(rotation.z))));
             glm::mat4 S = glm::scale(glm::mat4(1.f), scale);
             modelMat = T * R * S;
 
-            // (main.cpp¿¡¼­ °¡Á®¿Â ¸ðµ¨ ¿øÁ¡ º¸Á¤¿ë translate)
+            // (main.cppï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ translate)
             modelMat = glm::translate(modelMat, vec3(0.0f, 0.1f, 0.0f));
 
-            // PVM ¹× ¼ÎÀÌ´õ Uniform ¼³Á¤
+            // PVM ï¿½ï¿½ ï¿½ï¿½ï¿½Ì´ï¿½ Uniform ï¿½ï¿½ï¿½ï¿½
             mat4 projMat = CameraMgr::Instance()->getMainCamera()->getProjectionMatrix();
             mat4 view = CameraMgr::Instance()->getMainCamera()->getViewMatrix();
             glm::mat4 PVM = projMat * view * modelMat;
@@ -133,19 +204,19 @@ void Player::Render() {
             glUniformMatrix4fv(loc_PVM, 1, GL_FALSE, glm::value_ptr(PVM));
             glUniformMatrix3fv(loc_normalMat, 1, GL_FALSE, glm::value_ptr(normalMat));
 
-            // Bone(»À) Uniform ¼³Á¤
+            // Bone(ï¿½ï¿½) Uniform ï¿½ï¿½ï¿½ï¿½
             const auto& transforms = m_pAnimator->GetFinalBoneMatrices();
             GLuint finalBonesMatricesLoc = glGetUniformLocation(CCore::Instance()->shaderProgramID2, "finalBonesMatrices");
             for (int i = 0; i < transforms.size(); i++)
                 glUniformMatrix4fv(finalBonesMatricesLoc + i, 1, false, glm::value_ptr(transforms[i]));
 
-            // ÅØ½ºÃ³ Sampler ¼³Á¤
+            // ï¿½Ø½ï¿½Ã³ Sampler ï¿½ï¿½ï¿½ï¿½
             GLint loc_diffuseSampler = glGetUniformLocation(CCore::Instance()->shaderProgramID2, "diffuseTexture");
             GLint loc_normalSampler = glGetUniformLocation(CCore::Instance()->shaderProgramID2, "normalMap");
             glUniform1i(loc_diffuseSampler, 0);
             glUniform1i(loc_normalSampler, 1);
 
-            // ¸ðµ¨ ·»´õ¸µ
+            // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             currModel->Render();
 
             GLenum error = glGetError();
@@ -155,25 +226,55 @@ void Player::Render() {
     }
 }
 
+C2S_MovementUpdate Player::BuildMovementPacket()
+{
+    C2S_MovementUpdate pkt;
+
+    // ï¿½Þ½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    m_movementSeq++;
+    pkt.msgSeq = m_movementSeq;
+
+    // PlayerID ï¿½Ó½Ã·ï¿½ 0 Ã³ï¿½ï¿½
+    pkt.playerId = 0;
+
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡, È¸ï¿½ï¿½, ï¿½Óµï¿½ ï¿½ï¿½ï¿½ï¿½.
+    pkt.position.x = position.x;
+    pkt.position.y = position.y;
+    pkt.position.z = position.z;
+
+    pkt.rotation.x = rotation.x;
+    pkt.rotation.y = rotation.y;
+    pkt.rotation.z = rotation.z;
+
+    pkt.velocity.x = m_velocity.x;
+    pkt.velocity.y = m_velocity.y;
+    pkt.velocity.z = m_velocity.z;
+
+    // Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ® ï¿½Ã°ï¿½ Å¸ï¿½Ó½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    pkt.clientTime = (float)TimeMgr::Instance()->getCurrTime();
+
+    return pkt;
+}
+
 void Player::ApplyGravity() {
     double dt = DT;
 
-    m_velocity.y += m_gravity * dt; // Áß·Â °¡¼Óµµ Àû¿ë
-    position.y += m_velocity.y * dt; // yÃà ¼Óµµ¸¦ À§Ä¡¿¡ ¹Ý¿µ
+    m_velocity.y += m_gravity * dt; // ï¿½ß·ï¿½ ï¿½ï¿½ï¿½Óµï¿½ ï¿½ï¿½ï¿½ï¿½
+    position.y += m_velocity.y * dt; // yï¿½ï¿½ ï¿½Óµï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ý¿ï¿½
 
-    m_isOnGround = false; // ±âº»°ªÀº °øÁß
+    m_isOnGround = false; // ï¿½âº»ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-    // ¹Ù´Ú°ú Ãæµ¹ Ã³¸® (±âÁ¸ ÇÏµåÄÚµùµÈ ·ÎÁ÷ À¯Áö)
+    // ï¿½Ù´Ú°ï¿½ ï¿½æµ¹ Ã³ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ ï¿½Ïµï¿½ï¿½Úµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
     if (position.x < -2.31563 && position.z < -6.84576) {
         if (position.y <= -0.5f) {
             position.y = -0.5f;
             m_velocity.y = 0.0f;
-            m_isOnGround = true; // Á¡ÇÁ Á¾·á
+            m_isOnGround = true; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         }
     }
     else if (position.y <= -0.25f) {
         position.y = -0.25f;
         m_velocity.y = 0.0f;
-        m_isOnGround = true; // Á¡ÇÁ Á¾·á
+        m_isOnGround = true; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     }
 }

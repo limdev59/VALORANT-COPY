@@ -3,6 +3,7 @@
 #include "TimeMgr.h" // DT
 #include "KeyMgr.h"  // KeyMgr
 #include "IModel.h"  // 템플릿 래퍼 포함
+#include "ClientNetwork.h" // C2S_MovementUpdate, C2S_FireAction
 
 // 전방 선언
 class AnimModel;
@@ -28,6 +29,8 @@ protected:
     bool    m_isOnGround = false;
     float   m_jumpVelocity = 2.0f;
 
+    uint32_t m_movementSeq = 0;
+
 public:
     Player();
     virtual ~Player();
@@ -35,6 +38,8 @@ public:
     virtual void Update() override;
     virtual void Render() override;
 
+    C2S_MovementUpdate BuildMovementPacket();
+    
     // --- Physics Methods (from existing Player.h/Player.cpp) ---
     void ApplyGravity(); // [변경] Gravity(bool) -> ApplyGravity()
 
