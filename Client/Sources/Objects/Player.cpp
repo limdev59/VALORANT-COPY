@@ -153,7 +153,20 @@ void Player::Update()
     // ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     this->setPosition(originalPos);
 
-    setPosition(nextPosition);
+    setPosition(nextPosition); // 11/7 ´ÊÀºÆÐÄ¡ - ½¹¹Î
+
+    if (KeyMgr::Instance()->getKeyState(KEY::E) == KEY_TYPE::TAP) { // 11/11 ´ÊÀºÆÐÄ¡ - ½¹¹Î
+        // Ä«¸Þ¶óÀÇ ½Ã¾ß ¹æÇâÀ¸·Î
+        CCamera* cam = CameraMgr::Instance()->getMainCamera();
+        glm::vec3 camPos = cam->position;
+        glm::vec3 camTarget = cam->target;
+
+        glm::vec3 fireOrigin = camPos;
+        glm::vec3 fireDirection = glm::normalize(camTarget - camPos);
+
+        C2S_FireAction firePkt = BuildFirePacket(fireOrigin, fireDirection);
+        std::cout << "[Fire] FireAction Packet Built! Seq: " << firePkt.msgSeq << std::endl;
+    }
 
     C2S_MovementUpdate movementPkt = BuildMovementPacket();
 
@@ -251,6 +264,32 @@ C2S_MovementUpdate Player::BuildMovementPacket()
     pkt.velocity.z = m_velocity.z;
 
     // Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ® ï¿½Ã°ï¿½ Å¸ï¿½Ó½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    pkt.clientTime = (float)TimeMgr::Instance()->getCurrTime();
+
+    return pkt;
+}
+
+C2S_FireAction Player::BuildFirePacket(const vec3& fireOrigin, const vec3& fireDirection)
+{
+    C2S_FireAction pkt;
+
+    // ¸Þ½ÃÁö ½ÃÄö½º Áõ°¡ ¹× ¼³Á¤
+    m_fireSeq++;
+    pkt.msgSeq = m_fireSeq;
+
+    //  PlayerID ÀÓ½Ã·Î 0 Ã³¸®
+    pkt.playerId = 0;
+
+    // ÇöÀç À§Ä¡, È¸Àü, ¼Óµµ ¼³Á¤
+    pkt.fireOrigin.x = fireOrigin.x;
+    pkt.fireOrigin.y = fireOrigin.y;
+    pkt.fireOrigin.z = fireOrigin.z;
+
+    pkt.fireDirection.x = fireDirection.x;
+    pkt.fireDirection.y = fireDirection.y;
+    pkt.fireDirection.z = fireDirection.z;
+
+    // Å¬¶óÀÌ¾ðÆ® ½Ã°£ Å¸ÀÓ½ºÅÆÇÁ ¼³Á¤
     pkt.clientTime = (float)TimeMgr::Instance()->getCurrTime();
 
     return pkt;

@@ -30,7 +30,7 @@ protected:
     float   m_jumpVelocity = 2.0f;
 
     uint32_t m_movementSeq = 0;
-
+    uint32_t m_fireSeq = 0;
 public:
     Player();
     virtual ~Player();
@@ -38,8 +38,8 @@ public:
     virtual void Update() override;
     virtual void Render() override;
 
-    C2S_MovementUpdate BuildMovementPacket();
-    
+    C2S_MovementUpdate BuildMovementPacket();  
+    C2S_FireAction BuildFirePacket(const vec3& fireOrigin, const vec3& fireDirection);
     // --- Physics Methods (from existing Player.h/Player.cpp) ---
     void ApplyGravity(); // [º¯°æ] Gravity(bool) -> ApplyGravity()
 
