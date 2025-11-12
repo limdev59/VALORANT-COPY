@@ -153,10 +153,10 @@ void Player::Update()
     // ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     this->setPosition(originalPos);
 
-    setPosition(nextPosition); // 11/7 ´ÊÀºÆÐÄ¡ - ½¹¹Î
+    setPosition(nextPosition); // 11/7 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡ - ï¿½ï¿½ï¿½ï¿½
 
-    if (KeyMgr::Instance()->getKeyState(KEY::E) == KEY_TYPE::TAP) { // 11/11 ´ÊÀºÆÐÄ¡ - ½¹¹Î
-        // Ä«¸Þ¶óÀÇ ½Ã¾ß ¹æÇâÀ¸·Î
+    if (KeyMgr::Instance()->getKeyState(KEY::E) == KEY_TYPE::TAP) { // 11/11 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡ - ï¿½ï¿½ï¿½ï¿½
+        // Ä«ï¿½Þ¶ï¿½ï¿½ï¿½ ï¿½Ã¾ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         CCamera* cam = CameraMgr::Instance()->getMainCamera();
         glm::vec3 camPos = cam->position;
         glm::vec3 camTarget = cam->target;
@@ -169,6 +169,76 @@ void Player::Update()
     }
 
     C2S_MovementUpdate movementPkt = BuildMovementPacket();
+
+    glm::vec3 nextPosition = this->position + (m_velocity * (float)dt);
+
+    // --- 5. ï¿½æµ¹ Ã³ï¿½ï¿½ (CSceneï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½) ---
+    CScene* pCurScene = SceneMgr::Instance()->getScene();
+    if (!pCurScene) return;
+    // (ï¿½ï¿½ï¿½ï¿½) std::vector<CObject*> collidables = m_pCurrentScene->GetCollidables();
+
+    const vector<CObject*>& mapObjects = pCurScene->GetObjects(GROUP_TYPE::DEFAULT);
+    const vector<CObject*>& enemyObjects = pCurScene->GetObjects(GROUP_TYPE::ENEMY);
+
+    glm::vec3 originalPos = this->position;
+    bool isGroundedThisFrame = false;
+
+    // Yï¿½ï¿½(ï¿½ß·ï¿½/ï¿½ï¿½ï¿½ï¿½) ï¿½æµ¹ ï¿½ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½
+    this->setPosition(glm::vec3(originalPos.x, nextPosition.y, originalPos.z));
+
+    for (CObject* other : mapObjects) {
+        if (this->CheckCollision(*other)) {
+            if (m_velocity.y < 0) {
+                isGroundedThisFrame = true;
+            }
+            m_velocity.y = 0;
+            nextPosition.y = originalPos.y;
+            break;
+        }
+    }
+
+    // m_isOnGround ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
+    m_isOnGround = isGroundedThisFrame;
+
+    // Xï¿½ï¿½(ï¿½Â¿ï¿½) ï¿½æµ¹ ï¿½Ë»ï¿½
+    this->setPosition(glm::vec3(nextPosition.x, originalPos.y, originalPos.z));
+    for (CObject* other : mapObjects) { // ï¿½Ê°ï¿½ Xï¿½ï¿½ ï¿½Ë»ï¿½
+        if (this->CheckCollision(*other)) {
+            m_velocity.x = 0;
+            nextPosition.x = originalPos.x;
+            break;
+        }
+    }
+    for (CObject* other : enemyObjects) { // ï¿½ï¿½ï¿½ï¿½ Xï¿½ï¿½ ï¿½Ë»ï¿½
+        if (this->CheckCollision(*other)) {
+            m_velocity.x = 0;
+            nextPosition.x = originalPos.x;
+            break;
+        }
+    }
+
+    // Zï¿½ï¿½(ï¿½Õµï¿½) ï¿½æµ¹ ï¿½Ë»ï¿½
+    this->setPosition(glm::vec3(originalPos.x, originalPos.y, nextPosition.z));
+    for (CObject* other : mapObjects) { // ï¿½Ê°ï¿½ Zï¿½ï¿½ ï¿½Ë»ï¿½
+        if (this->CheckCollision(*other)) {
+            m_velocity.z = 0;
+            nextPosition.z = originalPos.z;
+            break;
+        }
+    }
+    for (CObject* other : enemyObjects) { // ï¿½ï¿½ï¿½ï¿½ Zï¿½ï¿½ ï¿½Ë»ï¿½
+        if (this->CheckCollision(*other)) {
+            m_velocity.z = 0;
+            nextPosition.z = originalPos.z;
+            break;
+        }
+    }
+
+    // ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    this->setPosition(originalPos);
+
+    setPosition(nextPosition);
+
 
     if (isMoving && m_isOnGround) {
         if (m_pAnimator->GetCurrAnimation() != m_pRunAnim)
@@ -273,14 +343,14 @@ C2S_FireAction Player::BuildFirePacket(const vec3& fireOrigin, const vec3& fireD
 {
     C2S_FireAction pkt;
 
-    // ¸Þ½ÃÁö ½ÃÄö½º Áõ°¡ ¹× ¼³Á¤
+    // ï¿½Þ½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     m_fireSeq++;
     pkt.msgSeq = m_fireSeq;
 
-    //  PlayerID ÀÓ½Ã·Î 0 Ã³¸®
+    //  PlayerID ï¿½Ó½Ã·ï¿½ 0 Ã³ï¿½ï¿½
     pkt.playerId = 0;
 
-    // ÇöÀç À§Ä¡, È¸Àü, ¼Óµµ ¼³Á¤
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡, È¸ï¿½ï¿½, ï¿½Óµï¿½ ï¿½ï¿½ï¿½ï¿½
     pkt.fireOrigin.x = fireOrigin.x;
     pkt.fireOrigin.y = fireOrigin.y;
     pkt.fireOrigin.z = fireOrigin.z;
@@ -289,7 +359,7 @@ C2S_FireAction Player::BuildFirePacket(const vec3& fireOrigin, const vec3& fireD
     pkt.fireDirection.y = fireDirection.y;
     pkt.fireDirection.z = fireDirection.z;
 
-    // Å¬¶óÀÌ¾ðÆ® ½Ã°£ Å¸ÀÓ½ºÅÆÇÁ ¼³Á¤
+    // Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ® ï¿½Ã°ï¿½ Å¸ï¿½Ó½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     pkt.clientTime = (float)TimeMgr::Instance()->getCurrTime();
 
     return pkt;
