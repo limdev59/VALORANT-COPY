@@ -181,10 +181,30 @@ void ClientNetwork::SendMovement(const C2S_MovementUpdate& pkt)
     }
 }   // 2025.11.12 지훈 -> SendMovement 수정
 
-void ClientNetwork::SendFire(const C2S_FireAction& pkt) // 슝민
+void ClientNetwork::SendFire(const C2S_FireAction& pkt) 
 {
-    std::cout << "발사 패킷 전송 (아직 미구현)" << std::endl;
-}
+    if (m_udpSocket == INVALID_SOCKET) {
+        std::cerr << "[사격] UDP 소켓이 유효하지 않습니다.\n";
+        return;
+    }
+
+    const char* data = reinterpret_cast<const char*>(&pkt);
+    const int   len = static_cast<int>(sizeof(pkt));
+
+    int sent = sendto(
+        m_udpSocket,
+        data,
+        len,
+        0,
+        reinterpret_cast<const sockaddr*>(&m_serverUdpAddr),
+        sizeof(m_serverUdpAddr)
+    );
+
+    if (sent == SOCKET_ERROR) {
+        std::cerr << "[사격] sendto 실패, WSA=" << WSAGetLastError() << "\n";
+        return;
+    }
+}   // 2025.11.12 지훈 -> SendFire 구현
 
 void ClientNetwork::PollIncomingPackets() // 슝민
 {
