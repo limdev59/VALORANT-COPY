@@ -155,10 +155,31 @@ bool ClientNetwork::ConnectToServer(const std::string& ip, uint16_t tcpPort, uin
     return true; 
 } // 슝민
 
-void ClientNetwork::SendMovement(const C2S_MovementUpdate& pkt) // 슝민
+void ClientNetwork::SendMovement(const C2S_MovementUpdate& pkt) 
 {
-    std::cout << "이동 패킷 전송 (아직 미구현)" << std::endl;
-}
+    if (m_udpSocket == INVALID_SOCKET) {
+        std::cerr << "[이동] UDP 소켓이 유효하지 않습니다.\n";
+        return;
+    }
+
+    // 구조체 메모리 그대로 송신
+    const char* data = reinterpret_cast<const char*>(&pkt);
+    int len = static_cast<int>(sizeof(pkt));
+
+    int sent = sendto(
+        m_udpSocket,
+        data,
+        len,
+        0,
+        reinterpret_cast<const sockaddr*>(&m_serverUdpAddr),
+        sizeof(m_serverUdpAddr)
+    );
+
+    if (sent == SOCKET_ERROR) {
+        std::cerr << "[이동] sendto 실패, WSA=" << WSAGetLastError() << "\n";
+        return;
+    }
+}   // 2025.11.12 지훈 -> SendMovement 수정
 
 void ClientNetwork::SendFire(const C2S_FireAction& pkt) // 슝민
 {
