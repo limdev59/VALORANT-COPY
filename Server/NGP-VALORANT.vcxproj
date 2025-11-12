@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ClientSession.cpp" />
+    <ClCompile Include="IPacketHandler.cpp" />
     <ClCompile Include="PlayerState.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="WorldState.cpp" />
@@ -27,6 +28,8 @@
   <ItemGroup>
     <ClInclude Include="ClientSession.h" />
     <ClInclude Include="common.h" />
+    <ClInclude Include="DecodedPacket.h" />
+    <ClInclude Include="IPacketHandler.h" />
     <ClInclude Include="PacketDefs.h" />
     <ClInclude Include="PlayerState.h" />
     <ClInclude Include="QueueTypes.h" />
