@@ -75,11 +75,12 @@ void Player::Update()
         isMoving = true;
     }
     if (KeyMgr::Instance()->getKeyState(KEY::A) == KEY_TYPE::HOLD) {
-        moveDir -= rightVec; // 'A' (����)
+
+        moveDir += rightVec;
         isMoving = true;
     }
     if (KeyMgr::Instance()->getKeyState(KEY::D) == KEY_TYPE::HOLD) {
-        moveDir += rightVec; // 'D' (������)
+        moveDir -= rightVec;
         isMoving = true;
     }
 

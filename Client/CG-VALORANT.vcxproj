@@ -172,7 +172,6 @@
     <ClCompile Include="Sources\CCore.cpp" />
     <ClCompile Include="Sources\Objects\CObject.cpp" />
     <ClCompile Include="Sources\Scenes\CScene.cpp" />
-    <ClCompile Include="Sources\Camera\Debug_Camera.cpp" />
     <ClCompile Include="Sources\Objects\Enemy.cpp" />
     <ClCompile Include="Sources\Managers\KeyMgr.cpp" />
     <ClCompile Include="Sources\main.cpp" />
@@ -204,7 +203,6 @@
     <ClInclude Include="Headers\CCore.h" />
     <ClInclude Include="Headers\CObject.h" />
     <ClInclude Include="Headers\CScene.h" />
-    <ClInclude Include="Headers\Debug_Camera.h" />
     <ClInclude Include="Headers\define.h" />
     <ClInclude Include="Headers\Enemy.h" />
     <ClInclude Include="Headers\KeyMgr.h" />
