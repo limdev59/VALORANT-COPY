@@ -9,7 +9,10 @@ class IModel;
 
 class Ascent : public CObject {
 private:
-    IModel<Model>* m_pModel;
+    IModel<Model>* m_pModelDecoration;
+    IModel<Model>* m_pModelFloor;
+    IModel<Model>* m_pModelWall;
+    IModel<Model>* m_pModelProps;
 
 public:
     Ascent();

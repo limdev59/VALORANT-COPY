@@ -5,7 +5,9 @@
 #include "TimeMgr.h"
 #include "MouseMgr.h"
 #include "CameraMgr.h"
+#include "SceneMgr.h"
 #include "CCamera.h"
+#include "CScene.h"
 
 
 Player::Player()
@@ -42,6 +44,8 @@ Player::~Player() {
     if (m_pRunAnim) delete m_pRunAnim;
 }
 
+
+
 void Player::Update()
 {
     double dt = DT;
@@ -50,6 +54,8 @@ void Player::Update()
     glm::vec3 pos = cam->position;
 
     // --- 1. �̵� ���� (�ű� Player.cpp) ---
+    //ApplyGravity();
+
     glm::vec3 viewVec = tar - pos;
     viewVec.y = 0.0f;
     viewVec = glm::normalize(viewVec);
@@ -57,30 +63,43 @@ void Player::Update()
     rightVec = glm::normalize(rightVec);
 
     bool isMoving = false;
+    float moveSpeed = 10.0f;
+    glm::vec3 moveDir = glm::vec3(0.0f);
+
     if (KeyMgr::Instance()->getKeyState(KEY::W) == KEY_TYPE::HOLD) {
-        position += viewVec * static_cast<float>(dt * 1.0);
-        isMoving = true;
-    }
-    if (KeyMgr::Instance()->getKeyState(KEY::A) == KEY_TYPE::HOLD) {
-        position += rightVec * static_cast<float>(dt * 1.0);
+        moveDir += viewVec;
         isMoving = true;
     }
     if (KeyMgr::Instance()->getKeyState(KEY::S) == KEY_TYPE::HOLD) {
-        position -= viewVec * static_cast<float>(dt * 1.0);
+        moveDir -= viewVec;
+        isMoving = true;
+    }
+    if (KeyMgr::Instance()->getKeyState(KEY::A) == KEY_TYPE::HOLD) {
+        moveDir -= rightVec; // 'A' (����)
         isMoving = true;
     }
     if (KeyMgr::Instance()->getKeyState(KEY::D) == KEY_TYPE::HOLD) {
-        position -= rightVec * static_cast<float>(dt * 1.0);
+        moveDir += rightVec; // 'D' (������)
         isMoving = true;
     }
 
+
     // --- 2. ���� �� ���� ���� (�ű� Player.cpp) ---
     // (isJumping ��� m_isOnGround ��� ���� ���)
+    if (isMoving) {
+        moveDir = glm::normalize(moveDir);
+        m_velocity.x = moveDir.x * moveSpeed;
+        m_velocity.z = moveDir.z * moveSpeed;
+    }
+    else {
+        m_velocity.x = 0.0f;
+        m_velocity.z = 0.0f;
+    }
+
     if (KeyMgr::Instance()->getKeyState(KEY::SPACE) == KEY_TYPE::HOLD && m_isOnGround) {
         m_isOnGround = false;
         m_velocity.y = m_jumpVelocity;
     }
-
 
     // �� ������ �߷� ���� (Gravity() �Լ� ����)
     ApplyGravity();
@@ -248,15 +267,80 @@ void Player::Update()
         if (m_pAnimator->GetCurrAnimation() != m_pIdleAnim)
             m_pAnimator->PlayAnimation(m_pIdleAnim);
     }
+
     // (����: ���� �ִϸ��̼� ���µ� �߰� �ʿ�)
     if (m_pAnimator) {
         m_pAnimator->UpdateAnimation(DT);
     }
 
+
     // --- 4. ��Ʈ�ڽ� ������Ʈ (�ű� Player.cpp) ---
     hitboxCenter = position;
     hitboxSize = scale;
 
+}
+
+
+//void Player::Update()
+//{
+//    double dt = DT;
+//    CCamera* cam = CameraMgr::Instance()->getMainCamera();
+//    glm::vec3 tar = cam->target;
+//    glm::vec3 pos = cam->position;
+//
+//    // --- 1. �̵� ���� (�ű� Player.cpp) ---
+//    glm::vec3 viewVec = tar - pos;
+//    viewVec.y = 0.0f;
+//    viewVec = glm::normalize(viewVec);
+//    glm::vec3 rightVec = glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), viewVec);
+//    rightVec = glm::normalize(rightVec);
+//
+//    bool isMoving = false;
+//    if (KeyMgr::Instance()->getKeyState(KEY::W) == KEY_TYPE::HOLD) {
+//        position += viewVec * static_cast<float>(dt * 1.0);
+//        isMoving = true;
+//    }
+//    if (KeyMgr::Instance()->getKeyState(KEY::A) == KEY_TYPE::HOLD) {
+//        position += rightVec * static_cast<float>(dt * 1.0);
+//        isMoving = true;
+//    }
+//    if (KeyMgr::Instance()->getKeyState(KEY::S) == KEY_TYPE::HOLD) {
+//        position -= viewVec * static_cast<float>(dt * 1.0);
+//        isMoving = true;
+//    }
+//    if (KeyMgr::Instance()->getKeyState(KEY::D) == KEY_TYPE::HOLD) {
+//        position -= rightVec * static_cast<float>(dt * 1.0);
+//        isMoving = true;
+//    }
+//
+//
+//    if (KeyMgr::Instance()->getKeyState(KEY::SPACE) == KEY_TYPE::HOLD && m_isOnGround) {
+//        m_isOnGround = false;
+//        m_velocity.y = m_jumpVelocity;
+//    }
+//
+//    // �� ������ �߷� ���� (Gravity() �Լ� ����)
+//    ApplyGravity();
+//
+//    // --- 3. �ִϸ��̼� ���� ���� (���� Player ����) ---
+//    if (isMoving && m_isOnGround) {
+//        if (m_pAnimator->GetCurrAnimation() != m_pRunAnim)
+//            m_pAnimator->PlayAnimation(m_pRunAnim);
+//    }
+//    else if (!isMoving && m_isOnGround) {
+//        if (m_pAnimator->GetCurrAnimation() != m_pIdleAnim)
+//            m_pAnimator->PlayAnimation(m_pIdleAnim);
+//    }
+//    // (����: ���� �ִϸ��̼� ���µ� �߰� �ʿ�)
+//    if (m_pAnimator) {
+//        m_pAnimator->UpdateAnimation(DT);
+//    }
+//
+//    // --- 4. ��Ʈ�ڽ� ������Ʈ (�ű� Player.cpp) ---
+//    hitboxCenter = position;
+//    hitboxSize = scale;
+//
+//}
 
 void Player::Render() {
     if (m_pModel) { // [Refactored]
@@ -385,5 +469,30 @@ void Player::ApplyGravity() {
         position.y = -0.25f;
         m_velocity.y = 0.0f;
         m_isOnGround = true; // ���� ����
+    if (!m_isOnGround) {
+        m_velocity.y += m_gravity * dt;
     }
 }
+
+//void Player::ApplyGravity() {
+//    double dt = DT;
+//
+//    m_velocity.y += m_gravity * dt; // �߷� ���ӵ� ����
+//    position.y += m_velocity.y * dt; // y�� �ӵ��� ��ġ�� �ݿ�
+//
+//    m_isOnGround = false; // �⺻���� ����
+//
+//    // �ٴڰ� �浹 ó�� (���� �ϵ��ڵ��� ���� ����)
+//    if (position.x < -2.31563 && position.z < -6.84576) {
+//        if (position.y <= -0.5f) {
+//            position.y = -0.5f;
+//            m_velocity.y = 0.0f;
+//            m_isOnGround = true; // ���� ����
+//        }
+//    }
+//    else if (position.y <= -0.25f) {
+//        position.y = -0.25f;
+//        m_velocity.y = 0.0f;
+//        m_isOnGround = true; // ���� ����
+//    }
+//}

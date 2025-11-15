@@ -38,7 +38,10 @@ enum class PROJ_TYPE {
 };
 enum class MODEL_TYPE {
 	JETT,
-	ASCENT,
+	ASCENT_DECORATION,
+	ASCENT_FLOOR,
+	ASCENT_WALL,
+	ASCENT_PROPS,
 	END,
 };
 

@@ -48,6 +48,7 @@ void Start_Camera::Update() {
     cam->target.x = Lerp(cam->target.x, target.x, lerpFactor);
     cam->target.y = Lerp(cam->target.y, target.y, lerpFactor);
     cam->target.z = Lerp(cam->target.z, target.z, lerpFactor);
+    //cam->target = plPos + vec3(0.0f, 0.0f, -1.0f);
 
     MouseMgr::Instance()->setCursorPos(screenWidth / 2, screenHeight / 2);
 }

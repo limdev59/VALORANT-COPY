@@ -20,12 +20,18 @@ public:
 		strName = _strName;
 	}
 	const wstring& getName() { return strName; }
+
 	CObject& getObject(GROUP_TYPE type, size_t index) {
 		if ((GLuint)type >= (GLuint)GROUP_TYPE::END || index >= arrObj[(GLuint)type].size()) {
 			exit(9);
 		}
 		return *arrObj[(GLuint)type][index];
 	}
+
+	const vector<CObject*>& GetObjects(GROUP_TYPE type) {
+		return arrObj[(GLuint)type];
+	}
+
 protected:
 
 	

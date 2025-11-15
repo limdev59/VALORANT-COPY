@@ -1,7 +1,6 @@
 #pragma once
 enum class CAM_IDX {
     START,
-    DEBUG,
     END,
 };
 

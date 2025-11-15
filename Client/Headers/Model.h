@@ -95,11 +95,11 @@ static GLuint LoadTexture(const string& filepath) {
 	glBindTexture(GL_TEXTURE_2D, 0);
 	return texture;
 }
-static vector<Material> ReadMtl(const string& filename) {
+static vector<Material> ReadMtl(const string& fileName, const string& folderName) {
 	std::vector<Material> materials;
-	std::ifstream file("Models/" + filename +'/' + filename + ".mtl");
+	std::ifstream file("Models/" + folderName +'/' + fileName + ".mtl");
 	if (!file.is_open()) {
-		std::cerr << "Failed to open MTL file: " << filename << std::endl;
+		std::cerr << "Failed to open MTL file: " << fileName << std::endl;
 		return materials;
 	}
 	std::string line;
@@ -150,7 +150,7 @@ static vector<Material> ReadMtl(const string& filename) {
 	file.close();
 	return materials;
 }
-static vector<Group> ReadObj(const string& filename, const vector<Material>& materials) {
+static vector<Group> ReadObj(const string& fileName, const string& folderName, const vector<Material>& materials) {
 	std::vector<glm::vec3> positions;
 	std::vector<glm::vec2> texCoords;
 	std::vector<glm::vec3> normals;
@@ -158,9 +158,9 @@ static vector<Group> ReadObj(const string& filename, const vector<Material>& mat
 	Group* currentGroup = nullptr;  // 현재 그룹 포인터
 	SubMesh currentSubMesh;
 
-	std::ifstream file("Models/" + filename+'/' + filename + ".obj");
+	std::ifstream file("Models/" + folderName +'/' + fileName + ".obj");
 	if (!file.is_open()) {
-		//std::cerr << "Failed to open OBJ file: " << filename << std::endl;
+		//std::cerr << "Failed to open OBJ file: " << fileName << std::endl;
 		return groups;
 	}
 
@@ -219,7 +219,7 @@ static vector<Group> ReadObj(const string& filename, const vector<Material>& mat
 			auto it = std::find_if(materials.begin(), materials.end(),
 				[&materialName](const Material& mat) { return mat.strName == materialName; });
 			if (it != materials.end()) {
-				currentSubMesh.texture = LoadTexture("Models/" + filename + "/textures/" + it->texture);
+				currentSubMesh.texture = LoadTexture("Models/" + folderName + "/textures/" + it->texture);
 				if (currentSubMesh.texture == 0) {
 					cout << currentGroup->strName << endl;
 				}
@@ -262,8 +262,8 @@ static vector<Group> ReadObj(const string& filename, const vector<Material>& mat
 	file.close();
 	return groups;
 }
-static std::pair<vector<Material>, vector<Group>> ReadModel(const string& filename) {
-	vector<Material> materials = ReadMtl(filename);
+static std::pair<vector<Material>, vector<Group>> ReadModel(const string& fileName, const string& folderName) {
+	vector<Material> materials = ReadMtl(fileName, folderName);
 
 	// 머티리얼 출력 (디버깅용)
 	for (auto mt : materials)
@@ -271,7 +271,7 @@ static std::pair<vector<Material>, vector<Group>> ReadModel(const string& filena
 
 	std::pair<vector<Material>, vector<Group>> modelPair;
 	modelPair.first = materials;
-	modelPair.second = ReadObj(filename, materials);  // 이제 Group을 반환
+	modelPair.second = ReadObj(fileName, folderName, materials);  // 이제 Group을 반환
 	for (auto gr : modelPair.second)
 		std::cout << gr << std::endl;
 	return modelPair;

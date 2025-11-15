@@ -60,8 +60,11 @@ int main(int argc, char** argv) {
         "Shaders/animFragment.glsl"
     );
     modelPairs = {
-        {MODEL_TYPE::JETT, ReadModel("jettTest")},
-        {MODEL_TYPE::ASCENT, ReadModel("ascentB")},
+        {MODEL_TYPE::JETT, ReadModel("jettTest", "jettTest")},
+        {MODEL_TYPE::ASCENT_DECORATION, ReadModel("ascentB2", "ascent")},
+        {MODEL_TYPE::ASCENT_FLOOR, ReadModel("ascentFloor", "ascent")},
+        {MODEL_TYPE::ASCENT_WALL, ReadModel("ascentWall", "ascent")},
+        {MODEL_TYPE::ASCENT_PROPS, ReadModel("ascentProps", "ascent")},
     };
 
 

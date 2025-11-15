@@ -18,24 +18,19 @@ Stage_1_Scene::~Stage_1_Scene() {
 
 void Stage_1_Scene::Enter() {
     if (!loaded) {
-        // --- 1. 맵 생성 ---
-        // Ascent() 생성자가 IModel<Model>을 통해 스스로 맵 모델을 로드합니다.
-        CObject* map_floor = new Ascent();
-        // Model* map_floor_model = new Model(MODEL_TYPE::ASCENT, GL_TRIANGLES); [제거]
-        // map_floor->setModel(map_floor_model); [제거]
-        map_floor->setScale(vec3(0.1));
-        map_floor->setPosition(vec3(0.0f, 0.0f, 0.0f));
 
-        // --- 2. 플레이어 생성 ---
-        // Player() 생성자가 IModel<AnimModel>("first2")를 로드합니다.
+
+        CObject* map_floor = new Ascent();
+        map_floor->setScale(vec3(0.1));
+        map_floor->setPosition(vec3(100.f, 0.0f, 100.f));
+
+
         CObject* player = new Player();
-        // Model* player_model = new Model(MODEL_TYPE::JETT, GL_TRIANGLES); [제거]
-        // player->setModel(player_model); [제거]
         player->setPosition(vec3(-2.56633, 0.125f, -4.68781));
         player->setScale(vec3(0.1f));
 
 
-        // --- 3. 적 생성 ---
+  
         std::vector<glm::vec3> enemyPositions = {
             glm::vec3(-1.49554f, 0.125f,-5.42878),
             glm::vec3(-3.76336f, 0.125f, -6.6219f),  //백사위
@@ -47,15 +42,12 @@ void Stage_1_Scene::Enter() {
         std::vector<CObject*> enemies; // 적 객체를 관리하는 컨테이너
 
         for (const auto& position : enemyPositions) {
-            // Enemy() 생성자가 IModel을 통해 스스로 모델을 로드합니다.
             Enemy* enemy = new Enemy();
-            // Model* enemy_model = new Model(MODEL_TYPE::JETT, GL_TRIANGLES); [제거]
-            // enemy->setModel(enemy_model); [제거]
-            enemy->setPosition(position); // 적의 위치 설정
+            enemy->setPosition(position);
             enemy->setScale(glm::vec3(0.1f));
 
-            enemies.push_back(enemy); // 컨테이너에 추가
-            addObject(enemy, GROUP_TYPE::ENEMY); // 게임 세계에 등록
+            enemies.push_back(enemy);
+            addObject(enemy, GROUP_TYPE::ENEMY);
         }
 
         // --- 4. 씬에 객체 추가 ---
@@ -68,29 +60,14 @@ void Stage_1_Scene::Enter() {
 }
 
 void Stage_1_Scene::Update() {
-    // --- [기존 Update 로직 (사용자가 수정한 내용)] ---
     CScene::Update();
 
-    // (getObject 호출은 씬에 객체가 추가된 후에만 안전합니다)
     if (loaded) {
         CObject& player = getObject(GROUP_TYPE::PLAYER, 0);
         cout << player.getPosition().x << ' ' << player.getPosition().y << ' ' << player.getPosition().z << endl;
         CObject& mapFloor = getObject(GROUP_TYPE::DEFAULT, 0);
+		mapFloor.setPosition(vec3(player.getPosition().x + 902.f, 0.0f, player.getPosition().z + 1202.f));
 
-        Player* playerPtr = dynamic_cast<Player*>(&player);
-        playerPtr->ApplyGravity(); // [유지] 사용자의 중력 테스트 코드
-
-        // (기존 충돌 체크 로직은 주석 처리)
-        //if (player.CheckCollision(mapFloor)) {
-        //    if (playerPtr) {
-        //        playerPtr->ApplyGravity();  
-        //    }
-        //}
-        //else {
-        //    if (playerPtr) {
-        //        playerPtr->ApplyGravity();  
-        //    }
-        //}
     }
 }
 
