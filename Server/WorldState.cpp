@@ -90,10 +90,26 @@ void WorldState::OnMovement(PlayerID pid, const C2S_MovementUpdate& pkt, float n
 
 void WorldState::OnFire(PlayerID pid, const C2S_FireAction& pkt)
 {
+	// 총을 쏜 플레이어 상태 업데이트
     auto it = m_PlayerStates.find(pid);
     if (it != m_PlayerStates.end())
     {
         it->second->ApplyFireFromClient(pkt);
+    }
+
+    // 총을 맞은 플레이어 상태 업데이트
+    if (pkt.hitPlayerID != -1)
+    {
+        // 자기 자신을 쏘는 경우 무시
+        if (pkt.hitPlayerID == pid) return;
+
+        // 맞은 사람 찾기
+        auto itVictim = m_PlayerStates.find(pkt.hitPlayerID);
+        if (itVictim != m_PlayerStates.end())
+        {
+            // 맞은 사람에게 데미지 적용
+            itVictim->second->ApplyDamage(20);
+        }
     }
 }
 
