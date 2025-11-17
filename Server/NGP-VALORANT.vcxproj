@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -24,6 +24,7 @@
     <ClCompile Include="MovementUpdateHandler.cpp" />
     <ClCompile Include="PlayerState.cpp" />
     <ClCompile Include="Server.cpp" />
+    <ClCompile Include="SessionManager.cpp" />
     <ClCompile Include="WorldState.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -35,6 +36,7 @@
     <ClInclude Include="PacketDefs.h" />
     <ClInclude Include="PlayerState.h" />
     <ClInclude Include="QueueTypes.h" />
+    <ClInclude Include="SessionManager.h" />
     <ClInclude Include="ThreadQueue.h" />
     <ClInclude Include="WorldEvent.h" />
     <ClInclude Include="WorldState.h" />

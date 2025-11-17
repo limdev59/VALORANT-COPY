@@ -1,18 +1,31 @@
 #pragma once
 #include "PacketDefs.h"
+#include "SessionManager.h"
+#include "common.h"
 
 class ClientSession
 {
 public:
-    ClientSession()
-        : playerId(nextId++)
-    {
-    }
+	ClientSession(SOCKET tcpSocket, SessionManager* manager, PacketQueue* worldlnQueue);
+	~ClientSession();
 
-	PlayerID GetPlayerID() const { return playerId; }   // 지훈   : 플레이어 ID 반환
-    void SendUDP_SnapshotState(const std::vector<PlayerSnapshot>& snaps);
+	void StartThread();
+	void SetLoginInfo(PlayerID id, const sockaddr_in& udpAddr);
+
+	PlayerID GetPlayerID() const { return m_PlayerID; }   // 지훈   : 플레이어 ID 반환 -> 2025.11.17 변수명 교체
+	sockaddr_in GetUdpAddress() const { return m_UDPEndPoint; }
 
 private:
-    static inline PlayerID nextId = 0;
-    PlayerID playerId;
+	static DWORD WINAPI ThreadWrapper(LPVOID lpParam);
+	void ReceivlLoop();
+	void HandleLogin(const C2S_LoginRequest& pkt);
+	void HandleDisconnect();
+
+private:
+	SOCKET			m_TCPSocket;
+	HANDLE			m_hThread;
+	PlayerID		m_PlayerID;
+	sockaddr_in		m_UDPEndPoint;
+	SessionManager* m_pSessionManager;
+	PacketQueue*	m_pWorldlnputQueue;
 };
