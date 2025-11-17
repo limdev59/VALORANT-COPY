@@ -208,9 +208,49 @@ void ClientNetwork::SendFire(const C2S_FireAction& pkt)
 
 void ClientNetwork::PollIncomingPackets() // 슝민
 {
-    std::cout << "수신 패킷 처리 (미구현)" << std::endl;
-}
+    if (m_udpSocket == INVALID_SOCKET) return;
 
+    char buffer[4096];
+    int bufferLen = 4096;
+
+    // 비동기 수신 확인
+    fd_set readSet;
+    FD_ZERO(&readSet);
+    FD_SET(m_udpSocket, &readSet);
+
+    timeval timeout;
+    timeout.tv_sec = 0;
+    timeout.tv_usec = 0;
+
+    int readyCount = select(0, &readSet, nullptr, nullptr, &timeout);
+
+    if (readyCount == SOCKET_ERROR || readyCount == 0) {
+        return;
+    }
+
+    // recvfrom 데이터 수신 
+    SOCKADDR_IN fromAddr;
+    int fromLen = sizeof(fromAddr);
+
+    int bytesRecv = recvfrom(
+        m_udpSocket,
+        buffer,
+        bufferLen,
+        0,
+        (SOCKADDR*)&fromAddr,
+        &fromLen
+    );
+
+    if (bytesRecv == SOCKET_ERROR) {
+        int err = WSAGetLastError();
+        if (err != WSAEWOULDBLOCK) {
+            std::cerr << "[Poll] recvfrom error: " << err << std::endl;
+        }
+        return;
+    }
+
+    // std::cout << bytesRecv << std::endl; //바이트
+}
 const std::vector<PlayerSnapshot>& ClientNetwork::GetLastSnapshots() const // 슝민
 {
     return m_lastSnapshots;
