@@ -12,7 +12,10 @@ PlayerState::PlayerState(PlayerID id)
 
 void PlayerState::ApplyMovementFromClient(const C2S_MovementUpdate& pkt, float serverNow)
 {
-
+	// 패킷에서 받은 정보를 그대로 반영
+	m_Position = pkt.position;
+	m_Rotation = pkt.rotation;
+	m_Velocity = pkt.velocity;
 }
 
 void PlayerState::ApplyFireFromClient(const C2S_FireAction& pkt)
