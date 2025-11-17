@@ -22,6 +22,7 @@
     <ClCompile Include="ClientSession.cpp" />
     <ClCompile Include="IPacketHandler.cpp" />
     <ClCompile Include="MovementUpdateHandler.cpp" />
+    <ClCompile Include="PacketDispatcher.cpp" />
     <ClCompile Include="PlayerState.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="SessionManager.cpp" />
@@ -34,6 +35,7 @@
     <ClInclude Include="IPacketHandler.h" />
     <ClInclude Include="MovementUpdateHandler.h" />
     <ClInclude Include="PacketDefs.h" />
+    <ClInclude Include="PacketDispatcher.h" />
     <ClInclude Include="PlayerState.h" />
     <ClInclude Include="QueueTypes.h" />
     <ClInclude Include="SessionManager.h" />

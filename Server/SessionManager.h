@@ -1,8 +1,8 @@
 #pragma once
 #include "ClientSession.h"
 #include "common.h"
-
-class PacketQueue;
+#include <map>
+#include "QueueTypes.h";
 
 class SessionManager
 {
