@@ -68,6 +68,8 @@ struct C2S_FireAction {
 	Vec3		fireOrigin;
 	Vec3		fireDirection;
 	float		clientTime{ 0.f };
+
+	PlayerID    hitPlayerID;
 };
 
 struct S2C_SnapshotState {
