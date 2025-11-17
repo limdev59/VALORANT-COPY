@@ -228,7 +228,7 @@ void ClientNetwork::PollIncomingPackets() // ΩππŒ
         return;
     }
 
-    // recvfrom µ•¿Ã≈Õ ºˆΩ≈ 
+    // recvfrom µ•¿Ã≈Õ ºˆΩ≈
     SOCKADDR_IN fromAddr;
     int fromLen = sizeof(fromAddr);
 
@@ -249,7 +249,32 @@ void ClientNetwork::PollIncomingPackets() // ΩππŒ
         return;
     }
 
-    // std::cout << bytesRecv << std::endl; //πŸ¿Ã∆Æ
+    // ∆–≈∂ ∆ƒΩÃ
+    if (bytesRecv < sizeof(uint16_t)) return;
+
+    MsgType type = *reinterpret_cast<MsgType*>(buffer);
+
+    if (type == MsgType::S2C_SNAPSHOT_STATE)
+    {
+        size_t headerSize = sizeof(uint16_t);
+        size_t payloadSize = bytesRecv - headerSize;
+        size_t snapshotSize = sizeof(PlayerSnapshot);
+
+        if (payloadSize % snapshotSize != 0) return;
+
+        int count = static_cast<int>(payloadSize / snapshotSize);
+
+        m_lastSnapshots.clear();
+        m_lastSnapshots.reserve(count);
+
+        char* ptr = buffer + headerSize;
+        for (int i = 0; i < count; ++i)
+        {
+            PlayerSnapshot sn = *reinterpret_cast<PlayerSnapshot*>(ptr);
+            m_lastSnapshots.push_back(sn);
+            ptr += snapshotSize;
+        }
+    }
 }
 const std::vector<PlayerSnapshot>& ClientNetwork::GetLastSnapshots() const // ΩππŒ
 {
