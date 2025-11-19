@@ -4,11 +4,14 @@
 #include "KeyMgr.h"
 #include "SceneMgr.h"
 #include "MouseMgr.h"
-// [제거] 씬은 더 이상 Model을 직접 생성하지 않습니다.
-// #include "Model.h" 
 #include "Player.h"
 #include "Ascent.h"
 #include "Enemy.h"
+
+#include "ClientNetwork.h"
+#include "PacketDefs.h"
+
+extern ClientNetwork* g_pNetwork;
 
 Stage_1_Scene::Stage_1_Scene() {
 }
@@ -64,10 +67,46 @@ void Stage_1_Scene::Update() {
 
     if (loaded) {
         CObject& player = getObject(GROUP_TYPE::PLAYER, 0);
-        cout << player.getPosition().x << ' ' << player.getPosition().y << ' ' << player.getPosition().z << endl;
-        CObject& mapFloor = getObject(GROUP_TYPE::DEFAULT, 0);
-		mapFloor.setPosition(vec3(player.getPosition().x + 902.f, 0.0f, player.getPosition().z + 1202.f));
 
+        CObject& mapFloor = getObject(GROUP_TYPE::DEFAULT, 0);
+        mapFloor.setPosition(vec3(player.getPosition().x + 902.f, 0.0f, player.getPosition().z + 1202.f));
+
+        //ApplySnapshot
+        if (g_pNetwork)
+        {
+            // 최신 스냅샷
+            const std::vector<PlayerSnapshot>& snapshots = g_pNetwork->GetLastSnapshots();
+
+            for (const auto& snap : snapshots)
+            {
+                // 내 캐릭터는 스냅샷 적용 제외
+                if (snap.id == 0) continue;
+
+                // 3. 해당 ID의 플레이어가 이미 씬에 있는지 확인
+                auto it = m_remotePlayers.find(snap.id);
+
+                if (it != m_remotePlayers.end())
+                {
+                    // 위치 회전 동기화
+                    CObject* pRemoteObj = it->second;
+                    pRemoteObj->setPosition(glm::vec3(snap.position.x, snap.position.y, snap.position.z));
+                    pRemoteObj->setRotation(glm::vec3(snap.rotation.x, snap.rotation.y, snap.rotation.z));
+                }
+                else
+                {
+                    // [없음] 새로운 플레이어 객체 생성 (Enemy 클래스 재활용)
+                   Enemy* newRemotePlayer = new Enemy();
+                    newRemotePlayer->setPosition(glm::vec3(snap.position.x, snap.position.y, snap.position.z));
+                    newRemotePlayer->setScale(glm::vec3(0.1f)); // 크기 설정
+
+                    // 씬과 관리 맵에 추가
+                    addObject(newRemotePlayer, GROUP_TYPE::ENEMY);
+                    m_remotePlayers[snap.id] = newRemotePlayer;
+
+                    std::cout << "[ApplySnapshot] New Player Joined: ID " << snap.id << std::endl;
+                }
+            }
+        }
     }
 }
 

@@ -1,5 +1,7 @@
 #pragma once
 #include "CScene.h"
+#include <map>
+#include <cstdint>
 
 class Stage_1_Scene : public CScene {
 public:
@@ -10,4 +12,6 @@ public:
     virtual void Render();
     virtual void Enter();
     virtual void Exit();
+private:
+    std::map<uint16_t, class CObject*> m_remotePlayers;
 };

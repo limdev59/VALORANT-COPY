@@ -11,8 +11,9 @@
 #include "CObject.h"
 #include "CScene.h"
 #include "MouseMgr.h"
+#include "ClientNetwork.h"
 
-
+ClientNetwork* g_pNetwork = nullptr;
 
 glm::mat3 GetNormalMat(glm::mat4& modelMat)
 {
@@ -27,9 +28,10 @@ static GLvoid Reshape(int w, int h) {
     CCore::Instance()->Reshape(w, h);
 }
 static GLvoid Update() {
+    if (g_pNetwork) {
+        g_pNetwork->PollIncomingPackets();
+    }
     CCore::Instance()->Update();
-    
-
 }
 std::unordered_map<MODEL_TYPE, const std::pair<vector<Material>, vector<Group>>> modelPairs;
 std::unordered_map<MODEL_TYPE, const std::pair<vector<Material>, vector<Group>>>&  Model::modelPairArr = modelPairs;
@@ -42,6 +44,12 @@ int main(int argc, char** argv) {
     glutCreateWindow("OpenGL Application");
     glewExperimental = GL_TRUE;
     glewInit();
+
+    g_pNetwork = new ClientNetwork();
+	// IP는 루프백 임시, 포트는 임의 지정
+    if (!g_pNetwork->ConnectToServer("127.0.0.1", 7777, 9001)) {
+        std::cout << "[Main] Failed to connect to server." << std::endl;
+    }
 
     static GLuint vertexShader, fragmentShader;
     make_shaderProgram(
@@ -82,4 +90,9 @@ int main(int argc, char** argv) {
     glutReshapeFunc(Reshape);
 
     glutMainLoop();
+
+    if (g_pNetwork) {
+        delete g_pNetwork;
+        g_pNetwork = nullptr;
+    }
 }
