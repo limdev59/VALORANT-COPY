@@ -113,7 +113,25 @@ void WorldState::OnFire(PlayerID pid, const C2S_FireAction& pkt)
     }
 }
 
-// (3주차 작업)
+// 김도윤
 void WorldState::BuildSnapshotAll(float nowSec, S2C_SnapshotState& outPkt)
 {
+    outPkt.type = MsgType::S2C_SNAPSHOT_STATE;
+
+    for (auto& pair : m_PlayerStates)
+    {
+        PlayerState* pState = pair.second;
+
+        if (pState != nullptr)
+        {
+            // 1. PlayerState 스냅샷 정보 생성
+            PlayerSnapshot snapshot = pState->ToSnapshot();
+
+            // 2. 서버 시간 설정
+            snapshot.serverTime = nowSec;
+
+            // 3. 패킷 벡터에 추가
+            outPkt.snapshots.push_back(snapshot);
+        }
+    }
 }

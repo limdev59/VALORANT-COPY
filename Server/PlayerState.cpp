@@ -53,7 +53,7 @@ PlayerSnapshot PlayerState::ToSnapshot() const
 	snap.rotation = m_Rotation;
 	snap.velocity = m_Velocity;
 	snap.health = m_Health;
-	// TODO: snap.serverTime은 WorldState::Tick()에서 채워줄것
+	snap.serverTime = 0.0f;
 
 	return snap;
 }
