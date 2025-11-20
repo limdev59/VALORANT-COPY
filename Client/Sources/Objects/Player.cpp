@@ -13,28 +13,28 @@
 Player::Player()
     : CObject() {
 
-    // --- 1. Model / Animation �ε� (���� Player ����) ---
+    // --- 1. Model / Animation 로드 (기존 Player 사용) ---
     string modelPath = "first2";
-    m_pModel = new IModel<AnimModel>(modelPath); // [Refactored]
+    m_pModel = new IModel<AnimModel>(modelPath);
 
-    AnimModel* currModel = m_pModel->GetModel(); // ���ۿ��� ���� �� ������ ��������
+    AnimModel* currModel = m_pModel->GetModel(); // 모델에서 본 정보를 가져옴
 
     m_pIdleAnim = new Animation("Models/first2/firstIdle.gltf", currModel);
     m_pRunAnim = new Animation("Models/first2/first.gltf", currModel);
     
     m_pAnimator = new Animator(m_pIdleAnim);
 
-    // --- 2. Physics ���� �ʱ�ȭ (�ű� Player ����) ---
+    // --- 2. Physics 변수 초기화 (신규 Player 적용) ---
     m_gravity = -9.81f;
     m_velocity = vec3(0.0f);
-    m_isOnGround = true; // (�ٴڿ��� �����Ѵٰ� ����)
+    m_isOnGround = true; // (바닥에 서있다고 가정)
     m_jumpVelocity = 3.0f;
 
-    // --- 3. CObject �⺻�� ���� (���� Render �������� ����) ---
-    // main.cpp�� �ϵ��ڵ��� ���� CObject�� �⺻������ ����
+    // --- 3. CObject 기본값 설정 (기본 Render 설정을 위함) ---
+    // main.cpp의 하드코딩을 대신해 CObject의 기본값으로 설정
     setScale(vec3(0.3f, 0.3f, 0.3f));
-    setRotation(vec3(0, 0.0f, 0.0f)); // X�� 90�� ȸ��
-    // (translate(0, -1, 0)�� position.y�� �߷����� ó��)
+    setRotation(vec3(0, 0.0f, 0.0f));; // X축 0도 (필요시 수정)
+    // (translate(0, -1, 0)은 position.y로 중점 보정 처리)
 }
 
 Player::~Player() {
@@ -53,9 +53,7 @@ void Player::Update()
     glm::vec3 tar = cam->target;
     glm::vec3 pos = cam->position;
 
-    // --- 1. �̵� ���� (�ű� Player.cpp) ---
-    //ApplyGravity();
-
+    // --- 1. 이동 입력 처리 ---
     glm::vec3 viewVec = tar - pos;
     viewVec.y = 0.0f;
     viewVec = glm::normalize(viewVec);
@@ -75,7 +73,6 @@ void Player::Update()
         isMoving = true;
     }
     if (KeyMgr::Instance()->getKeyState(KEY::A) == KEY_TYPE::HOLD) {
-
         moveDir += rightVec;
         isMoving = true;
     }
@@ -84,9 +81,7 @@ void Player::Update()
         isMoving = true;
     }
 
-
-    // --- 2. ���� �� ���� ���� (�ű� Player.cpp) ---
-    // (isJumping ��� m_isOnGround ��� ���� ���)
+    // --- 2. 속도 및 점프 설정 ---
     if (isMoving) {
         moveDir = glm::normalize(moveDir);
         m_velocity.x = moveDir.x * moveSpeed;
@@ -102,16 +97,15 @@ void Player::Update()
         m_velocity.y = m_jumpVelocity;
     }
 
-    // �� ������ �߷� ���� (Gravity() �Լ� ����)
+    // 중력 적용
     ApplyGravity();
 
-    // --- 3. �ִϸ��̼� ���� ���� (���� Player ����) ---
+    // --- 3. 예상 위치 계산 ---
     glm::vec3 nextPosition = this->position + (m_velocity * (float)dt);
 
-    // --- 5. �浹 ó�� (CScene�� ���� �ʿ�) ---
+    // --- 4. 충돌 처리 (CScene 의존) ---
     CScene* pCurScene = SceneMgr::Instance()->getScene();
     if (!pCurScene) return;
-    // (����) std::vector<CObject*> collidables = m_pCurrentScene->GetCollidables();
 
     const vector<CObject*>& mapObjects = pCurScene->GetObjects(GROUP_TYPE::DEFAULT);
     const vector<CObject*>& enemyObjects = pCurScene->GetObjects(GROUP_TYPE::ENEMY);
@@ -119,7 +113,7 @@ void Player::Update()
     glm::vec3 originalPos = this->position;
     bool isGroundedThisFrame = false;
 
-    // Y��(�߷�/����) �浹 ���� �˻�
+    // Y축(중력/바닥) 충돌 검사
     this->setPosition(glm::vec3(originalPos.x, nextPosition.y, originalPos.z));
 
     for (CObject* other : mapObjects) {
@@ -133,19 +127,19 @@ void Player::Update()
         }
     }
 
-    // m_isOnGround ���� Ȯ��
+    // m_isOnGround 상태 갱신
     m_isOnGround = isGroundedThisFrame;
 
-    // X��(�¿�) �浹 �˻�
+    // X축(좌우) 충돌 검사
     this->setPosition(glm::vec3(nextPosition.x, originalPos.y, originalPos.z));
-    for (CObject* other : mapObjects) { // �ʰ� X�� �˻�
+    for (CObject* other : mapObjects) {
         if (this->CheckCollision(*other)) {
             m_velocity.x = 0;
             nextPosition.x = originalPos.x;
             break;
         }
     }
-    for (CObject* other : enemyObjects) { // ���� X�� �˻�
+    for (CObject* other : enemyObjects) {
         if (this->CheckCollision(*other)) {
             m_velocity.x = 0;
             nextPosition.x = originalPos.x;
@@ -153,16 +147,16 @@ void Player::Update()
         }
     }
 
-    // Z��(�յ�) �浹 �˻�
+    // Z축(앞뒤) 충돌 검사
     this->setPosition(glm::vec3(originalPos.x, originalPos.y, nextPosition.z));
-    for (CObject* other : mapObjects) { // �ʰ� Z�� �˻�
+    for (CObject* other : mapObjects) {
         if (this->CheckCollision(*other)) {
             m_velocity.z = 0;
             nextPosition.z = originalPos.z;
             break;
         }
     }
-    for (CObject* other : enemyObjects) { // ���� Z�� �˻�
+    for (CObject* other : enemyObjects) {
         if (this->CheckCollision(*other)) {
             m_velocity.z = 0;
             nextPosition.z = originalPos.z;
@@ -170,13 +164,14 @@ void Player::Update()
         }
     }
 
-    // ��ġ ���� ����
+    // 충돌 검사 완료 후 위치 원복 (검사만 수행했으므로)
     this->setPosition(originalPos);
 
-    setPosition(nextPosition); // 11/7 ������ġ - ����
+    // 최종 위치 반영
+    setPosition(nextPosition);
 
-    if (KeyMgr::Instance()->getKeyState(KEY::E) == KEY_TYPE::TAP) { // 11/11 ������ġ - ����
-        // ī�޶��� �þ� ��������
+    // --- 5. 액션 패킷 처리 (Fire) ---
+    if (KeyMgr::Instance()->getKeyState(KEY::E) == KEY_TYPE::TAP) {
         CCamera* cam = CameraMgr::Instance()->getMainCamera();
         glm::vec3 camPos = cam->position;
         glm::vec3 camTarget = cam->target;
@@ -188,78 +183,10 @@ void Player::Update()
         std::cout << "[Fire] FireAction Packet Built! Seq: " << firePkt.msgSeq << std::endl;
     }
 
+    // 이동 패킷 생성
     C2S_MovementUpdate movementPkt = BuildMovementPacket();
 
-    glm::vec3 nextPosition = this->position + (m_velocity * (float)dt);
-
-    // --- 5. �浹 ó�� (CScene�� ���� �ʿ�) ---
-    CScene* pCurScene = SceneMgr::Instance()->getScene();
-    if (!pCurScene) return;
-    // (����) std::vector<CObject*> collidables = m_pCurrentScene->GetCollidables();
-
-    const vector<CObject*>& mapObjects = pCurScene->GetObjects(GROUP_TYPE::DEFAULT);
-    const vector<CObject*>& enemyObjects = pCurScene->GetObjects(GROUP_TYPE::ENEMY);
-
-    glm::vec3 originalPos = this->position;
-    bool isGroundedThisFrame = false;
-
-    // Y��(�߷�/����) �浹 ���� �˻�
-    this->setPosition(glm::vec3(originalPos.x, nextPosition.y, originalPos.z));
-
-    for (CObject* other : mapObjects) {
-        if (this->CheckCollision(*other)) {
-            if (m_velocity.y < 0) {
-                isGroundedThisFrame = true;
-            }
-            m_velocity.y = 0;
-            nextPosition.y = originalPos.y;
-            break;
-        }
-    }
-
-    // m_isOnGround ���� Ȯ��
-    m_isOnGround = isGroundedThisFrame;
-
-    // X��(�¿�) �浹 �˻�
-    this->setPosition(glm::vec3(nextPosition.x, originalPos.y, originalPos.z));
-    for (CObject* other : mapObjects) { // �ʰ� X�� �˻�
-        if (this->CheckCollision(*other)) {
-            m_velocity.x = 0;
-            nextPosition.x = originalPos.x;
-            break;
-        }
-    }
-    for (CObject* other : enemyObjects) { // ���� X�� �˻�
-        if (this->CheckCollision(*other)) {
-            m_velocity.x = 0;
-            nextPosition.x = originalPos.x;
-            break;
-        }
-    }
-
-    // Z��(�յ�) �浹 �˻�
-    this->setPosition(glm::vec3(originalPos.x, originalPos.y, nextPosition.z));
-    for (CObject* other : mapObjects) { // �ʰ� Z�� �˻�
-        if (this->CheckCollision(*other)) {
-            m_velocity.z = 0;
-            nextPosition.z = originalPos.z;
-            break;
-        }
-    }
-    for (CObject* other : enemyObjects) { // ���� Z�� �˻�
-        if (this->CheckCollision(*other)) {
-            m_velocity.z = 0;
-            nextPosition.z = originalPos.z;
-            break;
-        }
-    }
-
-    // ��ġ ���� ����
-    this->setPosition(originalPos);
-
-    setPosition(nextPosition);
-
-
+    // --- 6. 애니메이션 업데이트 ---
     if (isMoving && m_isOnGround) {
         if (m_pAnimator->GetCurrAnimation() != m_pRunAnim)
             m_pAnimator->PlayAnimation(m_pRunAnim);
@@ -269,79 +196,15 @@ void Player::Update()
             m_pAnimator->PlayAnimation(m_pIdleAnim);
     }
 
-    // (����: ���� �ִϸ��̼� ���µ� �߰� �ʿ�)
     if (m_pAnimator) {
         m_pAnimator->UpdateAnimation(DT);
     }
 
-
-    // --- 4. ��Ʈ�ڽ� ������Ʈ (�ű� Player.cpp) ---
+    // --- 7. 히트박스 업데이트 ---
     hitboxCenter = position;
     hitboxSize = scale;
-
 }
 
-
-//void Player::Update()
-//{
-//    double dt = DT;
-//    CCamera* cam = CameraMgr::Instance()->getMainCamera();
-//    glm::vec3 tar = cam->target;
-//    glm::vec3 pos = cam->position;
-//
-//    // --- 1. �̵� ���� (�ű� Player.cpp) ---
-//    glm::vec3 viewVec = tar - pos;
-//    viewVec.y = 0.0f;
-//    viewVec = glm::normalize(viewVec);
-//    glm::vec3 rightVec = glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), viewVec);
-//    rightVec = glm::normalize(rightVec);
-//
-//    bool isMoving = false;
-//    if (KeyMgr::Instance()->getKeyState(KEY::W) == KEY_TYPE::HOLD) {
-//        position += viewVec * static_cast<float>(dt * 1.0);
-//        isMoving = true;
-//    }
-//    if (KeyMgr::Instance()->getKeyState(KEY::A) == KEY_TYPE::HOLD) {
-//        position += rightVec * static_cast<float>(dt * 1.0);
-//        isMoving = true;
-//    }
-//    if (KeyMgr::Instance()->getKeyState(KEY::S) == KEY_TYPE::HOLD) {
-//        position -= viewVec * static_cast<float>(dt * 1.0);
-//        isMoving = true;
-//    }
-//    if (KeyMgr::Instance()->getKeyState(KEY::D) == KEY_TYPE::HOLD) {
-//        position -= rightVec * static_cast<float>(dt * 1.0);
-//        isMoving = true;
-//    }
-//
-//
-//    if (KeyMgr::Instance()->getKeyState(KEY::SPACE) == KEY_TYPE::HOLD && m_isOnGround) {
-//        m_isOnGround = false;
-//        m_velocity.y = m_jumpVelocity;
-//    }
-//
-//    // �� ������ �߷� ���� (Gravity() �Լ� ����)
-//    ApplyGravity();
-//
-//    // --- 3. �ִϸ��̼� ���� ���� (���� Player ����) ---
-//    if (isMoving && m_isOnGround) {
-//        if (m_pAnimator->GetCurrAnimation() != m_pRunAnim)
-//            m_pAnimator->PlayAnimation(m_pRunAnim);
-//    }
-//    else if (!isMoving && m_isOnGround) {
-//        if (m_pAnimator->GetCurrAnimation() != m_pIdleAnim)
-//            m_pAnimator->PlayAnimation(m_pIdleAnim);
-//    }
-//    // (����: ���� �ִϸ��̼� ���µ� �߰� �ʿ�)
-//    if (m_pAnimator) {
-//        m_pAnimator->UpdateAnimation(DT);
-//    }
-//
-//    // --- 4. ��Ʈ�ڽ� ������Ʈ (�ű� Player.cpp) ---
-//    hitboxCenter = position;
-//    hitboxSize = scale;
-//
-//}
 
 void Player::Render() {
     if (m_pModel) { // [Refactored]
@@ -349,17 +212,17 @@ void Player::Render() {
         {
             AnimModel* currModel = m_pModel->GetModel(); // [Refactored]
 
-            // CObject�� P, R, S�� Model Matrix ���
+            // CObject의 P, R, S로 Model Matrix 계산
             glm::mat4 modelMat = glm::mat4(1.0f);
             glm::mat4 T = glm::translate(glm::mat4(1.f), position);
             glm::mat4 R = glm::mat4_cast(glm::quat(glm::vec3(glm::radians(rotation.x), glm::radians(rotation.y), glm::radians(rotation.z))));
             glm::mat4 S = glm::scale(glm::mat4(1.f), scale);
             modelMat = T * R * S;
 
-            // (main.cpp���� ������ �� ���� ������ translate)
+            // (main.cpp에서 수행하던 발 위치 보정을 위한 translate)
             modelMat = glm::translate(modelMat, vec3(0.0f, 0.1f, 0.0f));
 
-            // PVM �� ���̴� Uniform ����
+            // PVM 등 셰이더 Uniform 전송
             mat4 projMat = CameraMgr::Instance()->getMainCamera()->getProjectionMatrix();
             mat4 view = CameraMgr::Instance()->getMainCamera()->getViewMatrix();
             glm::mat4 PVM = projMat * view * modelMat;
@@ -372,19 +235,19 @@ void Player::Render() {
             glUniformMatrix4fv(loc_PVM, 1, GL_FALSE, glm::value_ptr(PVM));
             glUniformMatrix3fv(loc_normalMat, 1, GL_FALSE, glm::value_ptr(normalMat));
 
-            // Bone(��) Uniform ����
+            // Bone(뼈) Uniform 전송
             const auto& transforms = m_pAnimator->GetFinalBoneMatrices();
             GLuint finalBonesMatricesLoc = glGetUniformLocation(CCore::Instance()->shaderProgramID2, "finalBonesMatrices");
             for (int i = 0; i < transforms.size(); i++)
                 glUniformMatrix4fv(finalBonesMatricesLoc + i, 1, false, glm::value_ptr(transforms[i]));
 
-            // �ؽ�ó Sampler ����
+            // 텍스처 Sampler 설정
             GLint loc_diffuseSampler = glGetUniformLocation(CCore::Instance()->shaderProgramID2, "diffuseTexture");
             GLint loc_normalSampler = glGetUniformLocation(CCore::Instance()->shaderProgramID2, "normalMap");
             glUniform1i(loc_diffuseSampler, 0);
             glUniform1i(loc_normalSampler, 1);
 
-            // �� ������
+            // 렌더링 수행
             currModel->Render();
 
             GLenum error = glGetError();
@@ -398,14 +261,14 @@ C2S_MovementUpdate Player::BuildMovementPacket()
 {
     C2S_MovementUpdate pkt;
 
-    // �޽��� ������ ���� �� ����
+    // 메시지 시퀀스 번호 증가 및 할당
     m_movementSeq++;
     pkt.msgSeq = m_movementSeq;
 
-    // PlayerID �ӽ÷� 0 ó��
+    // PlayerID 임시로 0 처리
     pkt.playerId = 0;
 
-    // ���� ��ġ, ȸ��, �ӵ� ����.
+    // 현재 위치, 회전, 속도 정보 패킷에 담기
     pkt.position.x = position.x;
     pkt.position.y = position.y;
     pkt.position.z = position.z;
@@ -418,7 +281,7 @@ C2S_MovementUpdate Player::BuildMovementPacket()
     pkt.velocity.y = m_velocity.y;
     pkt.velocity.z = m_velocity.z;
 
-    // Ŭ���̾�Ʈ �ð� Ÿ�ӽ����� ����
+    // 클라이언트 시간 타임스탬프 설정
     pkt.clientTime = (float)TimeMgr::Instance()->getCurrTime();
 
     return pkt;
@@ -428,14 +291,14 @@ C2S_FireAction Player::BuildFirePacket(const vec3& fireOrigin, const vec3& fireD
 {
     C2S_FireAction pkt;
 
-    // �޽��� ������ ���� �� ����
+    // 메시지 시퀀스 번호 증가 및 할당
     m_fireSeq++;
     pkt.msgSeq = m_fireSeq;
 
-    //  PlayerID �ӽ÷� 0 ó��
+    // PlayerID 임시로 0 처리
     pkt.playerId = 0;
 
-    // ���� ��ġ, ȸ��, �ӵ� ����
+    // 발사 원점 및 방향 설정
     pkt.fireOrigin.x = fireOrigin.x;
     pkt.fireOrigin.y = fireOrigin.y;
     pkt.fireOrigin.z = fireOrigin.z;
@@ -444,7 +307,7 @@ C2S_FireAction Player::BuildFirePacket(const vec3& fireOrigin, const vec3& fireD
     pkt.fireDirection.y = fireDirection.y;
     pkt.fireDirection.z = fireDirection.z;
 
-    // Ŭ���̾�Ʈ �ð� Ÿ�ӽ����� ����
+    // 클라이언트 시간 타임스탬프 설정
     pkt.clientTime = (float)TimeMgr::Instance()->getCurrTime();
 
     return pkt;
@@ -453,47 +316,25 @@ C2S_FireAction Player::BuildFirePacket(const vec3& fireOrigin, const vec3& fireD
 void Player::ApplyGravity() {
     double dt = DT;
 
-    m_velocity.y += m_gravity * dt; // �߷� ���ӵ� ����
-    position.y += m_velocity.y * dt; // y�� �ӵ��� ��ġ�� �ݿ�
+    m_velocity.y += m_gravity * dt; // 중력 가속도 적용
+    position.y += m_velocity.y * dt; // Y축 속도를 위치에 반영
 
-    m_isOnGround = false; // �⺻���� ����
+    m_isOnGround = false; // 기본값은 공중
 
-    // �ٴڰ� �浹 ó�� (���� �ϵ��ڵ��� ���� ����)
+    // 바닥과 충돌 처리 (단순 하드코딩된 영역 검사)
     if (position.x < -2.31563 && position.z < -6.84576) {
         if (position.y <= -0.5f) {
             position.y = -0.5f;
             m_velocity.y = 0.0f;
-            m_isOnGround = true; // ���� ����
+            m_isOnGround = true; // 바닥 착지
         }
     }
     else if (position.y <= -0.25f) {
         position.y = -0.25f;
         m_velocity.y = 0.0f;
-        m_isOnGround = true; // ���� ����
-    if (!m_isOnGround) {
-        m_velocity.y += m_gravity * dt;
+        m_isOnGround = true; // 바닥 착지
+        if (!m_isOnGround) {
+            m_velocity.y += m_gravity * dt;
+        }
     }
 }
-
-//void Player::ApplyGravity() {
-//    double dt = DT;
-//
-//    m_velocity.y += m_gravity * dt; // �߷� ���ӵ� ����
-//    position.y += m_velocity.y * dt; // y�� �ӵ��� ��ġ�� �ݿ�
-//
-//    m_isOnGround = false; // �⺻���� ����
-//
-//    // �ٴڰ� �浹 ó�� (���� �ϵ��ڵ��� ���� ����)
-//    if (position.x < -2.31563 && position.z < -6.84576) {
-//        if (position.y <= -0.5f) {
-//            position.y = -0.5f;
-//            m_velocity.y = 0.0f;
-//            m_isOnGround = true; // ���� ����
-//        }
-//    }
-//    else if (position.y <= -0.25f) {
-//        position.y = -0.25f;
-//        m_velocity.y = 0.0f;
-//        m_isOnGround = true; // ���� ����
-//    }
-//}
