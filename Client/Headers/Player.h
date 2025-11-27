@@ -39,7 +39,7 @@ public:
     virtual void Render() override;
 
     C2S_MovementUpdate BuildMovementPacket();  
-    C2S_FireAction BuildFirePacket(const vec3& fireOrigin, const vec3& fireDirection);
+    C2S_FireAction BuildFirePacket(const vec3& fireOrigin, const vec3& fireDirection, PlayerID targetID);
     // --- Physics Methods (from existing Player.h/Player.cpp) ---
     void ApplyGravity(); // [º¯°æ] Gravity(bool) -> ApplyGravity()
 

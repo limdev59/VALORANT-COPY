@@ -2,6 +2,9 @@
 #include <cstdio>
 #include <vector>
 #include "WorldEvent.h"
+#include "PacketDefs.h"
+#include "SessionManager.h"
+#include "ThreadQueue.h"
 
 NetworkIO::NetworkIO()
 	: m_TCPListenSocket(INVALID_SOCKET)

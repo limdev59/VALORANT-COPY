@@ -2,7 +2,7 @@
 #include "ClientSession.h"
 #include "common.h"
 #include <map>
-#include "QueueTypes.h";
+#include "QueueTypes.h"
 
 class SessionManager
 {

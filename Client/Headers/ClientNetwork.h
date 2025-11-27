@@ -71,3 +71,4 @@ private:
 };
 
 // 임시 구조 정의임
+extern ClientNetwork* g_pNetwork;

@@ -37,14 +37,14 @@ struct MsgHeader {
 };
 
 struct C2S_LoginRequest {
-	MsgType type		= MsgType::C2S_LOGIN_REQUEST;
+	MsgType type = MsgType::C2S_LOGIN_REQUEST;
 
 	std::string playerName;
 	uint16_t    clientUdpPort{ 0 };
 };
 
 struct S2C_LoginAccept {
-	MsgType		type	= MsgType::S2C_LOGIN_ACCEPT;
+	MsgType		type = MsgType::S2C_LOGIN_ACCEPT;
 
 	PlayerID	playerId;
 };

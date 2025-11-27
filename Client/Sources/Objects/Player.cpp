@@ -179,8 +179,43 @@ void Player::Update()
         glm::vec3 fireOrigin = camPos;
         glm::vec3 fireDirection = glm::normalize(camTarget - camPos);
 
-        C2S_FireAction firePkt = BuildFirePacket(fireOrigin, fireDirection);
+        PlayerID hitID = -1;
+
+        CScene* pScene = SceneMgr::Instance()->getScene();
+        if (pScene) {
+            const vector<CObject*>& enemies = pScene->GetObjects(GROUP_TYPE::ENEMY);
+            float minDist = 1000.0f; // 사거리 제한
+
+            for (CObject* enemyObj : enemies) {
+                // 적의 충돌체(Sphere 또는 Box)와 Ray(fireOrigin, fireDirection)의 충돌 검사 수행
+                // 현재는 단순 거리와 내적을 이용한 약식 판정 예시입니다.
+                // 실제로는 Sphere::IntersectsRay 등을 사용해야 정확합니다.
+
+                glm::vec3 toEnemy = enemyObj->getPosition() - fireOrigin;
+                float dist = glm::length(toEnemy);
+
+                // 방향이 거의 일치하고(내적 > 0.95), 사거리 내에 있다면
+                if (dist < minDist && glm::dot(glm::normalize(toEnemy), fireDirection) > 0.99f) {
+                    minDist = dist;
+                    // 적 객체에 PlayerID를 저장해두었다면 가져옵니다. 
+                    // (현재 Enemy 클래스 구조를 모르므로 dynamic_cast 예시)
+                    // Enemy* pEnemy = dynamic_cast<Enemy*>(enemyObj);
+                    // if(pEnemy) hitID = pEnemy->GetID();
+
+                    hitID = 999; 
+                }
+            }
+        }
+
+        C2S_FireAction firePkt = BuildFirePacket(fireOrigin, fireDirection, hitID);
         std::cout << "[Fire] FireAction Packet Built! Seq: " << firePkt.msgSeq << std::endl;
+        if (g_pNetwork) {
+            g_pNetwork->SendFire(firePkt);
+            std::cout << ">>> [Client] SendFire() Called! Packet sent to server. <<<" << std::endl;
+        }
+        else {
+            std::cout << "!!! [Client] Error: g_pNetwork is NULL. Cannot send packet. !!!" << std::endl;
+        }
     }
 
     // 이동 패킷 생성
@@ -284,10 +319,11 @@ C2S_MovementUpdate Player::BuildMovementPacket()
     // 클라이언트 시간 타임스탬프 설정
     pkt.clientTime = (float)TimeMgr::Instance()->getCurrTime();
 
+
     return pkt;
 }
 
-C2S_FireAction Player::BuildFirePacket(const vec3& fireOrigin, const vec3& fireDirection)
+C2S_FireAction Player::BuildFirePacket(const vec3& fireOrigin, const vec3& fireDirection, PlayerID targetID)
 {
     C2S_FireAction pkt;
 
@@ -309,6 +345,8 @@ C2S_FireAction Player::BuildFirePacket(const vec3& fireOrigin, const vec3& fireD
 
     // 클라이언트 시간 타임스탬프 설정
     pkt.clientTime = (float)TimeMgr::Instance()->getCurrTime();
+
+    pkt.hitPlayerID = targetID;
 
     return pkt;
 }
