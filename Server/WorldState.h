@@ -26,6 +26,10 @@ public:
      * @brief 게임 로직의 메인 루프. 입력 큐를 처리하고, 스냅샷을 출력 큐에 보냄
      */
     void Tick(float nowSec);
+    /**
+     * @brief 과거 스냅샷 버퍼를 반환하는 함수 - 슝민
+     */
+    const std::deque<S2C_SnapshotState>& GetLastSnapshots() const { return m_SnapshotHistory; }
 
 private:
     // --- 이벤트 처리 함수 ---
@@ -45,4 +49,9 @@ private:
 
     // 게임에 존재하는 모든 플레이어의 상태
     std::map<PlayerID, PlayerState*> m_PlayerStates;
+
+    // 스냅샷 히스토리 버퍼 (최근 N개의 스냅샷 저장)
+    std::deque<S2C_SnapshotState> m_SnapshotHistory;
+
+    const size_t MAX_SNAPSHOT_HISTORY_SIZE = 60;
 };

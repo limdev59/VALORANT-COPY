@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ClientSession.cpp" />
+    <ClCompile Include="FireActionHandler.cpp" />
     <ClCompile Include="IPacketHandler.cpp" />
     <ClCompile Include="MovementUpdateHandler.cpp" />
     <ClCompile Include="NetworkIO.cpp" />
@@ -33,6 +34,7 @@
     <ClInclude Include="ClientSession.h" />
     <ClInclude Include="common.h" />
     <ClInclude Include="DecodedPacket.h" />
+    <ClInclude Include="FireActionHandler.h" />
     <ClInclude Include="IPacketHandler.h" />
     <ClInclude Include="MovementUpdateHandler.h" />
     <ClInclude Include="NetworkIO.h" />

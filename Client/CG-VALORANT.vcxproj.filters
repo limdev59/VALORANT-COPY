@@ -61,9 +61,6 @@
     <Filter Include="소스 파일\Camera\Start_Camera">
       <UniqueIdentifier>{ff43ce33-2779-4038-a74e-dbfd423ba0e1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Camera\Debug_Camera">
-      <UniqueIdentifier>{64ccad62-0258-4aea-82a3-0bb8c0c91fcc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\Object\Sova">
       <UniqueIdentifier>{2050e6b0-6dd0-469e-82da-33660bb2aa1d}</UniqueIdentifier>
     </Filter>
@@ -122,9 +119,6 @@
     </ClCompile>
     <ClCompile Include="Sources\Camera\CCamera.cpp">
       <Filter>소스 파일\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\Camera\Debug_Camera.cpp">
-      <Filter>소스 파일\Camera\Debug_Camera</Filter>
     </ClCompile>
     <ClCompile Include="Sources\Camera\Start_Camera.cpp">
       <Filter>소스 파일\Camera\Start_Camera</Filter>
@@ -196,9 +190,6 @@
     </ClInclude>
     <ClInclude Include="Headers\CCamera.h">
       <Filter>소스 파일\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Debug_Camera.h">
-      <Filter>소스 파일\Camera\Debug_Camera</Filter>
     </ClInclude>
     <ClInclude Include="Headers\Start_Camera.h">
       <Filter>소스 파일\Camera\Start_Camera</Filter>

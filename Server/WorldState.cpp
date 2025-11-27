@@ -52,9 +52,16 @@ void WorldState::Tick(float nowSec)
     BuildSnapshotAll(nowSec, snapshotPkt);
 
     // 스냅샷 출력 큐에 삽입
+    // TODO: snapshotPkt를 std::vector<uint8_t>로 직렬화(Serialize)해야함
     if (!snapshotPkt.snapshots.empty())
     {
-        // TODO: snapshotPkt를 std::vector<uint8_t>로 직렬화(Serialize)해야함
+        m_SnapshotHistory.push_back(snapshotPkt);
+
+        // 버퍼 크기 관리 (오래된 데이터 삭제)
+        while (m_SnapshotHistory.size() > MAX_SNAPSHOT_HISTORY_SIZE)
+        {
+            m_SnapshotHistory.pop_front();
+        }
     }
 }
 
