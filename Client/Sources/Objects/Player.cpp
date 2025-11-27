@@ -9,6 +9,8 @@
 #include "CCamera.h"
 #include "CScene.h"
 
+extern ClientNetwork* g_pNetwork;
+
 
 Player::Player()
     : CObject() {
@@ -181,10 +183,20 @@ void Player::Update()
 
         C2S_FireAction firePkt = BuildFirePacket(fireOrigin, fireDirection);
         std::cout << "[Fire] FireAction Packet Built! Seq: " << firePkt.msgSeq << std::endl;
+
+        if (g_pNetwork)
+        {
+            g_pNetwork->SendFire(firePkt);
+        }
     }
 
     // 이동 패킷 생성
     C2S_MovementUpdate movementPkt = BuildMovementPacket();
+
+    if (g_pNetwork)
+    {
+        g_pNetwork->SendMovement(movementPkt);
+    }
 
     // --- 6. 애니메이션 업데이트 ---
     if (isMoving && m_isOnGround) {
@@ -309,6 +321,9 @@ C2S_FireAction Player::BuildFirePacket(const vec3& fireOrigin, const vec3& fireD
 
     // 클라이언트 시간 타임스탬프 설정
     pkt.clientTime = (float)TimeMgr::Instance()->getCurrTime();
+
+    // 기본적으로 피격 대상은 없다고 표시
+    pkt.hitPlayerID = static_cast<PlayerID>(-1);
 
     return pkt;
 }

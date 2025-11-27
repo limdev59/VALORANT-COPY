@@ -1,9 +1,9 @@
 #include "PacketDispatcher.h"
-#include "WorldEvent.h"           
-#include "DecodedPacket.h"        
+#include "WorldEvent.h"
+#include "DecodedPacket.h"
 
-#include "MovementUpdateHandler.h" 
-// #include "FireActionHandler.h"  // [¹ß»ç] ÇÚµé·¯
+#include "MovementUpdateHandler.h"
+#include "FireActionHandler.h"
 
 PacketDispatcher::PacketDispatcher()
     : m_pWorldInputQueue(nullptr)
@@ -23,11 +23,11 @@ void PacketDispatcher::Initialize(PacketQueue* worldInQueue)
 {
     m_pWorldInputQueue = worldInQueue;
 
-    // ÀÌµ¿ ÆĞÅ¶ ÇÚµé·¯ (Movement)
+    // ì´ë™ íŒ¨í‚· í•¸ë“¤ëŸ¬ (Movement)
     m_Handlers[MsgType::C2S_MOVEMENT_UPDATE] = new MovementUpdateHandler();
 
-    // ¹ß»ç ÆĞÅ¶ ÇÚµé·¯ (Fire)
-    // m_Handlers[MsgType::C2S_FIRE_ACTION] = new FireActionHandler();
+    // ì‚¬ê²© íŒ¨í‚· í•¸ë“¤ëŸ¬ (Fire)
+    m_Handlers[MsgType::C2S_FIRE_ACTION] = new FireActionHandler();
 
     printf("[PacketDispatcher] Initialized. Handlers registered: %zu\n", m_Handlers.size());
 }
@@ -39,10 +39,10 @@ void PacketDispatcher::DispatchUDP(const uint8_t* data, size_t len, ClientSessio
         return;
     }
 
-    // MsgType ÀĞ¾î ÆĞÅ¶ÀÎÁö È®ÀÎ
+    // MsgType ìœ¼ë¡œ íŒ¨í‚· íƒ€ì… í™•ì¸
     MsgType type = *reinterpret_cast<const MsgType*>(data);
 
-    // ÇØ´ç Å¸ÀÔ ÇÚµé·¯ µî·Ï È®ÀÎ
+    // ë“±ë¡ëœ íƒ€ì…ì— ëŒ€í•œ í•¸ë“¤ëŸ¬ ì¡´ì¬ ì—¬ë¶€ í™•ì¸
     auto it = m_Handlers.find(type);
     if (it == m_Handlers.end())
     {
@@ -51,30 +51,30 @@ void PacketDispatcher::DispatchUDP(const uint8_t* data, size_t len, ClientSessio
     }
 
     IPacketHandler* handler = it->second;
-    DecodedPacket decodedPkt; // °á°ú¸¦ ¹ŞÀ» ±¸Á¶Ã¼
+    DecodedPacket decodedPkt; // ì¶œë ¥ìš©
 
-    // ÆÄ½Ì
+    // íŒŒì‹±
     bool success = handler->Parse(data, len, *session, decodedPkt);
 
     if (success)
     {
-        // ÆÄ½Ì ¼º°ø ½Ã, ÀÌº¥Æ® »ı¼º
+        // íŒŒì‹± ì™„ë£Œ, ì´ë²¤íŠ¸ ìƒì„±
         WorldEvent event;
-        event.playerID = session->GetPlayerID(); // ´©°¡ º¸³Â´ÂÁö ±â·Ï
+        event.playerID = session->GetPlayerID(); // ê¸°ë³¸ê°’
 
-        // ÆĞÅ¶ Å¸ÀÔ¿¡ µû¶ó ÀÌº¥Æ® Á¾·ù ¼³Á¤ ¹× µ¥ÀÌÅÍ º¹»ç
+        // íŒ¨í‚· íƒ€ì…ë³„ë¡œ ì´ë²¤íŠ¸ êµ¬ì„±
         if (type == MsgType::C2S_MOVEMENT_UPDATE)
         {
             event.type = E_Packet_Movement;
             event.movement = decodedPkt.movement;
         }
-        //else if (type == MsgType::C2S_FIRE_ACTION)
-        //{
-        //    event.type = E_Packet_Fire;
-        //    event.fire = decodedPkt.fire;
-        //}
+        else if (type == MsgType::C2S_FIRE_ACTION)
+        {
+            event.type = E_Packet_Fire;
+            event.fire = decodedPkt.fire;
+        }
 
-        // Å¥¿¡ ÀÌº¥Æ® Çª½Ã
+        // íì— ì´ë²¤íŠ¸ ë°€ì–´ë„£ê¸°
         if (m_pWorldInputQueue)
         {
             m_pWorldInputQueue->Push(event);
