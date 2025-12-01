@@ -367,3 +367,4 @@ Animations/
 Models/
 
 Client/.idea/*
+*.cpp

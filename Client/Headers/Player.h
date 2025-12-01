@@ -29,6 +29,8 @@ protected:
     bool    m_isOnGround = false;
     float   m_jumpVelocity = 2.0f;
 
+    int     m_health = 150;
+
     uint32_t m_movementSeq = 0;
     uint32_t m_fireSeq = 0;
 public:
@@ -38,9 +40,12 @@ public:
     virtual void Update() override;
     virtual void Render() override;
 
+
     C2S_MovementUpdate BuildMovementPacket();  
     C2S_FireAction BuildFirePacket(const vec3& fireOrigin, const vec3& fireDirection, PlayerID targetID);
-    // --- Physics Methods (from existing Player.h/Player.cpp) ---
-    void ApplyGravity(); // [º¯°æ] Gravity(bool) -> ApplyGravity()
+    void ApplyGravity();
+
+    int GetHealth() const { return m_health; }
+    void SetHealth(int health) { m_health = health; }
 
 };

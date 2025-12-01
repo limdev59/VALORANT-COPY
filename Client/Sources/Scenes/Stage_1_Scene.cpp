@@ -113,7 +113,45 @@ void Stage_1_Scene::Update() {
 void Stage_1_Scene::Render()
 {
     CScene::Render();
+    RenderPlayerHUD();
 }
 
 void Stage_1_Scene::Exit() {
+}
+
+void Stage_1_Scene::RenderPlayerHUD()
+{
+    if (arrObj[(GLuint)GROUP_TYPE::PLAYER].empty())
+        return;
+
+    Player* player = dynamic_cast<Player*>(arrObj[(GLuint)GROUP_TYPE::PLAYER][0]);
+    if (!player)
+        return;
+
+    const std::string hpText = "HP: " + std::to_string(player->GetHealth());
+
+    glUseProgram(0);
+
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    glOrtho(0, WINDOW_WIDTH, 0, WINDOW_HEIGHT, -1, 1);
+
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+
+    glDisable(GL_DEPTH_TEST);
+    glColor3f(1.0f, 1.0f, 1.0f);
+    glRasterPos2f(20.0f, WINDOW_HEIGHT - 40.0f);
+    for (char c : hpText)
+    {
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
+    }
+    glEnable(GL_DEPTH_TEST);
+
+    glPopMatrix();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
 }
