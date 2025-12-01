@@ -11,14 +11,14 @@ Sova::Sova()
     string modelPath = "first2";
     m_pModel = new IModel<AnimModel>(modelPath);
 
-    AnimModel* currModel = m_pModel->GetModel(); // ·¡ÆÛ¿¡¼­ ½ÇÁ¦ ¸ðµ¨ Æ÷ÀÎÅÍ °¡Á®¿À±â
+    AnimModel* currModel = m_pModel->GetModel(); // Â·Â¡Ã†Ã›Â¿Â¡Â¼Â­ Â½Ã‡ÃÂ¦ Â¸Ã°ÂµÂ¨ Ã†Ã·Ã€ÃŽÃ…Ã Â°Â¡ÃÂ®Â¿Ã€Â±Ã¢
 
     m_pIdleAnim = new Animation("Models/first2/firstIdle.gltf", currModel);
     m_pAnimator = new Animator(m_pIdleAnim);
 
     m_gravity = -9.81f;
     m_velocity = vec3(0.0f);
-    m_isOnGround = true; // (¹Ù´Ú¿¡¼­ ½ÃÀÛÇÑ´Ù°í °¡Á¤)
+    m_isOnGround = true; // (Â¹Ã™Â´ÃšÂ¿Â¡Â¼Â­ Â½ÃƒÃ€Ã›Ã‡Ã‘Â´Ã™Â°Ã­ Â°Â¡ÃÂ¤)
     m_jumpVelocity = 3.0f;
 
     setScale(vec3(0.3f, 0.3f, 0.3f));
@@ -37,7 +37,7 @@ void Sova::Update() {
         m_pAnimator->PlayAnimation(m_pIdleAnim);
         m_pAnimator->UpdateAnimation(DT);
     }
-    hitboxCenter = position;
+    hitboxCenter = glm::vec3(0.0f);
     hitboxSize = scale;
 }
 
@@ -53,10 +53,10 @@ void Sova::Render() {
             glm::mat4 S = glm::scale(glm::mat4(1.f), scale);
             modelMat = T * R * S;
 
-            // 3. [Á¦¿Ü] Player Àü¿ë ¸ðµ¨ ¿øÁ¡ º¸Á¤ ÄÚµå´Â ÀÌ½ÄÇÏÁö ¾ÊÀ½
+            // 3. [ÃÂ¦Â¿Ãœ] Player Ã€Ã¼Â¿Ã« Â¸Ã°ÂµÂ¨ Â¿Ã¸ÃÂ¡ ÂºÂ¸ÃÂ¤ Ã„ÃšÂµÃ¥Â´Ã‚ Ã€ÃŒÂ½Ã„Ã‡ÃÃÃ¶ Â¾ÃŠÃ€Â½
             // modelMat = glm::translate(modelMat, vec3(0.0f, -1.0f, 0.0f));
 
-            // 4. PVM ¹× ¼ÎÀÌ´õ Uniform ¼³Á¤ (Player¿Í µ¿ÀÏ)
+            // 4. PVM Â¹Ã— Â¼ÃŽÃ€ÃŒÂ´Ãµ Uniform Â¼Â³ÃÂ¤ (PlayerÂ¿Ã ÂµÂ¿Ã€Ã)
             mat4 projMat = CameraMgr::Instance()->getMainCamera()->getProjectionMatrix();
             mat4 view = CameraMgr::Instance()->getMainCamera()->getViewMatrix();
             glm::mat4 PVM = projMat * view * modelMat;
@@ -69,24 +69,24 @@ void Sova::Render() {
             glUniformMatrix4fv(loc_PVM, 1, GL_FALSE, glm::value_ptr(PVM));
             glUniformMatrix3fv(loc_normalMat, 1, GL_FALSE, glm::value_ptr(normalMat));
 
-            // 5. Bone(»À) Uniform ¼³Á¤ (Sova ÀÚ½ÅÀÇ m_pAnimator »ç¿ë)
-            const auto& transforms = m_pAnimator->GetFinalBoneMatrices(); // [¼öÁ¤]
+            // 5. Bone(Â»Ã€) Uniform Â¼Â³ÃÂ¤ (Sova Ã€ÃšÂ½Ã…Ã€Ã‡ m_pAnimator Â»Ã§Â¿Ã«)
+            const auto& transforms = m_pAnimator->GetFinalBoneMatrices(); // [Â¼Ã¶ÃÂ¤]
             GLuint finalBonesMatricesLoc = glGetUniformLocation(CCore::Instance()->shaderProgramID2, "finalBonesMatrices");
             for (int i = 0; i < transforms.size(); i++)
                 glUniformMatrix4fv(finalBonesMatricesLoc + i, 1, false, glm::value_ptr(transforms[i]));
 
-            // 6. ÅØ½ºÃ³ Sampler ¼³Á¤ (Player¿Í µ¿ÀÏ)
+            // 6. Ã…Ã˜Â½ÂºÃƒÂ³ Sampler Â¼Â³ÃÂ¤ (PlayerÂ¿Ã ÂµÂ¿Ã€Ã)
             GLint loc_diffuseSampler = glGetUniformLocation(CCore::Instance()->shaderProgramID2, "diffuseTexture");
             GLint loc_normalSampler = glGetUniformLocation(CCore::Instance()->shaderProgramID2, "normalMap");
             glUniform1i(loc_diffuseSampler, 0);
             glUniform1i(loc_normalSampler, 1);
 
-            // 7. ¸ðµ¨ ·»´õ¸µ
+            // 7. Â¸Ã°ÂµÂ¨ Â·Â»Â´ÃµÂ¸Âµ
             currModel->Render();
 
             GLenum error = glGetError();
             if (error != GL_NO_ERROR)
-                std::cout << "Sova Render error : " << error << std::endl; // µð¹ö±ë¿ë
+                std::cout << "Sova Render error : " << error << std::endl; // ÂµÃ°Â¹Ã¶Â±Ã«Â¿Ã«
         }
     }
 }
@@ -94,22 +94,22 @@ void Sova::Render() {
 void Sova::ApplyGravity() {
     double dt = DT;
 
-    m_velocity.y += m_gravity * dt; // Áß·Â °¡¼Óµµ Àû¿ë
-    position.y += m_velocity.y * dt; // yÃà ¼Óµµ¸¦ À§Ä¡¿¡ ¹Ý¿µ
+    m_velocity.y += m_gravity * dt; // ÃÃŸÂ·Ã‚ Â°Â¡Â¼Ã“ÂµÂµ Ã€Ã»Â¿Ã«
+    position.y += m_velocity.y * dt; // yÃƒÃ  Â¼Ã“ÂµÂµÂ¸Â¦ Ã€Â§Ã„Â¡Â¿Â¡ Â¹ÃÂ¿Âµ
 
-    m_isOnGround = false; // ±âº»°ªÀº °øÁß
+    m_isOnGround = false; // Â±Ã¢ÂºÂ»Â°ÂªÃ€Âº Â°Ã¸ÃÃŸ
 
-    // ¹Ù´Ú°ú Ãæµ¹ Ã³¸® (±âÁ¸ ÇÏµåÄÚµùµÈ ·ÎÁ÷ À¯Áö)
+    // Â¹Ã™Â´ÃšÂ°Ãº ÃƒÃ¦ÂµÂ¹ ÃƒÂ³Â¸Â® (Â±Ã¢ÃÂ¸ Ã‡ÃÂµÃ¥Ã„ÃšÂµÃ¹ÂµÃˆ Â·ÃŽÃÃ· Ã€Â¯ÃÃ¶)
     if (position.x < -2.31563 && position.z < -6.84576) {
         if (position.y <= -0.5f) {
             position.y = -0.5f;
             m_velocity.y = 0.0f;
-            m_isOnGround = true; // Á¡ÇÁ Á¾·á
+            m_isOnGround = true; // ÃÂ¡Ã‡Ã ÃÂ¾Â·Ã¡
         }
     }
     else if (position.y <= -0.25f) {
         position.y = -0.25f;
         m_velocity.y = 0.0f;
-        m_isOnGround = true; // Á¡ÇÁ Á¾·á
+        m_isOnGround = true; // ÃÂ¡Ã‡Ã ÃÂ¾Â·Ã¡
     }
 }

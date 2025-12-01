@@ -178,6 +178,7 @@
     <ClCompile Include="Sources\Model\Model.cpp" />
     <ClCompile Include="Sources\Managers\MouseMgr.cpp" />
     <ClCompile Include="Sources\Objects\Ascent.cpp" />
+    <ClCompile Include="Sources\DebugDraw.cpp" />
     <ClCompile Include="Sources\Objects\Player.cpp" />
     <ClCompile Include="Sources\Managers\SceneMgr.cpp" />
     <ClCompile Include="Sources\Objects\Sphere.cpp" />
@@ -191,6 +192,8 @@
     <None Include="Shaders\animVertex.glsl" />
     <None Include="Shaders\fragment.glsl" />
     <None Include="Shaders\vertex.glsl" />
+    <None Include="Shaders\debugFragment.glsl" />
+    <None Include="Shaders\debugVertex.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headers\AnimModel.h" />
@@ -202,6 +205,7 @@
     <ClInclude Include="Headers\CameraMgr.h" />
     <ClInclude Include="Headers\CCore.h" />
     <ClInclude Include="Headers\CObject.h" />
+    <ClInclude Include="Headers\DebugDraw.h" />
     <ClInclude Include="Headers\CScene.h" />
     <ClInclude Include="Headers\define.h" />
     <ClInclude Include="Headers\Enemy.h" />

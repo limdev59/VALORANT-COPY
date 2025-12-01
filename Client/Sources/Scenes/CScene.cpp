@@ -6,7 +6,7 @@ CScene::CScene()
     :loaded(false)
 {
     for (GLuint i = 0; i < (GLuint)GROUP_TYPE::END; ++i) {
-        arrObj[i] = std::vector<CObject*>();  // ∞¢ ø‰º“∏¶ ∫§≈Õ∑Œ ∏ÌΩ√¿˚¿∏∑Œ √ ±‚»≠
+        arrObj[i] = std::vector<CObject*>();  // Í∞Å Í∑∏Î£πÎ≥Ñ Î≤°ÌÑ∞Î°ú Ï¥àÍ∏∞Ìôî
     }
 }
 
@@ -39,6 +39,14 @@ void CScene::Render()
     }
 }
 
+void CScene::RenderHitboxes(GLuint shaderProgramID)
+{
+    for (GLuint i = 0; i < (GLuint)GROUP_TYPE::END; ++i) {
+        for (size_t j = 0; j < arrObj[i].size(); ++j) {
+            arrObj[i][j]->RenderHitbox(shaderProgramID);
+        }
+    }
+}
 
 void CScene::Enter()
 {
@@ -46,5 +54,5 @@ void CScene::Enter()
 
 void CScene::Exit()
 {
-   
+
 }

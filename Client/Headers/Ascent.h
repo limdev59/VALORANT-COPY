@@ -1,8 +1,8 @@
 #pragma once
 #include "CObject.h"
-#include "IModel.h"      // 템플릿 래퍼 포함
+#include "IModel.h"      // 첩
 
-// 전방 선언
+//
 class Model;
 template <typename T>
 class IModel;
@@ -14,10 +14,15 @@ private:
     IModel<Model>* m_pModelWall;
     IModel<Model>* m_pModelProps;
 
+    std::vector<std::pair<glm::vec3, glm::vec3>> BuildColliderFromModel(IModel<Model>* model) const;
+
 public:
     Ascent();
     virtual ~Ascent();
 
     virtual void Update() override;
     virtual void Render() override;
+    virtual void RenderHitbox(GLuint shaderProgramID) override;
+
+    std::vector<std::pair<glm::vec3, glm::vec3>> GetWorldColliders() const;
 };

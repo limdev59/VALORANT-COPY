@@ -8,6 +8,7 @@
 #include "SceneMgr.h"
 #include "CCamera.h"
 #include "CScene.h"
+#include "Ascent.h"
 
 
 Player::Player()
@@ -97,8 +98,13 @@ void Player::Update()
         m_velocity.y = m_jumpVelocity;
     }
 
+    m_isOnGround = false;
     // 중력 적용
     ApplyGravity();
+
+    // --- 3. 히트박스 기본 설정 ---
+    hitboxCenter = glm::vec3(0.0f);
+    hitboxSize = scale;
 
     // --- 3. 예상 위치 계산 ---
     glm::vec3 nextPosition = this->position + (m_velocity * (float)dt);
@@ -113,59 +119,97 @@ void Player::Update()
     glm::vec3 originalPos = this->position;
     bool isGroundedThisFrame = false;
 
+    auto buildPlayerAABB = [&](const glm::vec3& pos) {
+        glm::vec3 center = pos + hitboxCenter;
+        glm::vec3 half = hitboxSize * 0.5f;
+        return std::make_pair(center - half, center + half);
+    };
+
+    auto buildObjectAABB = [&](const CObject& obj) {
+        glm::vec3 center = obj.getPosition() + obj.getHitboxCenter();
+        glm::vec3 half = obj.getHitboxSize() * 0.5f;
+        return std::make_pair(center - half, center + half);
+    };
+
+    auto intersects = [&](const std::pair<glm::vec3, glm::vec3>& a, const std::pair<glm::vec3, glm::vec3>& b) {
+        return !(a.second.x < b.first.x || a.first.x > b.second.x ||
+                 a.second.y < b.first.y || a.first.y > b.second.y ||
+                 a.second.z < b.first.z || a.first.z > b.second.z);
+    };
+
+    auto collidesWith = [&](const glm::vec3& candidatePos, const CObject* other) {
+        const auto playerBox = buildPlayerAABB(candidatePos);
+        if (const Ascent* ascent = dynamic_cast<const Ascent*>(other)) {
+            for (const auto& box : ascent->GetWorldColliders()) {
+                if (intersects(playerBox, box)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        return intersects(playerBox, buildObjectAABB(*other));
+    };
+
     // Y축(중력/바닥) 충돌 검사
-    this->setPosition(glm::vec3(originalPos.x, nextPosition.y, originalPos.z));
+    glm::vec3 candidatePos = glm::vec3(originalPos.x, nextPosition.y, originalPos.z);
 
     for (CObject* other : mapObjects) {
-        if (this->CheckCollision(*other)) {
+        if (collidesWith(candidatePos, other)) {
             if (m_velocity.y < 0) {
                 isGroundedThisFrame = true;
             }
             m_velocity.y = 0;
-            nextPosition.y = originalPos.y;
+            candidatePos.y = originalPos.y;
             break;
         }
     }
-
-    // m_isOnGround 상태 갱신
-    m_isOnGround = isGroundedThisFrame;
+    for (CObject* other : enemyObjects) {
+        if (collidesWith(candidatePos, other)) {
+            m_velocity.y = 0;
+            candidatePos.y = originalPos.y;
+            break;
+        }
+    }
+    nextPosition.y = candidatePos.y;
 
     // X축(좌우) 충돌 검사
-    this->setPosition(glm::vec3(nextPosition.x, originalPos.y, originalPos.z));
+    candidatePos = glm::vec3(nextPosition.x, nextPosition.y, originalPos.z);
     for (CObject* other : mapObjects) {
-        if (this->CheckCollision(*other)) {
+        if (collidesWith(candidatePos, other)) {
             m_velocity.x = 0;
-            nextPosition.x = originalPos.x;
+            candidatePos.x = originalPos.x;
             break;
         }
     }
     for (CObject* other : enemyObjects) {
-        if (this->CheckCollision(*other)) {
+        if (collidesWith(candidatePos, other)) {
             m_velocity.x = 0;
-            nextPosition.x = originalPos.x;
+            candidatePos.x = originalPos.x;
             break;
         }
     }
+    nextPosition.x = candidatePos.x;
 
     // Z축(앞뒤) 충돌 검사
-    this->setPosition(glm::vec3(originalPos.x, originalPos.y, nextPosition.z));
+    candidatePos = glm::vec3(nextPosition.x, nextPosition.y, nextPosition.z);
     for (CObject* other : mapObjects) {
-        if (this->CheckCollision(*other)) {
+        if (collidesWith(candidatePos, other)) {
             m_velocity.z = 0;
-            nextPosition.z = originalPos.z;
+            candidatePos.z = originalPos.z;
             break;
         }
     }
     for (CObject* other : enemyObjects) {
-        if (this->CheckCollision(*other)) {
+        if (collidesWith(candidatePos, other)) {
             m_velocity.z = 0;
-            nextPosition.z = originalPos.z;
+            candidatePos.z = originalPos.z;
             break;
         }
     }
+    nextPosition.z = candidatePos.z;
 
-    // 충돌 검사 완료 후 위치 원복 (검사만 수행했으므로)
-    this->setPosition(originalPos);
+    m_isOnGround = isGroundedThisFrame;
 
     // 최종 위치 반영
     setPosition(nextPosition);
@@ -187,22 +231,13 @@ void Player::Update()
             float minDist = 1000.0f; // 사거리 제한
 
             for (CObject* enemyObj : enemies) {
-                // 적의 충돌체(Sphere 또는 Box)와 Ray(fireOrigin, fireDirection)의 충돌 검사 수행
-                // 현재는 단순 거리와 내적을 이용한 약식 판정 예시입니다.
-                // 실제로는 Sphere::IntersectsRay 등을 사용해야 정확합니다.
-
                 glm::vec3 toEnemy = enemyObj->getPosition() - fireOrigin;
                 float dist = glm::length(toEnemy);
 
                 // 방향이 거의 일치하고(내적 > 0.95), 사거리 내에 있다면
                 if (dist < minDist && glm::dot(glm::normalize(toEnemy), fireDirection) > 0.99f) {
                     minDist = dist;
-                    // 적 객체에 PlayerID를 저장해두었다면 가져옵니다. 
-                    // (현재 Enemy 클래스 구조를 모르므로 dynamic_cast 예시)
-                    // Enemy* pEnemy = dynamic_cast<Enemy*>(enemyObj);
-                    // if(pEnemy) hitID = pEnemy->GetID();
-
-                    hitID = 999; 
+                    hitID = 999;
                 }
             }
         }
@@ -236,7 +271,7 @@ void Player::Update()
     }
 
     // --- 7. 히트박스 업데이트 ---
-    hitboxCenter = position;
+    hitboxCenter = glm::vec3(0.0f);
     hitboxSize = scale;
 
     if (CameraMgr::Instance()->getMainCamera()) {
@@ -247,8 +282,6 @@ void Player::Update()
         pCam->target = eyePos + camDir;
     }
 }
-
-
 void Player::Render() {
     if (m_pModel) { // [Refactored]
         glUseProgram(CCore::Instance()->shaderProgramID2);
@@ -362,25 +395,10 @@ C2S_FireAction Player::BuildFirePacket(const vec3& fireOrigin, const vec3& fireD
 void Player::ApplyGravity() {
     double dt = DT;
 
-    m_velocity.y += m_gravity * dt; // 중력 가속도 적용
-    position.y += m_velocity.y * dt; // Y축 속도를 위치에 반영
-
-    m_isOnGround = false; // 기본값은 공중
-
-    // 바닥과 충돌 처리 (단순 하드코딩된 영역 검사)
-    if (position.x < -2.31563 && position.z < -6.84576) {
-        if (position.y <= -0.5f) {
-            position.y = -0.5f;
-            m_velocity.y = 0.0f;
-            m_isOnGround = true; // 바닥 착지
-        }
+    if (!m_isOnGround) {
+        m_velocity.y += m_gravity * dt; // 중력 가속도 적용
     }
-    else if (position.y <= -0.25f) {
-        position.y = -0.25f;
+    else {
         m_velocity.y = 0.0f;
-        m_isOnGround = true; // 바닥 착지
-        if (!m_isOnGround) {
-            m_velocity.y += m_gravity * dt;
-        }
     }
 }

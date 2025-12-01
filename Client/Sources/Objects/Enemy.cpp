@@ -18,8 +18,8 @@ void Enemy::Update() {
         m_pModel->GetModel()->Update(position, rotation, scale);
     }
 
-    // ��Ʈ�ڽ�
-    hitboxCenter = position;
+    // 트리거용 히트박스 업데이트
+    hitboxCenter = glm::vec3(0.0f);
     hitboxSize = scale;
 }
 

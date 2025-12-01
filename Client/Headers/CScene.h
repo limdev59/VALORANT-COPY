@@ -1,42 +1,44 @@
 #pragma once
+#include "define.h"
 
 class CObject;
 class CScene
 {
 protected:
-	GLboolean					loaded;
-	vector<CObject*>			arrObj[(GLuint)GROUP_TYPE::END];
-	wstring						strName;
+        GLboolean                                       loaded;
+        vector<CObject*>                        arrObj[(GLuint)GROUP_TYPE::END];
+        wstring                                         strName;
 public:
-	CScene();
-	~CScene();
+        CScene();
+        ~CScene();
 
-	virtual void				Update() = 0;
-	virtual void				Render() = 0;
-	virtual void				Enter() = 0;
-	virtual void				Exit() = 0;
+        virtual void                            Update() = 0;
+        virtual void                            Render() = 0;
+        virtual void                            Enter() = 0;
+        virtual void                            Exit() = 0;
+        virtual void                            RenderHitboxes(GLuint shaderProgramID);
 
-	void setName(const wstring& _strName) {
-		strName = _strName;
-	}
-	const wstring& getName() { return strName; }
+        void setName(const wstring& _strName) {
+                strName = _strName;
+        }
+        const wstring& getName() { return strName; }
 
-	CObject& getObject(GROUP_TYPE type, size_t index) {
-		if ((GLuint)type >= (GLuint)GROUP_TYPE::END || index >= arrObj[(GLuint)type].size()) {
-			exit(9);
-		}
-		return *arrObj[(GLuint)type][index];
-	}
+        CObject& getObject(GROUP_TYPE type, size_t index) {
+                if ((GLuint)type >= (GLuint)GROUP_TYPE::END || index >= arrObj[(GLuint)type].size()) {
+                        exit(9);
+                }
+                return *arrObj[(GLuint)type][index];
+        }
 
-	const vector<CObject*>& GetObjects(GROUP_TYPE type) {
-		return arrObj[(GLuint)type];
-	}
+        const vector<CObject*>& GetObjects(GROUP_TYPE type) {
+                return arrObj[(GLuint)type];
+        }
 
 protected:
 
-	
-	void addObject(CObject* obj, GROUP_TYPE type) {
-		arrObj[(GLuint)type].push_back(obj);
-	}
+
+        void addObject(CObject* obj, GROUP_TYPE type) {
+                arrObj[(GLuint)type].push_back(obj);
+        }
 };
 

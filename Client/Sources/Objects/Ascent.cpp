@@ -1,10 +1,11 @@
 #include "pch.h"
 #include "Ascent.h"
-#include "IModel.h"      // IModel ±¸Çö Æ÷ÇÔ
-#include "CCore.h"       // ¼ÎÀÌ´õ ID¸¦ °¡Á®¿À±â À§ÇØ
-#include "define.h"      // MODEL_TYPE::ASCENT ¿­°ÅÇüÀ» »ç¿ëÇÏ±â À§ÇØ
+#include "IModel.h"      // IModel
+#include "CCore.h"       // ì…°ì´ë” ID
+#include "define.h"      // MODEL_TYPE::ASCENT ì •ì˜
+#include "DebugDraw.h"
 
-// »ı¼ºÀÚ: IModel<Model>À» »ı¼ºÇÏ°í ASCENT ¸ÊÀ» ·ÎµåÇÕ´Ï´Ù.
+// : IModel<Model> ë¥¼ í†µí•´ ASCENT ë§µ íŒŒíŠ¸ë¥¼ ë¡œë“œí•©ë‹ˆë‹¤.
 Ascent::Ascent()
     : m_pModelDecoration(nullptr)
     , m_pModelFloor(nullptr)
@@ -17,7 +18,7 @@ Ascent::Ascent()
     m_pModelProps       = new IModel<Model>(MODEL_TYPE::ASCENT_PROPS, GL_TRIANGLES);
 }
 
-// ¼Ò¸êÀÚ: IModel ·¡ÆÛ¸¦ ¾ÈÀüÇÏ°Ô »èÁ¦ÇÕ´Ï´Ù.
+// ì†Œë©¸ì: IModel ë©”ëª¨ë¦¬ë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤.
 Ascent::~Ascent() {
     if (m_pModelDecoration) delete m_pModelDecoration;
     if (m_pModelFloor) delete m_pModelFloor;
@@ -26,19 +27,19 @@ Ascent::~Ascent() {
 }
 
 void Ascent::Update() {
-    // CObject°¡ °¡Áö°í ÀÖ´Â À§Ä¡, È¸Àü, Å©±â Á¤º¸¸¦ °¡Á®¿È
+    // CObject ê¸°ë³¸ Transform(ìœ„ì¹˜, íšŒì „, ìŠ¤ì¼€ì¼)
     glm::vec3 pos = getPosition();
     glm::vec3 rot = getRotation();
     glm::vec3 scl = getScale();
 
-    // °¢ ³»ºÎ ¸ğµ¨µé¿¡°Ô º¯È¯ Á¤º¸ ¾÷µ¥ÀÌÆ® ¿äÃ»
+    // ê° íŒŒíŠ¸ ëª¨ë¸ì— Transform ì „ë‹¬
     if (m_pModelDecoration) m_pModelDecoration->GetModel()->Update(pos, rot, scl);
     if (m_pModelFloor)      m_pModelFloor->GetModel()->Update(pos, rot, scl);
     if (m_pModelWall)       m_pModelWall->GetModel()->Update(pos, rot, scl);
     if (m_pModelProps)      m_pModelProps->GetModel()->Update(pos, rot, scl);
 }
 
-// Render: Á¤Àû ¸ğµ¨ ¼ÎÀÌ´õ(shaderProgramID)¸¦ È°¼ºÈ­ÇÏ°í ¸ğµ¨À» ·»´õ¸µÇÕ´Ï´Ù.
+// Render: ê¸°ë³¸ ì…°ì´ë”(shaderProgramID)ë¥¼ í™œì„±í™”í•˜ê³  ë Œë”ë§í•©ë‹ˆë‹¤.
 void Ascent::Render() {
     if (m_pModelDecoration) {
         glUseProgram(CCore::Instance()->shaderProgramID);
@@ -47,5 +48,41 @@ void Ascent::Render() {
         m_pModelFloor->GetModel()->Render(CCore::Instance()->shaderProgramID);
         m_pModelWall->GetModel()->Render(CCore::Instance()->shaderProgramID);
         m_pModelProps->GetModel()->Render(CCore::Instance()->shaderProgramID);
+    }
+}
+
+std::vector<std::pair<glm::vec3, glm::vec3>> Ascent::BuildColliderFromModel(IModel<Model>* model) const {
+    std::vector<std::pair<glm::vec3, glm::vec3>> colliders;
+    if (!model) return colliders;
+
+    auto bounds = model->GetModel()->GetLocalAABB();
+    glm::vec3 scaledMin = bounds.first * getScale();
+    glm::vec3 scaledMax = bounds.second * getScale();
+
+    glm::vec3 worldMin = scaledMin + getPosition();
+    glm::vec3 worldMax = scaledMax + getPosition();
+
+    colliders.emplace_back(worldMin, worldMax);
+    return colliders;
+}
+
+std::vector<std::pair<glm::vec3, glm::vec3>> Ascent::GetWorldColliders() const {
+    std::vector<std::pair<glm::vec3, glm::vec3>> colliders;
+
+    auto appendColliders = [&](const std::vector<std::pair<glm::vec3, glm::vec3>>& boxes) {
+        colliders.insert(colliders.end(), boxes.begin(), boxes.end());
+    };
+
+    appendColliders(BuildColliderFromModel(m_pModelFloor));
+    appendColliders(BuildColliderFromModel(m_pModelWall));
+    appendColliders(BuildColliderFromModel(m_pModelProps));
+
+    return colliders;
+}
+
+void Ascent::RenderHitbox(GLuint shaderProgramID) {
+    const auto colliders = GetWorldColliders();
+    for (const auto& box : colliders) {
+        DebugDraw::DrawAABB(shaderProgramID, box.first, box.second, glm::vec3(0.0f, 1.0f, 1.0f));
     }
 }

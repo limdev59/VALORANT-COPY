@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CObject.h"
 #include "CCore.h"
+#include "DebugDraw.h"
 
 CObject::CObject()
     : position(0.0f), rotation(0.0f), scale(1.0f),
@@ -27,25 +28,13 @@ glm::vec3 CObject::getHitboxSize() const { return hitboxSize; }
 COLLIDER_TYPE CObject::getColliderType() const { return colliderType; }
 
 
-//bool CObject::CheckCollision(const CObject& other) {
-//    if (colliderType == COLLIDER_TYPE::AABB && other.colliderType == COLLIDER_TYPE::AABB) {
-//
-//        return (abs(hitboxCenter.x - other.hitboxCenter.x) < (hitboxSize.x + other.hitboxSize.x) * 0.5f &&
-//            abs(hitboxCenter.y - other.hitboxCenter.y) < (hitboxSize.y + other.hitboxSize.y) * 0.5f &&
-//            abs(hitboxCenter.z - other.hitboxCenter.z) < (hitboxSize.z + other.hitboxSize.z) * 0.5f);
-//    }
-//    return false;
-//}
-
-
 bool CObject::CheckCollision(const CObject& other) {
-    // µÎ °´Ã¼ ¸ğµÎ AABB Å¸ÀÔÀÎÁö È®ÀÎ
+    // í˜„ì¬ AABBë§Œ ì§€ì›
     if (this->colliderType != COLLIDER_TYPE::AABB || other.getColliderType() != COLLIDER_TYPE::AABB) {
         return false;
     }
 
-    // 1. °¢ °´Ã¼ÀÇ Àı´ëÀûÀÎ AABB ÃÖ¼Ò/ÃÖ´ë ÁÂÇ¥ °è»ê
-    // (positionÀº °´Ã¼ÀÇ Áß½É, hitboxCenter´Â ±× Áß½É¿¡¼­ÀÇ ¿ÀÇÁ¼Â)
+    // 1. ì–‘ ê°ì²´ì˜ AABB ìµœì†Œ/ìµœëŒ€ ì¢Œí‘œ ê³„ì‚°
     glm::vec3 thisMin = (this->position + this->hitboxCenter) - (this->hitboxSize / 2.0f);
     glm::vec3 thisMax = (this->position + this->hitboxCenter) + (this->hitboxSize / 2.0f);
 
@@ -53,13 +42,21 @@ bool CObject::CheckCollision(const CObject& other) {
     glm::vec3 otherMax = (other.getPosition() + other.getHitboxCenter()) + (other.getHitboxSize() / 2.0f);
 
 
-    // 2. °¢ Ãà(x, y, z)¿¡¼­ °ãÄ¡´ÂÁö È®ÀÎ (Slab Test)
-    // ÇÑ ÃàÀÌ¶óµµ °ãÄ¡Áö ¾ÊÀ¸¸é Ãæµ¹ÇÏÁö ¾ÊÀº °Í
+    // 2. ìŠ¬ë™ í…ŒìŠ¤íŠ¸ë¡œ ì¶•ë³„ ê²¹ì¹¨ ì—¬ë¶€ í™•ì¸
     if (thisMax.x < otherMin.x || thisMin.x > otherMax.x) return false;
     if (thisMax.y < otherMin.y || thisMin.y > otherMax.y) return false;
     if (thisMax.z < otherMin.z || thisMin.z > otherMax.z) return false;
 
-    // 3. ¸ğµç Ãà¿¡¼­ °ãÄ¡¸é Ãæµ¹!
+    // 3. ì—¬ê¸°ê¹Œì§€ ì™”ë‹¤ë©´ ì¶©ëŒ
     return true;
 }
 
+void CObject::RenderHitbox(GLuint shaderProgramID) {
+    if (shaderProgramID == 0) return;
+
+    glm::vec3 halfSize = hitboxSize / 2.0f;
+    glm::vec3 min = (this->position + this->hitboxCenter) - halfSize;
+    glm::vec3 max = (this->position + this->hitboxCenter) + halfSize;
+
+    DebugDraw::DrawAABB(shaderProgramID, min, max, glm::vec3(1.0f, 0.0f, 0.0f));
+}

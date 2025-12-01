@@ -33,16 +33,21 @@ GLvoid CCore::Init() {
 }
 
 GLvoid CCore::Update() {
-    
+
     CameraMgr::Instance()->Update();
     KeyMgr::Instance()->Update();
+
+    if (KeyMgr::Instance()->getKeyState(KEY::V) == KEY_TYPE::TAP) {
+        showHitboxes = !showHitboxes;
+    }
+
     SceneMgr::Instance()->Update();
     MouseMgr::Instance()->Update();
     TimeMgr::Instance()->Update();
     glutPostRedisplay();
 }
 
-// ·»´õ¸µ ÇÔ¼ö
+// ë Œë”ë§ ë£¨í”„
 void CCore::Render() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     {
@@ -71,5 +76,8 @@ void CCore::Render() {
     }
     TimeMgr::Instance()->Render();
     SceneMgr::Instance()->Render();
+    if (showHitboxes) {
+        SceneMgr::Instance()->RenderHitboxes(debugShaderID);
+    }
 }
 

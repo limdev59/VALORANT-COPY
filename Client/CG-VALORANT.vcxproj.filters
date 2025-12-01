@@ -126,6 +126,9 @@
     <ClCompile Include="Sources\Objects\Ascent.cpp">
       <Filter>소스 파일\Object\Ascent</Filter>
     </ClCompile>
+    <ClCompile Include="Sources\DebugDraw.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
     <ClCompile Include="Sources\Objects\Enemy.cpp">
       <Filter>소스 파일\Object\Enemy</Filter>
     </ClCompile>
@@ -138,6 +141,8 @@
     <None Include="Shaders\fragment.glsl" />
     <None Include="Shaders\animVertex.glsl" />
     <None Include="Shaders\animFragment.glsl" />
+    <None Include="Shaders\debugFragment.glsl" />
+    <None Include="Shaders\debugVertex.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headers\define.h">
@@ -166,6 +171,9 @@
     </ClInclude>
     <ClInclude Include="Headers\CObject.h">
       <Filter>소스 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\DebugDraw.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Headers\Player.h">
       <Filter>소스 파일\Object\Player</Filter>

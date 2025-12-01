@@ -11,6 +11,7 @@ public:
     void Init();
     void Update();
     void Render();
+    void RenderHitboxes(GLuint shaderProgramID);
     void changeScene(SCENE_TYPE newScene);
     CScene* getScene();
 };

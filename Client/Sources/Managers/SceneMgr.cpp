@@ -27,8 +27,15 @@ void SceneMgr::Update() {
 
 void SceneMgr::Render() {
     currentScene->Render();
-    
+
 }
+
+void SceneMgr::RenderHitboxes(GLuint shaderProgramID) {
+    if (currentScene) {
+        currentScene->RenderHitboxes(shaderProgramID);
+    }
+}
+
 void SceneMgr::changeScene(SCENE_TYPE newScene) {
     if (currentScene)
         currentScene->Exit();

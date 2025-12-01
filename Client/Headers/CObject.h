@@ -3,9 +3,9 @@
 
 enum class COLLIDER_TYPE {
     NONE,
-    AABB,   // Axis-Aligned Bounding Box    Ãà
-    OBB,    // Oriented Bounding Box        ¹Ú½º
-    SPHERE, // Spherical Bounding Box       ±¸
+    AABB,   // Axis-Aligned Bounding Box    ÃƒÃ 
+    OBB,    // Oriented Bounding Box        Â¹ÃšÂ½Âº
+    SPHERE, // Spherical Bounding Box       Â±Â¸
 };
 
 class CObject {
@@ -37,5 +37,6 @@ public:
 
     virtual void Update() = 0;
     virtual void Render() = 0;
+    virtual void RenderHitbox(GLuint shaderProgramID);
     virtual bool CheckCollision(const CObject& other);
 };

@@ -7,11 +7,11 @@ struct Vertex {
 	glm::vec3 normal;
 };
 struct SubMesh {
-	std::string strName;       // ¸ÓÆ¼¸®¾ó ÀÌ¸§
-	std::vector<Vertex> vertices;  // Á¤Á¡ µ¥ÀÌÅÍ
-	std::vector<GLuint> indices;  // ÀÎµ¦½º µ¥ÀÌÅÍ
-	GLuint texture;             // ÅØ½ºÃ³ ID
-	GLuint VAO = 0, VBO = 0, EBO = 0; // ¹öÆÛ °´Ã¼µé
+	std::string strName;       // Â¸Ã“Ã†Â¼Â¸Â®Â¾Ã³ Ã€ÃŒÂ¸Â§
+	std::vector<Vertex> vertices;  // ÃÂ¤ÃÂ¡ ÂµÂ¥Ã€ÃŒÃ…Ã
+	std::vector<GLuint> indices;  // Ã€ÃÂµÂ¦Â½Âº ÂµÂ¥Ã€ÃŒÃ…Ã
+	GLuint texture;             // Ã…Ã˜Â½ÂºÃƒÂ³ ID
+	GLuint VAO = 0, VBO = 0, EBO = 0; // Â¹Ã¶Ã†Ã› Â°Â´ÃƒÂ¼ÂµÃ©
 
 	~SubMesh() {
 		if (VAO) glDeleteVertexArrays(1, &VAO);
@@ -20,8 +20,8 @@ struct SubMesh {
 	}
 };
 struct Group {
-	std::string strName;        // ±×·ì ÀÌ¸§
-	std::vector<SubMesh> subMeshes;  // ÀÌ ±×·ì¿¡ ¼ÓÇÑ ¼­ºê¸Å½¬µé
+	std::string strName;        // Â±Ã—Â·Ã¬ Ã€ÃŒÂ¸Â§
+	std::vector<SubMesh> subMeshes;  // Ã€ÃŒ Â±Ã—Â·Ã¬Â¿Â¡ Â¼Ã“Ã‡Ã‘ Â¼Â­ÂºÃªÂ¸Ã…Â½Â¬ÂµÃ©
 
 	Group(const std::string& name) : strName(name) {}
 
@@ -32,7 +32,7 @@ struct Group {
 		os << "Group Name: " << group.strName << "\n";
 		os << "Number of SubMeshes: " << group.subMeshes.size() << "\n";
 
-		// °¢ ¼­ºê¸Å½¬ Á¤º¸ Ãâ·Â
+		// Â°Â¢ Â¼Â­ÂºÃªÂ¸Ã…Â½Â¬ ÃÂ¤ÂºÂ¸ ÃƒÃ¢Â·Ã‚
 		for (const auto& subMesh : group.subMeshes) {
 			os << "  SubMesh Name: " << subMesh.strName << "\n";
 		}
@@ -40,7 +40,7 @@ struct Group {
 	}
 };
 struct Material {
-	std::string strName;  // ¸ÓÆ¼¸®¾ó ÀÌ¸§
+	std::string strName;  // Â¸Ã“Ã†Â¼Â¸Â®Â¾Ã³ Ã€ÃŒÂ¸Â§
 	float shininess;						// Shininess
 	glm::vec3 ambient;					// Ambient Color
 	glm::vec3 diffuse;					// Diffuse Color
@@ -80,15 +80,15 @@ static GLuint LoadTexture(const string& filepath) {
 		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);  // SÃà ¹İ»ç ·¡ÇÎ
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);  // SÃƒÃ  Â¹ÃÂ»Ã§ Â·Â¡Ã‡Ã
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); // Ãà¼Ò ÇÊÅÍ
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); // ÃƒÃ Â¼Ã’ Ã‡ÃŠÃ…Ã
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	}
 	else {
 		std::cerr << "Failed to load texture: " << filepath << " || ";
-		glDeleteTextures(1, &texture); // ÅØ½ºÃ³ »èÁ¦
-		return 0; // ¿À·ù ¹ß»ı ½Ã 0 ¹İÈ¯
+		glDeleteTextures(1, &texture); // Ã…Ã˜Â½ÂºÃƒÂ³ Â»Ã¨ÃÂ¦
+		return 0; // Â¿Ã€Â·Ã¹ Â¹ÃŸÂ»Ã½ Â½Ãƒ 0 Â¹ÃÃˆÂ¯
 	}
 
 	stbi_image_free(data);
@@ -155,7 +155,7 @@ static vector<Group> ReadObj(const string& fileName, const string& folderName, c
 	std::vector<glm::vec2> texCoords;
 	std::vector<glm::vec3> normals;
 	std::vector<Group> groups;
-	Group* currentGroup = nullptr;  // ÇöÀç ±×·ì Æ÷ÀÎÅÍ
+	Group* currentGroup = nullptr;  // Ã‡Ã¶Ã€Ã§ Â±Ã—Â·Ã¬ Ã†Ã·Ã€ÃÃ…Ã
 	SubMesh currentSubMesh;
 
 	std::ifstream file("Models/" + folderName +'/' + fileName + ".obj");
@@ -171,20 +171,20 @@ static vector<Group> ReadObj(const string& fileName, const string& folderName, c
 		iss >> prefix;
 
 		if (prefix == "v") {
-			// Á¤Á¡ ÁÂÇ¥ Ã³¸®
+			// ÃÂ¤ÃÂ¡ ÃÃ‚Ã‡Â¥ ÃƒÂ³Â¸Â®
 			glm::vec3 pos;
 			iss >> pos.x >> pos.y >> pos.z;
 			positions.push_back(pos);
 		}
 		else if (prefix == "vt") {
-			// ÅØ½ºÃ³ ÁÂÇ¥ Ã³¸®
+			// Ã…Ã˜Â½ÂºÃƒÂ³ ÃÃ‚Ã‡Â¥ ÃƒÂ³Â¸Â®
 			glm::vec2 vt;
 			iss >> vt.x >> vt.y;
-			vt.y = 1.0f - vt.y;  // OpenGLÀÇ ÅØ½ºÃ³ ÁÂÇ¥´Â y°¡ ¹İÀüµÇ¹Ç·Î ¼öÁ¤
+			vt.y = 1.0f - vt.y;  // OpenGLÃ€Ã‡ Ã…Ã˜Â½ÂºÃƒÂ³ ÃÃ‚Ã‡Â¥Â´Ã‚ yÂ°Â¡ Â¹ÃÃ€Ã¼ÂµÃ‡Â¹Ã‡Â·Ã Â¼Ã¶ÃÂ¤
 			texCoords.push_back(vt);
 		}
 		else if (prefix == "vn") {
-			// ¹ı¼± º¤ÅÍ Ã³¸®
+			// Â¹Ã½Â¼Â± ÂºÂ¤Ã…Ã ÃƒÂ³Â¸Â®
 			glm::vec3 vn;
 			iss >> vn.x >> vn.y >> vn.z;
 			normals.push_back(vn);
@@ -206,16 +206,16 @@ static vector<Group> ReadObj(const string& fileName, const string& folderName, c
 			std::string materialName;
 			iss >> materialName;
 
-			// ¸ÓÆ¼¸®¾ó º¯°æ ½Ã ¼­ºê¸Å½¬¸¦ ÀÌÀü ±×·ì¿¡ Ãß°¡
+			// Â¸Ã“Ã†Â¼Â¸Â®Â¾Ã³ ÂºÂ¯Â°Ã¦ Â½Ãƒ Â¼Â­ÂºÃªÂ¸Ã…Â½Â¬Â¸Â¦ Ã€ÃŒÃ€Ã¼ Â±Ã—Â·Ã¬Â¿Â¡ ÃƒÃŸÂ°Â¡
 			if (currentGroup != nullptr && !currentSubMesh.vertices.empty()) {
-				currentGroup->AddSubMesh(currentSubMesh);  // ÇöÀç ¼­ºê¸Å½¬¸¦ ±×·ì¿¡ Ãß°¡
+				currentGroup->AddSubMesh(currentSubMesh);  // Ã‡Ã¶Ã€Ã§ Â¼Â­ÂºÃªÂ¸Ã…Â½Â¬Â¸Â¦ Â±Ã—Â·Ã¬Â¿Â¡ ÃƒÃŸÂ°Â¡
 			}
 
-			// »õ·Î¿î ¼­ºê¸Å½¬ ½ÃÀÛ
+			// Â»ÃµÂ·ÃÂ¿Ã® Â¼Â­ÂºÃªÂ¸Ã…Â½Â¬ Â½ÃƒÃ€Ã›
 			currentSubMesh = SubMesh();
 			currentSubMesh.strName = materialName;
 
-			// ¸ÓÆ¼¸®¾ó¿¡ ÇØ´çÇÏ´Â ÅØ½ºÃ³ ·Îµå
+			// Â¸Ã“Ã†Â¼Â¸Â®Â¾Ã³Â¿Â¡ Ã‡Ã˜Â´Ã§Ã‡ÃÂ´Ã‚ Ã…Ã˜Â½ÂºÃƒÂ³ Â·ÃÂµÃ¥
 			auto it = std::find_if(materials.begin(), materials.end(),
 				[&materialName](const Material& mat) { return mat.strName == materialName; });
 			if (it != materials.end()) {
@@ -226,14 +226,14 @@ static vector<Group> ReadObj(const string& fileName, const string& folderName, c
 			}
 		}
 		else if (prefix == "f") {
-			// ¾ó±¼(Æú¸®°ï) Ã³¸®
+			// Â¾Ã³Â±Â¼(Ã†ÃºÂ¸Â®Â°Ã¯) ÃƒÂ³Â¸Â®
 			std::string vertexData;
 			while (iss >> vertexData) {
 				std::istringstream vertexStream(vertexData);
 				std::string indexStr;
 				int posIdx = 0, texIdx = 0, normIdx = 0;
 
-				// /·Î ±¸ºĞµÈ ÀÎµ¦½º Ã³¸®
+				// /Â·Ã Â±Â¸ÂºÃÂµÃˆ Ã€ÃÂµÂ¦Â½Âº ÃƒÂ³Â¸Â®
 				std::getline(vertexStream, indexStr, '/');
 				posIdx = std::stoi(indexStr);
 
@@ -250,13 +250,13 @@ static vector<Group> ReadObj(const string& fileName, const string& folderName, c
 				if (texIdx > 0) vertex.texCoord = texCoords[texIdx - 1];
 				if (normIdx > 0) vertex.normal = normals[normIdx - 1];
 				currentSubMesh.vertices.push_back(vertex);
-				currentSubMesh.indices.push_back(currentSubMesh.vertices.size() - 1);  // ÀÎµ¦½º Ãß°¡
+				currentSubMesh.indices.push_back(currentSubMesh.vertices.size() - 1);  // Ã€ÃÂµÂ¦Â½Âº ÃƒÃŸÂ°Â¡
 			}
 		}
 	}
 
 	if (currentGroup != nullptr && !currentSubMesh.vertices.empty()) {
-		currentGroup->AddSubMesh(currentSubMesh);  // ¸¶Áö¸· ¼­ºê¸Å½¬¸¦ ±×·ì¿¡ Ãß°¡
+		currentGroup->AddSubMesh(currentSubMesh);  // Â¸Â¶ÃÃ¶Â¸Â· Â¼Â­ÂºÃªÂ¸Ã…Â½Â¬Â¸Â¦ Â±Ã—Â·Ã¬Â¿Â¡ ÃƒÃŸÂ°Â¡
 	}
 
 	file.close();
@@ -265,13 +265,13 @@ static vector<Group> ReadObj(const string& fileName, const string& folderName, c
 static std::pair<vector<Material>, vector<Group>> ReadModel(const string& fileName, const string& folderName) {
 	vector<Material> materials = ReadMtl(fileName, folderName);
 
-	// ¸ÓÆ¼¸®¾ó Ãâ·Â (µğ¹ö±ë¿ë)
+	// Â¸Ã“Ã†Â¼Â¸Â®Â¾Ã³ ÃƒÃ¢Â·Ã‚ (ÂµÃ°Â¹Ã¶Â±Ã«Â¿Ã«)
 	for (auto mt : materials)
 		std::cout << mt << std::endl;
 
 	std::pair<vector<Material>, vector<Group>> modelPair;
 	modelPair.first = materials;
-	modelPair.second = ReadObj(fileName, folderName, materials);  // ÀÌÁ¦ GroupÀ» ¹İÈ¯
+	modelPair.second = ReadObj(fileName, folderName, materials);  // Ã€ÃŒÃÂ¦ GroupÃ€Â» Â¹ÃÃˆÂ¯
 	for (auto gr : modelPair.second)
 		std::cout << gr << std::endl;
 	return modelPair;
@@ -289,6 +289,8 @@ protected:
 	vec3 pivot = vec3(0.0f);
 	std::vector<Material> materials;
 	std::vector<Group> groups;
+	glm::vec3 localAabbMin = glm::vec3(0.0f);
+	glm::vec3 localAabbMax = glm::vec3(0.0f);
 	void InitBuffer(SubMesh& subMesh);
 	const Material* FindMaterial(const std::string& name) const;
 public:
@@ -307,4 +309,5 @@ public:
 	void setScale(const vec3& newScale);
 	void Render(GLuint shaderProgramID);
 	virtual void Update(vec3 position, vec3 rotation, vec3 scale);
+	std::pair<glm::vec3, glm::vec3> GetLocalAABB() const { return { localAabbMin, localAabbMax }; }
 };

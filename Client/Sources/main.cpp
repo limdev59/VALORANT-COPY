@@ -46,7 +46,7 @@ int main(int argc, char** argv) {
     glewInit();
 
     g_pNetwork = new ClientNetwork();
-	// IP는 루프백 임시, 포트는 임의 지정
+        // IP  擔, 트
     if (!g_pNetwork->ConnectToServer("127.0.0.1", 7777, 9001)) {
         std::cout << "[Main] Failed to connect to server." << std::endl;
     }
@@ -66,6 +66,14 @@ int main(int argc, char** argv) {
         fragmentShader2,
         "Shaders/animVertex.glsl",
         "Shaders/animFragment.glsl"
+    );
+    static GLuint debugVertexShader, debugFragmentShader;
+    make_shaderProgram(
+        CCore::Instance()->debugShaderID,
+        debugVertexShader,
+        debugFragmentShader,
+        "Shaders/debugVertex.glsl",
+        "Shaders/debugFragment.glsl"
     );
     modelPairs = {
         {MODEL_TYPE::JETT, ReadModel("jettTest", "jettTest")},
