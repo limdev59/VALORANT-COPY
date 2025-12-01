@@ -143,19 +143,25 @@ void NetworkIO::HandleTCPAccept()
 				printf("No more pending connections to accept.\n");
 				break;
 			}
-			
 
-			// 논블로킹
-			u_long mode = 1;
-			ioctlsocket(clientSocket, FIONBIO, &mode);
+			//// 논블로킹
+			//u_long mode = 1;
+			//ioctlsocket(clientSocket, FIONBIO, &mode);
 
-			bool registered = false;
-			if (m_pSessionManager)
-				// registered = m_pSessionManager->OnSessionLoggedIn(clientSocket, clientAddr);
-				// sessionManager-> OnSessionLoggedIn 구현 필요
+			//bool registered = false;
+			//if (m_pSessionManager)
+			//	// registered = m_pSessionManager->OnSessionLoggedIn(clientSocket, clientAddr);
+			//	// sessionManager-> OnSessionLoggedIn 구현 필요
 
-			if (!registered)
-				closesocket(clientSocket);
+			//if (!registered)
+			//	closesocket(clientSocket);
+		}
+		// 2025.12.01 도윤 - 연결 성공 시 수행할 초기화 작업 추가 필요
+		else {
+			char clientIP[INET_ADDRSTRLEN];
+			inet_ntop(AF_INET, &clientAddr.sin_addr, clientIP, INET_ADDRSTRLEN);
+
+			printf("[NetworkIO] New TCP Connection from %s\n", clientIP);
 		}
 	}
 }

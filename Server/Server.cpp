@@ -8,7 +8,7 @@
 #include <chrono>
 
 // 서버 설정
-const USHORT SERVER_PORT = 9000;
+const USHORT SERVER_PORT = 7777;
 const float TARGET_FPS = 60.0f;
 const float FRAME_DELAY_MS = 1000.0f / TARGET_FPS;
 
