@@ -26,6 +26,16 @@ Ascent::~Ascent() {
 }
 
 void Ascent::Update() {
+    // CObject가 가지고 있는 위치, 회전, 크기 정보를 가져옴
+    glm::vec3 pos = getPosition();
+    glm::vec3 rot = getRotation();
+    glm::vec3 scl = getScale();
+
+    // 각 내부 모델들에게 변환 정보 업데이트 요청
+    if (m_pModelDecoration) m_pModelDecoration->GetModel()->Update(pos, rot, scl);
+    if (m_pModelFloor)      m_pModelFloor->GetModel()->Update(pos, rot, scl);
+    if (m_pModelWall)       m_pModelWall->GetModel()->Update(pos, rot, scl);
+    if (m_pModelProps)      m_pModelProps->GetModel()->Update(pos, rot, scl);
 }
 
 // Render: 정적 모델 셰이더(shaderProgramID)를 활성화하고 모델을 렌더링합니다.

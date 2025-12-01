@@ -25,7 +25,7 @@ void Stage_1_Scene::Enter() {
 
         CObject* map_floor = new Ascent();
         map_floor->setScale(vec3(0.1));
-        map_floor->setPosition(vec3(100.f, 0.0f, 100.f));
+        map_floor->setPosition(vec3(0.0f, 0.0f, 0.0f));
 
 
         CObject* player = new Player();
@@ -68,8 +68,8 @@ void Stage_1_Scene::Update() {
     if (loaded) {
         CObject& player = getObject(GROUP_TYPE::PLAYER, 0);
 
-        CObject& mapFloor = getObject(GROUP_TYPE::DEFAULT, 0);
-        mapFloor.setPosition(vec3(player.getPosition().x + 902.f, 0.0f, player.getPosition().z + 1202.f));
+        //CObject& mapFloor = getObject(GROUP_TYPE::DEFAULT, 0);
+        //mapFloor.setPosition(vec3(0.0f, 0.0f, 0.0f));
 
         //ApplySnapshot
         if (g_pNetwork)

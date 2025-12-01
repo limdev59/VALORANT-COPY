@@ -61,7 +61,7 @@ void Player::Update()
     rightVec = glm::normalize(rightVec);
 
     bool isMoving = false;
-    float moveSpeed = 10.0f;
+    float moveSpeed = 3.0f;
     glm::vec3 moveDir = glm::vec3(0.0f);
 
     if (KeyMgr::Instance()->getKeyState(KEY::W) == KEY_TYPE::HOLD) {
@@ -238,6 +238,14 @@ void Player::Update()
     // --- 7. 히트박스 업데이트 ---
     hitboxCenter = position;
     hitboxSize = scale;
+
+    if (CameraMgr::Instance()->getMainCamera()) {
+        CCamera* pCam = CameraMgr::Instance()->getMainCamera();
+        glm::vec3 camDir = pCam->target - pCam->position;
+        glm::vec3 eyePos = this->position + glm::vec3(0.0f, 0.5f, 0.0f);
+        pCam->position = eyePos;
+        pCam->target = eyePos + camDir;
+    }
 }
 
 
