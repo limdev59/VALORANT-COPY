@@ -102,7 +102,30 @@ void ClientSession::ReceiveLoop()
 	// 로그인
 	HandleLogin(loginPkt);
 
-	// TODO: 로그인 이후 확인 패킷 보내기
+	// 로그인 결과 확인 및 응답 전송
+	if (m_PlayerID != static_cast<PlayerID>(-1))
+	{
+		// 성공: S2C_LOGIN_ACCEPT 패킷 전송
+		S2C_LoginAccept acceptPkt{};
+		acceptPkt.type = MsgType::S2C_LOGIN_ACCEPT;
+		acceptPkt.playerId = m_PlayerID;
+
+		int sent = send(m_TCPSocket, reinterpret_cast<const char*>(&acceptPkt), sizeof(acceptPkt), 0);
+		if (sent == SOCKET_ERROR)
+		{
+			printf("[ClientSession] 로그인 수락 패킷 전송 실패 Error: %d\n", WSAGetLastError());
+			HandleDisconnect();
+			return;
+		}
+		printf("[ClientSession] 로그인 수락 패킷 전송 완료 (할당된 PID: %d)\n", m_PlayerID);
+	}
+	else
+	{
+		// 실패: 연결 종료
+		printf("[ClientSession] 로그인 실패 (SessionManager 거부)\n");
+		HandleDisconnect();
+		return;
+	}
 
 	// 이후에 올 게 없다고 가정하고 끊김만 감지하는 루프 (필요시 패킷 처리 추가)
 	char buf[512];
