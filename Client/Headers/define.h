@@ -51,7 +51,7 @@ enum class ANIM_MODEL_TYPE {
 	END,
 }; 
 
-static string fileToBuf(string filename)
+static string fileToBuf(const string& filename)
 {
 	std::ifstream in{ filename };
 	if (!in) {

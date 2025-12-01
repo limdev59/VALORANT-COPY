@@ -7,9 +7,9 @@
 using PlayerID = uint16_t;
 
 struct Vec3 {
-	float x;
-	float y;
-	float z;
+	float x, y, z;
+	Vec3() : x(0), y(0), z(0) {}
+	Vec3(float _x, float _y, float _z) : x(_x), y(_y), z(_z) {}
 };
 
 struct PlayerSnapshot {
@@ -37,14 +37,14 @@ struct MsgHeader {
 };
 
 struct C2S_LoginRequest {
-	MsgType type		= MsgType::C2S_LOGIN_REQUEST;
+	MsgType type = MsgType::C2S_LOGIN_REQUEST;
 
 	std::string playerName;
 	uint16_t    clientUdpPort{ 0 };
 };
 
 struct S2C_LoginAccept {
-	MsgType		type	= MsgType::S2C_LOGIN_ACCEPT;
+	MsgType		type = MsgType::S2C_LOGIN_ACCEPT;
 
 	PlayerID	playerId;
 };
