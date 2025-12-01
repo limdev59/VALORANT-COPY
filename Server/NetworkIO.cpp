@@ -162,6 +162,10 @@ void NetworkIO::HandleTCPAccept()
 			inet_ntop(AF_INET, &clientAddr.sin_addr, clientIP, INET_ADDRSTRLEN);
 
 			printf("[NetworkIO] New TCP Connection from %s\n", clientIP);
+
+			// 새로운 ClientSession 생성 및 스레드 시작
+			ClientSession* newSession = new ClientSession(clientSocket, m_pSessionManager, m_pWorldInputQueue);
+			newSession->StartThread();
 		}
 	}
 }

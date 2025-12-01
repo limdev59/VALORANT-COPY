@@ -109,23 +109,29 @@ bool ClientNetwork::ConnectToServer(const std::string& ip, uint16_t tcpPort, uin
     // 로그인
     // 8. C2S_LOGIN_REQUEST 패킷 생성 및 전송 (TCP)
     //    (PacketDefs.h에 C2S_LOGIN_REQUEST 구조체가 정의되어 있어야 함)
-    std::cout << "TODO: Send C2S_LOGIN_REQUEST (TCP) with UDP port " << udpPort << std::endl;
-    /*
-    C2S_LOGIN_REQUEST loginPkt;
-    loginPkt.header.packetType = PacketType::C2S_LOGIN_REQUEST;
-    loginPkt.header.packetSize = sizeof(C2S_LOGIN_REQUEST);
-    loginPkt.udpPort = udpPort; // 우리가 바인딩한 UDP 포트 알려주기
+    // std::cout << "TODO: Send C2S_LOGIN_REQUEST (TCP) with UDP port " << udpPort << std::endl;
+
+    //C2S_LOGIN_REQUEST loginPkt;
+    //loginPkt.header.packetType = PacketType::C2S_LOGIN_REQUEST;
+    //loginPkt.header.packetSize = sizeof(C2S_LOGIN_REQUEST);
+    //loginPkt.udpPort = udpPort; // 우리가 바인딩한 UDP 포트 알려주기
+
+	// 2025.12.01 도윤 - 패킷 형태에 맞게 수정
+    C2S_LoginRequest loginPkt;
+    loginPkt.type = MsgType::C2S_LOGIN_REQUEST;
+	loginPkt.playerName = "Player1"; 
+	loginPkt.clientUdpPort = udpPort;
 
     if (send(m_tcpSocket, (char*)&loginPkt, sizeof(loginPkt), 0) == SOCKET_ERROR) {
         std::cerr << "send C2S_LOGIN_REQUEST failed: " << WSAGetLastError() << std::endl;
         // 소켓 정리 및 false 반환
         return false;
     }
-    */
+    std::cout << "Sent Login Request. My UDP Port: " << udpPort << std::endl;
 
     // 9. S2C_LOGIN_RESPONSE 패킷 수신 (TCP) 및 m_myPlayerId 설정
     //    (PacketDefs.h에 S2C_LOGIN_RESPONSE 구조체가 정의되어 있어야 함)
-    std::cout << "TODO: Receive S2C_LOGIN_RESPONSE (TCP) and set m_myPlayerId" << std::endl;
+    // std::cout << "TODO: Receive S2C_LOGIN_RESPONSE (TCP) and set m_myPlayerId" << std::endl;
     /*
     S2C_LOGIN_RESPONSE loginResp;
     int bytesRecv = recv(m_tcpSocket, (char*)&loginResp, sizeof(loginResp), 0);
@@ -138,16 +144,38 @@ bool ClientNetwork::ConnectToServer(const std::string& ip, uint16_t tcpPort, uin
     m_myPlayerId = loginResp.playerId;
     std::cout << "Login successful. Player ID: " << m_myPlayerId << std::endl;
     */
+
+    // 2025.12.01 도윤 - 패킷 형태에 맞게 수정
+	S2C_LoginAccept loginResp;
+	int bytesRecv = recv(m_tcpSocket, (char*)&loginResp, sizeof(loginResp), 0);
+
+    if (bytesRecv <= 0) {
+        std::cerr << "Failed to receive Login Response or Server disconnected." << std::endl;
+        closesocket(m_tcpSocket);
+        closesocket(m_udpSocket);
+        return false;
+    }
+
+    // 패킷 타입 검증
+    if (loginResp.type != MsgType::S2C_LOGIN_ACCEPT) {
+        std::cerr << "Invalid Packet Received during login: " << (int)loginResp.type << std::endl;
+        closesocket(m_tcpSocket);
+        closesocket(m_udpSocket);
+        return false;
+    }
+
+    // 로그인 성공 ID 저장
+    m_myPlayerId = loginResp.playerId;
+    std::cout << "Login Successful! Assigned PlayerID: " << m_myPlayerId << std::endl;
     
-    // TODO: TCP 소켓 논블로킹 전환 (PollIncomingPackets 위함)
-    /*
+
+    // TCP 소켓 논블로킹 전환 (PollIncomingPackets 위함)
     u_long nonBlockingMode = 1;
     if (ioctlsocket(m_tcpSocket, FIONBIO, &nonBlockingMode) == SOCKET_ERROR) {
        std::cerr << "ioctlsocket (non-blocking) failed: " << WSAGetLastError() << std::endl;
        // 오류 처리
        return false;
     }
-    */
 
     // 로그인 로직이 구현되지 않았지만,
     // TCP 연결 및 UDP 바인딩까지 성공했다면 true 반환

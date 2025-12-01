@@ -19,7 +19,7 @@ public:
 
 private:
 	static DWORD WINAPI ThreadWrapper(LPVOID lpParam);
-	void ReceivlLoop();
+	void ReceiveLoop();
 	void HandleLogin(const C2S_LoginRequest& pkt);
 	void HandleDisconnect();
 

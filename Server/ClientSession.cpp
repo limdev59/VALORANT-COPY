@@ -57,15 +57,17 @@ DWORD WINAPI ClientSession::ThreadWrapper(LPVOID lpParam)
 	ClientSession* self = reinterpret_cast<ClientSession*>(lpParam);
 	if (self)
 	{
-		self->ReceivlLoop();
+		self->ReceiveLoop();
 	}
 
 	return 0;
 }
 
 // TCP 수신 루프
-void ClientSession::ReceivlLoop()
+void ClientSession::ReceiveLoop()
 {
+	printf("[ClientSession] ReceiveLoop 시작\n");
+
 	// 로그인 패킷 받기
 	C2S_LoginRequest loginPkt{};
 	char* writePtr	= reinterpret_cast<char*>(&loginPkt);
@@ -93,8 +95,14 @@ void ClientSession::ReceivlLoop()
 		total += ret;
 	}
 
+	// 로그인 패킷 확인
+	printf("[ClientSession] 로그인 요청 받음: playerName='%s', clientUdpPort=%d\n",
+		loginPkt.playerName.c_str(), loginPkt.clientUdpPort);
+
 	// 로그인
 	HandleLogin(loginPkt);
+
+	// TODO: 로그인 이후 확인 패킷 보내기
 
 	// 이후에 올 게 없다고 가정하고 끊김만 감지하는 루프 (필요시 패킷 처리 추가)
 	char buf[512];
