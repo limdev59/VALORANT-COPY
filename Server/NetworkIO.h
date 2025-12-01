@@ -2,10 +2,9 @@
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <cstdint>
+#include "QueueTypes.h"
 
 class SessionManager;
-class ByteQueue;
-class PacketQueue;
 
 class NetworkIO
 {
