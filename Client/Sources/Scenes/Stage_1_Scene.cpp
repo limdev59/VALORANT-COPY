@@ -4,6 +4,7 @@
 #include "KeyMgr.h"
 #include "SceneMgr.h"
 #include "MouseMgr.h"
+#include "CCore.h"
 #include "Player.h"
 #include "Ascent.h"
 #include "Enemy.h"
@@ -36,13 +37,13 @@ void Stage_1_Scene::Enter() {
   
         std::vector<glm::vec3> enemyPositions = {
             glm::vec3(-1.49554f, 0.125f,-5.42878),
-            glm::vec3(-3.76336f, 0.125f, -6.6219f),  //¹é»çÀ§
+            glm::vec3(-3.76336f, 0.125f, -6.6219f),  //ï¿½ï¿½ï¿½ï¿½ï¿½
             glm::vec3(-0.518212f, 0.125f, -6.9495f),
             glm::vec3(-1.4714f, 0.125f, -9.09569), //ct
-            glm::vec3(-4.81171f, -0.1f, -8.39536f),  //¹é»ç¿À¸¥
+            glm::vec3(-4.81171f, -0.1f, -8.39536f),  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         };
 
-        std::vector<CObject*> enemies; // Àû °´Ã¼¸¦ °ü¸®ÇÏ´Â ÄÁÅ×ÀÌ³Ê
+        std::vector<CObject*> enemies; // ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì³ï¿½
 
         for (const auto& position : enemyPositions) {
             Enemy* enemy = new Enemy();
@@ -53,7 +54,7 @@ void Stage_1_Scene::Enter() {
             addObject(enemy, GROUP_TYPE::ENEMY);
         }
 
-        // --- 4. ¾À¿¡ °´Ã¼ Ãß°¡ ---
+        // --- 4. ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ ï¿½ß°ï¿½ ---
         addObject(map_floor, GROUP_TYPE::DEFAULT);
         addObject(player, GROUP_TYPE::PLAYER);
         loaded = true;
@@ -74,32 +75,32 @@ void Stage_1_Scene::Update() {
         //ApplySnapshot
         if (g_pNetwork)
         {
-            // ÃÖ½Å ½º³À¼¦
+            // ï¿½Ö½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             const std::vector<PlayerSnapshot>& snapshots = g_pNetwork->GetLastSnapshots();
 
             for (const auto& snap : snapshots)
             {
-                // ³» Ä³¸¯ÅÍ´Â ½º³À¼¦ Àû¿ë Á¦¿Ü
+                // ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½Í´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 if (snap.id == 0) continue;
 
-                // 3. ÇØ´ç IDÀÇ ÇÃ·¹ÀÌ¾î°¡ ÀÌ¹Ì ¾À¿¡ ÀÖ´ÂÁö È®ÀÎ
+                // 3. ï¿½Ø´ï¿½ IDï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ï¿½ï¿½ È®ï¿½ï¿½
                 auto it = m_remotePlayers.find(snap.id);
 
                 if (it != m_remotePlayers.end())
                 {
-                    // À§Ä¡ È¸Àü µ¿±âÈ­
+                    // ï¿½ï¿½Ä¡ È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½È­
                     CObject* pRemoteObj = it->second;
                     pRemoteObj->setPosition(glm::vec3(snap.position.x, snap.position.y, snap.position.z));
                     pRemoteObj->setRotation(glm::vec3(snap.rotation.x, snap.rotation.y, snap.rotation.z));
                 }
                 else
                 {
-                    // [¾øÀ½] »õ·Î¿î ÇÃ·¹ÀÌ¾î °´Ã¼ »ý¼º (Enemy Å¬·¡½º ÀçÈ°¿ë)
+                    // [ï¿½ï¿½ï¿½ï¿½] ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½ (Enemy Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È°ï¿½ï¿½)
                    Enemy* newRemotePlayer = new Enemy();
                     newRemotePlayer->setPosition(glm::vec3(snap.position.x, snap.position.y, snap.position.z));
-                    newRemotePlayer->setScale(glm::vec3(0.1f)); // Å©±â ¼³Á¤
+                    newRemotePlayer->setScale(glm::vec3(0.1f)); // Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-                    // ¾À°ú °ü¸® ¸Ê¿¡ Ãß°¡
+                    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ ï¿½ß°ï¿½
                     addObject(newRemotePlayer, GROUP_TYPE::ENEMY);
                     m_remotePlayers[snap.id] = newRemotePlayer;
 
@@ -113,7 +114,85 @@ void Stage_1_Scene::Update() {
 void Stage_1_Scene::Render()
 {
     CScene::Render();
+    if (CCore::Instance()->IsHitboxDebugEnabled()) {
+        RenderHitboxes();
+    }
     RenderPlayerHUD();
+}
+
+void Stage_1_Scene::RenderHitboxes()
+{
+    auto drawAABB = [](const glm::vec3& min, const glm::vec3& max, const glm::vec3& color)
+    {
+        glUseProgram(0);
+        glColor3f(color.r, color.g, color.b);
+        glLineWidth(2.0f);
+
+        glm::vec3 p1 = glm::vec3(min.x, min.y, min.z);
+        glm::vec3 p2 = glm::vec3(max.x, min.y, min.z);
+        glm::vec3 p3 = glm::vec3(max.x, min.y, max.z);
+        glm::vec3 p4 = glm::vec3(min.x, min.y, max.z);
+        glm::vec3 p5 = glm::vec3(min.x, max.y, min.z);
+        glm::vec3 p6 = glm::vec3(max.x, max.y, min.z);
+        glm::vec3 p7 = glm::vec3(max.x, max.y, max.z);
+        glm::vec3 p8 = glm::vec3(min.x, max.y, max.z);
+
+        glBegin(GL_LINES);
+        // bottom
+        glVertex3fv(glm::value_ptr(p1)); glVertex3fv(glm::value_ptr(p2));
+        glVertex3fv(glm::value_ptr(p2)); glVertex3fv(glm::value_ptr(p3));
+        glVertex3fv(glm::value_ptr(p3)); glVertex3fv(glm::value_ptr(p4));
+        glVertex3fv(glm::value_ptr(p4)); glVertex3fv(glm::value_ptr(p1));
+
+        // top
+        glVertex3fv(glm::value_ptr(p5)); glVertex3fv(glm::value_ptr(p6));
+        glVertex3fv(glm::value_ptr(p6)); glVertex3fv(glm::value_ptr(p7));
+        glVertex3fv(glm::value_ptr(p7)); glVertex3fv(glm::value_ptr(p8));
+        glVertex3fv(glm::value_ptr(p8)); glVertex3fv(glm::value_ptr(p5));
+
+        // sides
+        glVertex3fv(glm::value_ptr(p1)); glVertex3fv(glm::value_ptr(p5));
+        glVertex3fv(glm::value_ptr(p2)); glVertex3fv(glm::value_ptr(p6));
+        glVertex3fv(glm::value_ptr(p3)); glVertex3fv(glm::value_ptr(p7));
+        glVertex3fv(glm::value_ptr(p4)); glVertex3fv(glm::value_ptr(p8));
+        glEnd();
+
+        glLineWidth(1.0f);
+    };
+
+    if (!arrObj[(GLuint)GROUP_TYPE::PLAYER].empty())
+    {
+        Player* player = dynamic_cast<Player*>(arrObj[(GLuint)GROUP_TYPE::PLAYER][0]);
+        if (player)
+        {
+            auto playerAABB = player->GetWorldAABB();
+            drawAABB(playerAABB.first, playerAABB.second, glm::vec3(0.1f, 0.8f, 0.1f));
+        }
+    }
+
+    if (!arrObj[(GLuint)GROUP_TYPE::DEFAULT].empty())
+    {
+        Ascent* map = dynamic_cast<Ascent*>(arrObj[(GLuint)GROUP_TYPE::DEFAULT][0]);
+        if (map)
+        {
+            const auto walkables = map->GetWalkableColliders();
+            const auto blockers = map->GetWallColliders();
+
+            if (!walkables.empty())
+            {
+                drawAABB(walkables[0].min, walkables[0].max, glm::vec3(0.2f, 0.4f, 1.0f));
+                if (walkables.size() > 1)
+                {
+                    drawAABB(walkables[1].min, walkables[1].max, glm::vec3(0.6f, 0.2f, 1.0f));
+                }
+            }
+
+            if (!blockers.empty())
+            {
+                drawAABB(blockers[0].min, blockers[0].max, glm::vec3(1.0f, 0.2f, 0.2f));
+            }
+        }
+    }
 }
 
 void Stage_1_Scene::Exit() {

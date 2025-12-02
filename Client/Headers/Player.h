@@ -1,11 +1,13 @@
 #pragma once
+#include <utility>
+
 #include "CObject.h"
 #include "TimeMgr.h" // DT
 #include "KeyMgr.h"  // KeyMgr
-#include "IModel.h"  // 템플릿 래퍼 포함
+#include "IModel.h"  // Model wrapper
 #include "ClientNetwork.h" // C2S_MovementUpdate, C2S_FireAction
+#include "Ascent.h"
 
-// 전방 선언
 class AnimModel;
 class Animator;
 class Animation;
@@ -41,11 +43,19 @@ public:
     virtual void Render() override;
 
 
-    C2S_MovementUpdate BuildMovementPacket();  
+    C2S_MovementUpdate BuildMovementPacket();
     C2S_FireAction BuildFirePacket(const vec3& fireOrigin, const vec3& fireDirection, PlayerID targetID);
-    void ApplyGravity();
+    void ApplyGravity(double dt);
+
+    std::pair<glm::vec3, glm::vec3> GetWorldAABB() const;
 
     int GetHealth() const { return m_health; }
     void SetHealth(int health) { m_health = health; }
 
+private:
+    std::pair<glm::vec3, glm::vec3> ComputeAABBAtPosition(const glm::vec3& pos) const;
+    bool CollidesWith(const glm::vec3& pos, const std::vector<Ascent::AABBCollider>& colliders) const;
+    bool OverlapsXZ(const std::pair<glm::vec3, glm::vec3>& aabb, const Ascent::AABBCollider& collider) const;
+    glm::vec3 ResolveVerticalMovement(const glm::vec3& currentPos, const glm::vec3& targetPos, const std::vector<Ascent::AABBCollider>& walkables);
+    glm::vec3 ResolveHorizontalMovement(const glm::vec3& currentPos, const glm::vec3& targetPos, const std::vector<Ascent::AABBCollider>& blockers);
 };

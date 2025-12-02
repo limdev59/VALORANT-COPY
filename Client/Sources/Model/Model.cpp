@@ -33,14 +33,14 @@ const Material* Model::FindMaterial(const std::string& name) const {
 			return &material;
 		}
 	}
-	return nullptr; // ÀÌ¸§¿¡ ÇØ´çÇÏ´Â MaterialÀ» Ã£Áö ¸øÇÑ °æ¿ì
+	return nullptr; // ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½Ø´ï¿½ï¿½Ï´ï¿½ Materialï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 }
 
 Model::Model(MODEL_TYPE type, GLenum mode)
-	: renderMode(mode), transform(mat4(1.0f)) {
-	materials = modelPairArr[type].first;
-	cout << modelPairArr[type].second.size()<<endl;
-	groups = modelPairArr[type].second;
+        : renderMode(mode), transform(mat4(1.0f)) {
+        materials = modelPairArr[type].first;
+        cout << modelPairArr[type].second.size()<<endl;
+        groups = modelPairArr[type].second;
 	for (auto& material : materials) {
 		Group group(material.strName);
 		for (auto& groupItem : groups) {
@@ -54,11 +54,35 @@ Model::Model(MODEL_TYPE type, GLenum mode)
 			groups.push_back(group);
 		}
 	}
-	for (auto& group : groups) {
-		for (auto& subMesh : group.subMeshes) {
-			InitBuffer(subMesh);
-		}
-	}
+        for (auto& group : groups) {
+                for (auto& subMesh : group.subMeshes) {
+                        InitBuffer(subMesh);
+                }
+        }
+
+        ComputeLocalBounds();
+}
+
+void Model::ComputeLocalBounds() {
+        glm::vec3 minBounds(std::numeric_limits<float>::max());
+        glm::vec3 maxBounds(std::numeric_limits<float>::lowest());
+        bool hasVertex = false;
+
+        for (const auto& group : groups) {
+                for (const auto& subMesh : group.subMeshes) {
+                        for (const auto& vertex : subMesh.vertices) {
+                                hasVertex = true;
+                                minBounds = glm::min(minBounds, vertex.position);
+                                maxBounds = glm::max(maxBounds, vertex.position);
+                        }
+                }
+        }
+
+        if (hasVertex) {
+                m_localMin = minBounds;
+                m_localMax = maxBounds;
+                m_hasBounds = true;
+        }
 }
 
 void Model::setScale(const vec3& newScale) {
@@ -74,13 +98,13 @@ void Model::Render(GLuint shaderProgramID) {
 			GLuint modelLocation = glGetUniformLocation(shaderProgramID, "modelTransform");
 			glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(transform));
 
-			if (subMesh.texture != 0) { // ÅØ½ºÃ³°¡ Á¸ÀçÇÏ´Â °æ¿ì
+			if (subMesh.texture != 0) { // ï¿½Ø½ï¿½Ã³ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½
 				glActiveTexture(GL_TEXTURE0);
 				glBindTexture(GL_TEXTURE_2D, subMesh.texture);
 				glUniform1i(glGetUniformLocation(shaderProgramID, "diffuseTexture"), 0);
 			}
 
-			// ÀçÁú ¼Ó¼º Àü´Þ
+			// ï¿½ï¿½ï¿½ï¿½ ï¿½Ó¼ï¿½ ï¿½ï¿½ï¿½ï¿½
 			const Material* material = FindMaterial(subMesh.strName);
 			if (material) {
 				glUniform3fv(glGetUniformLocation(shaderProgramID, "Ka"), 1, glm::value_ptr(material->ambient));
@@ -89,7 +113,7 @@ void Model::Render(GLuint shaderProgramID) {
 				glUniform1f(glGetUniformLocation(shaderProgramID, "Ns"), material->shininess);
 			}
 
-			// µå·Î¿ì È£Ãâ
+			// ï¿½ï¿½Î¿ï¿½ È£ï¿½ï¿½
 			glDrawElements(renderMode, subMesh.indices.size(), GL_UNSIGNED_INT, 0);
 			glBindVertexArray(0);
 		}

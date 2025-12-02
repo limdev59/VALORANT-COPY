@@ -15,4 +15,5 @@ public:
 private:
     std::map<uint16_t, class CObject*> m_remotePlayers;
     void RenderPlayerHUD();
+    void RenderHitboxes();
 };
