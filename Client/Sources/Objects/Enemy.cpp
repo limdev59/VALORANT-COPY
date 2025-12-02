@@ -7,6 +7,7 @@
 Enemy::Enemy()
     : CObject() {
     m_pModel = new IModel<Model>(MODEL_TYPE::JETT, GL_TRIANGLES);
+    setHitbox(glm::vec3(0.0f, 0.6f, 0.0f), glm::vec3(0.6f, 1.6f, 0.6f), COLLIDER_TYPE::AABB);
 }
 
 Enemy::~Enemy() {
@@ -18,9 +19,6 @@ void Enemy::Update() {
         m_pModel->GetModel()->Update(position, rotation, scale);
     }
 
-    // 히트박스
-    hitboxCenter = position;
-    hitboxSize = scale;
 }
 
 void Enemy::Render() {

@@ -1,10 +1,10 @@
 #include "pch.h"
 #include "Ascent.h"
-#include "IModel.h"      // IModel ±¸Çö Æ÷ÇÔ
-#include "CCore.h"       // ¼ÎÀÌ´õ ID¸¦ °¡Á®¿À±â À§ÇØ
-#include "define.h"      // MODEL_TYPE::ASCENT ¿­°ÅÇüÀ» »ç¿ëÇÏ±â À§ÇØ
+#include "IModel.h"      // IModel êµ¬í˜„ í¬í•¨
+#include "CCore.h"       // ì…°ì´ë” IDë¥¼ ê°€ì ¸ì˜¤ê¸° ìœ„í•´
+#include "define.h"      // MODEL_TYPE::ASCENT ì—´ê±°í˜•ì„ ì‚¬ìš©í•˜ê¸° ìœ„í•´
 
-// »ı¼ºÀÚ: IModel<Model>À» »ı¼ºÇÏ°í ASCENT ¸ÊÀ» ·ÎµåÇÕ´Ï´Ù.
+// ìƒì„±ì: IModel<Model>ì„ ìƒì„±í•˜ê³  ASCENT ë§µì„ ë¡œë“œí•©ë‹ˆë‹¤.
 Ascent::Ascent()
     : m_pModelDecoration(nullptr)
     , m_pModelFloor(nullptr)
@@ -17,7 +17,51 @@ Ascent::Ascent()
     m_pModelProps       = new IModel<Model>(MODEL_TYPE::ASCENT_PROPS, GL_TRIANGLES);
 }
 
-// ¼Ò¸êÀÚ: IModel ·¡ÆÛ¸¦ ¾ÈÀüÇÏ°Ô »èÁ¦ÇÕ´Ï´Ù.
+
+    UpdateColliders();
+}
+bool Ascent::CheckCollisionWithAABB(const glm::vec3& otherCenter, const glm::vec3& otherSize) const {
+    glm::vec3 otherHalf = otherSize * 0.5f;
+    for (const auto& collider : m_colliders) {
+        glm::vec3 halfSize = collider.size * 0.5f;
+        if (std::abs(collider.center.x - otherCenter.x) <= (halfSize.x + otherHalf.x) &&
+            std::abs(collider.center.y - otherCenter.y) <= (halfSize.y + otherHalf.y) &&
+            std::abs(collider.center.z - otherCenter.z) <= (halfSize.z + otherHalf.z)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void Ascent::UpdateColliders() {
+    m_colliders.clear();
+
+    auto pushFromModel = [this](IModel<Model>* model) {
+        if (!model) return;
+        glm::vec3 center(0.0f), size(0.0f);
+        model->GetModel()->GetWorldAABB(center, size);
+        m_colliders.push_back({ center, size });
+    };
+
+    pushFromModel(m_pModelFloor);
+    pushFromModel(m_pModelWall);
+    pushFromModel(m_pModelProps);
+
+    if (!m_colliders.empty()) {
+        glm::vec3 minBound(FLT_MAX);
+        glm::vec3 maxBound(-FLT_MAX);
+        for (const auto& collider : m_colliders) {
+            glm::vec3 halfSize = collider.size * 0.5f;
+            minBound = glm::min(minBound, collider.center - halfSize);
+            maxBound = glm::max(maxBound, collider.center + halfSize);
+        }
+
+        glm::vec3 combinedCenter = (minBound + maxBound) * 0.5f;
+        glm::vec3 combinedSize = maxBound - minBound;
+        setHitbox(combinedCenter - getPosition(), combinedSize, COLLIDER_TYPE::AABB);
+    }
+}
 Ascent::~Ascent() {
     if (m_pModelDecoration) delete m_pModelDecoration;
     if (m_pModelFloor) delete m_pModelFloor;
@@ -26,19 +70,19 @@ Ascent::~Ascent() {
 }
 
 void Ascent::Update() {
-    // CObject°¡ °¡Áö°í ÀÖ´Â À§Ä¡, È¸Àü, Å©±â Á¤º¸¸¦ °¡Á®¿È
+    // CObjectê°€ ê°€ì§€ê³  ìˆëŠ” ìœ„ì¹˜, íšŒì „, í¬ê¸° ì •ë³´ë¥¼ ê°€ì ¸ì˜´
     glm::vec3 pos = getPosition();
     glm::vec3 rot = getRotation();
     glm::vec3 scl = getScale();
 
-    // °¢ ³»ºÎ ¸ğµ¨µé¿¡°Ô º¯È¯ Á¤º¸ ¾÷µ¥ÀÌÆ® ¿äÃ»
+    // ê° ë‚´ë¶€ ëª¨ë¸ë“¤ì—ê²Œ ë³€í™˜ ì •ë³´ ì—…ë°ì´íŠ¸ ìš”ì²­
     if (m_pModelDecoration) m_pModelDecoration->GetModel()->Update(pos, rot, scl);
     if (m_pModelFloor)      m_pModelFloor->GetModel()->Update(pos, rot, scl);
     if (m_pModelWall)       m_pModelWall->GetModel()->Update(pos, rot, scl);
     if (m_pModelProps)      m_pModelProps->GetModel()->Update(pos, rot, scl);
 }
 
-// Render: Á¤Àû ¸ğµ¨ ¼ÎÀÌ´õ(shaderProgramID)¸¦ È°¼ºÈ­ÇÏ°í ¸ğµ¨À» ·»´õ¸µÇÕ´Ï´Ù.
+// Render: ì •ì  ëª¨ë¸ ì…°ì´ë”(shaderProgramID)ë¥¼ í™œì„±í™”í•˜ê³  ëª¨ë¸ì„ ë Œë”ë§í•©ë‹ˆë‹¤.
 void Ascent::Render() {
     if (m_pModelDecoration) {
         glUseProgram(CCore::Instance()->shaderProgramID);

@@ -1,8 +1,21 @@
 #pragma once
 #include "CObject.h"
-#include "IModel.h"      // ÅÛÇÃ¸´ ·¡ÆÛ Æ÷ÇÔ
+    struct Collider {
+        glm::vec3 center;
+        glm::vec3 size;
+    };
 
-// Àü¹æ ¼±¾ğ
+    std::vector<Collider> m_colliders;
+
+
+    const std::vector<Collider>& GetColliders() const { return m_colliders; }
+    bool CheckCollisionWithAABB(const glm::vec3& otherCenter, const glm::vec3& otherSize) const;
+
+private:
+    void UpdateColliders();
+#include "IModel.h"      // è¢æ•²å¤ è´°æ¬º å™¨çªƒ
+
+// å‚ˆè§„ æ€¥æ”«
 class Model;
 template <typename T>
 class IModel;

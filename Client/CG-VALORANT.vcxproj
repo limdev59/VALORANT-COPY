@@ -184,6 +184,8 @@
     <ClCompile Include="Sources\Scenes\Stage_1_Scene.cpp" />
     <ClCompile Include="Sources\Camera\Start_Camera.cpp" />
     <ClCompile Include="Sources\Scenes\Start_Scene.cpp" />
+    <ClCompile Include="Sources\DebugDraw.cpp" />
+
     <ClCompile Include="Sources\Managers\TimeMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -216,6 +218,8 @@
     <ClInclude Include="Headers\Stage_1_Scene.h" />
     <ClInclude Include="Headers\Start_Camera.h" />
     <ClInclude Include="Headers\Start_Scene.h" />
+    <ClInclude Include="Headers\DebugDraw.h" />
+
     <ClInclude Include="Headers\TimeMgr.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

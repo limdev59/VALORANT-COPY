@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Model.h"
+#include <cfloat>
 
 void Model::InitBuffer(SubMesh& subMesh) {
 	glGenVertexArrays(1, &subMesh.VAO);
@@ -33,7 +34,7 @@ const Material* Model::FindMaterial(const std::string& name) const {
 			return &material;
 		}
 	}
-	return nullptr; // ÀÌ¸§¿¡ ÇØ´çÇÏ´Â MaterialÀ» Ã£Áö ¸øÇÑ °æ¿ì
+	return nullptr; // ì´ë¦„ì— í•´ë‹¹í•˜ëŠ” Materialì„ ì°¾ì§€ ëª»í•œ ê²½ìš°
 }
 
 Model::Model(MODEL_TYPE type, GLenum mode)
@@ -59,6 +60,8 @@ Model::Model(MODEL_TYPE type, GLenum mode)
 			InitBuffer(subMesh);
 		}
 	}
+
+        ComputeBoundingBox();
 }
 
 void Model::setScale(const vec3& newScale) {
@@ -74,13 +77,13 @@ void Model::Render(GLuint shaderProgramID) {
 			GLuint modelLocation = glGetUniformLocation(shaderProgramID, "modelTransform");
 			glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(transform));
 
-			if (subMesh.texture != 0) { // ÅØ½ºÃ³°¡ Á¸ÀçÇÏ´Â °æ¿ì
+			if (subMesh.texture != 0) { // í…ìŠ¤ì²˜ê°€ ì¡´ìž¬í•˜ëŠ” ê²½ìš°
 				glActiveTexture(GL_TEXTURE0);
 				glBindTexture(GL_TEXTURE_2D, subMesh.texture);
 				glUniform1i(glGetUniformLocation(shaderProgramID, "diffuseTexture"), 0);
 			}
 
-			// ÀçÁú ¼Ó¼º Àü´Þ
+			// ìž¬ì§ˆ ì†ì„± ì „ë‹¬
 			const Material* material = FindMaterial(subMesh.strName);
 			if (material) {
 				glUniform3fv(glGetUniformLocation(shaderProgramID, "Ka"), 1, glm::value_ptr(material->ambient));
@@ -89,7 +92,65 @@ void Model::Render(GLuint shaderProgramID) {
 				glUniform1f(glGetUniformLocation(shaderProgramID, "Ns"), material->shininess);
 			}
 
-			// µå·Î¿ì È£Ãâ
+
+void Model::ComputeBoundingBox() {
+        bool initialized = false;
+        vec3 minBounds(0.0f);
+        vec3 maxBounds(0.0f);
+
+        for (const auto& group : groups) {
+                for (const auto& subMesh : group.subMeshes) {
+                        for (const auto& vertex : subMesh.vertices) {
+                                if (!initialized) {
+                                        minBounds = maxBounds = vertex.position;
+                                        initialized = true;
+                                }
+                                else {
+                                        minBounds = glm::min(minBounds, vertex.position);
+                                        maxBounds = glm::max(maxBounds, vertex.position);
+                                }
+                        }
+                }
+        }
+
+        if (initialized) {
+                boundingMin = minBounds;
+                boundingMax = maxBounds;
+        }
+        else {
+                boundingMin = vec3(-0.5f);
+                boundingMax = vec3(0.5f);
+        }
+}
+
+void Model::GetWorldAABB(vec3& outCenter, vec3& outSize) const {
+        vec3 localMin = boundingMin;
+        vec3 localMax = boundingMax;
+
+        vec3 corners[8] = {
+                {localMin.x, localMin.y, localMin.z},
+                {localMax.x, localMin.y, localMin.z},
+                {localMin.x, localMax.y, localMin.z},
+                {localMax.x, localMax.y, localMin.z},
+                {localMin.x, localMin.y, localMax.z},
+                {localMax.x, localMin.y, localMax.z},
+                {localMin.x, localMax.y, localMax.z},
+                {localMax.x, localMax.y, localMax.z}
+        };
+
+        vec3 worldMin(FLT_MAX);
+        vec3 worldMax(-FLT_MAX);
+
+        for (const auto& corner : corners) {
+                vec4 transformed = transform * vec4(corner, 1.0f);
+                worldMin = glm::min(worldMin, vec3(transformed));
+                worldMax = glm::max(worldMax, vec3(transformed));
+        }
+
+        outCenter = (worldMin + worldMax) * 0.5f;
+        outSize = worldMax - worldMin;
+}
+			// ë“œë¡œìš° í˜¸ì¶œ
 			glDrawElements(renderMode, subMesh.indices.size(), GL_UNSIGNED_INT, 0);
 			glBindVertexArray(0);
 		}

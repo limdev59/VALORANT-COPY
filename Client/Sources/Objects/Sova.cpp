@@ -11,18 +11,19 @@ Sova::Sova()
     string modelPath = "first2";
     m_pModel = new IModel<AnimModel>(modelPath);
 
-    AnimModel* currModel = m_pModel->GetModel(); // ·¡ÆÛ¿¡¼­ ½ÇÁ¦ ¸ðµ¨ Æ÷ÀÎÅÍ °¡Á®¿À±â
+    AnimModel* currModel = m_pModel->GetModel(); // Û¿    
 
     m_pIdleAnim = new Animation("Models/first2/firstIdle.gltf", currModel);
     m_pAnimator = new Animator(m_pIdleAnim);
 
     m_gravity = -9.81f;
     m_velocity = vec3(0.0f);
-    m_isOnGround = true; // (¹Ù´Ú¿¡¼­ ½ÃÀÛÇÑ´Ù°í °¡Á¤)
+    m_isOnGround = true; // (Ù´Ú¿ Ñ´Ù° )
     m_jumpVelocity = 3.0f;
 
     setScale(vec3(0.3f, 0.3f, 0.3f));
     setRotation(vec3(0, 0.0f, 0.0f));
+    setHitbox(glm::vec3(0.0f, 0.6f, 0.0f), glm::vec3(0.6f, 1.6f, 0.6f), COLLIDER_TYPE::AABB);
 }
 
 Sova::~Sova() {
@@ -37,8 +38,6 @@ void Sova::Update() {
         m_pAnimator->PlayAnimation(m_pIdleAnim);
         m_pAnimator->UpdateAnimation(DT);
     }
-    hitboxCenter = position;
-    hitboxSize = scale;
 }
 
 void Sova::Render() {
@@ -53,10 +52,10 @@ void Sova::Render() {
             glm::mat4 S = glm::scale(glm::mat4(1.f), scale);
             modelMat = T * R * S;
 
-            // 3. [Á¦¿Ü] Player Àü¿ë ¸ðµ¨ ¿øÁ¡ º¸Á¤ ÄÚµå´Â ÀÌ½ÄÇÏÁö ¾ÊÀ½
+            // 3. [] Player     Úµ Ì½ 
             // modelMat = glm::translate(modelMat, vec3(0.0f, -1.0f, 0.0f));
 
-            // 4. PVM ¹× ¼ÎÀÌ´õ Uniform ¼³Á¤ (Player¿Í µ¿ÀÏ)
+            // 4. PVM  Ì´ Uniform  (Player )
             mat4 projMat = CameraMgr::Instance()->getMainCamera()->getProjectionMatrix();
             mat4 view = CameraMgr::Instance()->getMainCamera()->getViewMatrix();
             glm::mat4 PVM = projMat * view * modelMat;
@@ -69,24 +68,24 @@ void Sova::Render() {
             glUniformMatrix4fv(loc_PVM, 1, GL_FALSE, glm::value_ptr(PVM));
             glUniformMatrix3fv(loc_normalMat, 1, GL_FALSE, glm::value_ptr(normalMat));
 
-            // 5. Bone(»À) Uniform ¼³Á¤ (Sova ÀÚ½ÅÀÇ m_pAnimator »ç¿ë)
-            const auto& transforms = m_pAnimator->GetFinalBoneMatrices(); // [¼öÁ¤]
+            // 5. Bone() Uniform  (Sova Ú½ m_pAnimator )
+            const auto& transforms = m_pAnimator->GetFinalBoneMatrices(); // []
             GLuint finalBonesMatricesLoc = glGetUniformLocation(CCore::Instance()->shaderProgramID2, "finalBonesMatrices");
             for (int i = 0; i < transforms.size(); i++)
                 glUniformMatrix4fv(finalBonesMatricesLoc + i, 1, false, glm::value_ptr(transforms[i]));
 
-            // 6. ÅØ½ºÃ³ Sampler ¼³Á¤ (Player¿Í µ¿ÀÏ)
+            // 6. Ø½Ã³ Sampler  (Player )
             GLint loc_diffuseSampler = glGetUniformLocation(CCore::Instance()->shaderProgramID2, "diffuseTexture");
             GLint loc_normalSampler = glGetUniformLocation(CCore::Instance()->shaderProgramID2, "normalMap");
             glUniform1i(loc_diffuseSampler, 0);
             glUniform1i(loc_normalSampler, 1);
 
-            // 7. ¸ðµ¨ ·»´õ¸µ
+            // 7.  
             currModel->Render();
 
             GLenum error = glGetError();
             if (error != GL_NO_ERROR)
-                std::cout << "Sova Render error : " << error << std::endl; // µð¹ö±ë¿ë
+                std::cout << "Sova Render error : " << error << std::endl; // 
         }
     }
 }
@@ -94,22 +93,22 @@ void Sova::Render() {
 void Sova::ApplyGravity() {
     double dt = DT;
 
-    m_velocity.y += m_gravity * dt; // Áß·Â °¡¼Óµµ Àû¿ë
-    position.y += m_velocity.y * dt; // yÃà ¼Óµµ¸¦ À§Ä¡¿¡ ¹Ý¿µ
+    m_velocity.y += m_gravity * dt; // ß· Óµ 
+    position.y += m_velocity.y * dt; // y Óµ Ä¡ Ý¿
 
-    m_isOnGround = false; // ±âº»°ªÀº °øÁß
+    m_isOnGround = false; // âº» 
 
-    // ¹Ù´Ú°ú Ãæµ¹ Ã³¸® (±âÁ¸ ÇÏµåÄÚµùµÈ ·ÎÁ÷ À¯Áö)
+    // Ù´Ú° æµ¹ Ã³ ( ÏµÚµ  )
     if (position.x < -2.31563 && position.z < -6.84576) {
         if (position.y <= -0.5f) {
             position.y = -0.5f;
             m_velocity.y = 0.0f;
-            m_isOnGround = true; // Á¡ÇÁ Á¾·á
+            m_isOnGround = true; //  
         }
     }
     else if (position.y <= -0.25f) {
         position.y = -0.25f;
         m_velocity.y = 0.0f;
-        m_isOnGround = true; // Á¡ÇÁ Á¾·á
+        m_isOnGround = true; //  
     }
 }

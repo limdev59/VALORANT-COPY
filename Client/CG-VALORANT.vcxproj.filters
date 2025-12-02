@@ -132,6 +132,9 @@
     <ClCompile Include="Sources\ClientNetwork\ClientNetwork.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Sources\DebugDraw.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\vertex.glsl" />
@@ -178,6 +181,9 @@
     </ClInclude>
     <ClInclude Include="Headers\Stage_1_Scene.h">
       <Filter>소스 파일\Scene\Stage_1_Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\DebugDraw.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Headers\Sphere.h">
       <Filter>소스 파일\Object\Sphere</Filter>
