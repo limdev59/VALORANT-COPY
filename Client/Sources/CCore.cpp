@@ -36,13 +36,22 @@ GLvoid CCore::Update() {
     
     CameraMgr::Instance()->Update();
     KeyMgr::Instance()->Update();
+
+    if (KeyMgr::Instance()->getKeyState(KEY::V) == KEY_TYPE::TAP) {
+        ToggleHitboxVisibility();
+    }
+
     SceneMgr::Instance()->Update();
     MouseMgr::Instance()->Update();
     TimeMgr::Instance()->Update();
     glutPostRedisplay();
 }
 
-// ·»´õ¸µ ÇÔ¼ö
+
+void CCore::ToggleHitboxVisibility() {
+    m_showHitboxes = !m_showHitboxes;
+}
+// Â·Â»Â´ÃµÂ¸Âµ Ã‡Ã”Â¼Ã¶
 void CCore::Render() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     {

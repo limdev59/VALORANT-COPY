@@ -1,10 +1,10 @@
 #include "pch.h"
 #include "Ascent.h"
-#include "IModel.h"      // IModel 구현 포함
-#include "CCore.h"       // 셰이더 ID를 가져오기 위해
-#include "define.h"      // MODEL_TYPE::ASCENT 열거형을 사용하기 위해
+#include "IModel.h"      // IModel
+#include "CCore.h"       // 甄 ID
+#include "define.h"      // MODEL_TYPE::ASCENT  歐
 
-// 생성자: IModel<Model>을 생성하고 ASCENT 맵을 로드합니다.
+// : IModel<Model> 構 ASCENT  琯爛求.
 Ascent::Ascent()
     : m_pModelDecoration(nullptr)
     , m_pModelFloor(nullptr)
@@ -15,9 +15,11 @@ Ascent::Ascent()
     m_pModelFloor       = new IModel<Model>(MODEL_TYPE::ASCENT_FLOOR, GL_TRIANGLES);
     m_pModelWall        = new IModel<Model>(MODEL_TYPE::ASCENT_WALL, GL_TRIANGLES);
     m_pModelProps       = new IModel<Model>(MODEL_TYPE::ASCENT_PROPS, GL_TRIANGLES);
+
+    BuildLocalColliders();
 }
 
-// 소멸자: IModel 래퍼를 안전하게 삭제합니다.
+// 恬: IModel 肪 構 爛求.
 Ascent::~Ascent() {
     if (m_pModelDecoration) delete m_pModelDecoration;
     if (m_pModelFloor) delete m_pModelFloor;
@@ -25,20 +27,62 @@ Ascent::~Ascent() {
     if (m_pModelProps) delete m_pModelProps;
 }
 
+
+
+void Ascent::BuildLocalColliders() {
+    m_localColliders.clear();
+
+    auto addColliders = [&](IModel<Model>* model, bool isFloor) {
+        if (!model) return;
+
+        for (const auto& bounds : model->GetModel()->CalculateSubMeshAABBs()) {
+            m_localColliders.push_back({ bounds.first, bounds.second, isFloor });
+        }
+    };
+
+    addColliders(m_pModelFloor, true);
+    addColliders(m_pModelWall, false);
+    addColliders(m_pModelProps, false);
+
+    UpdateColliderTransforms();
+}
+
+void Ascent::UpdateColliderTransforms() {
+    glm::vec3 pos = getPosition();
+    glm::vec3 scl = getScale();
+
+    m_worldColliders.clear();
+    for (const auto& local : m_localColliders) {
+        glm::vec3 scaledMin = local.min * scl;
+        glm::vec3 scaledMax = local.max * scl;
+        glm::vec3 worldMin = scaledMin + pos;
+        glm::vec3 worldMax = scaledMax + pos;
+
+        AABBBounds worldBounds;
+        worldBounds.min = glm::min(worldMin, worldMax);
+        worldBounds.max = glm::max(worldMin, worldMax);
+        worldBounds.isFloor = local.isFloor;
+
+        m_worldColliders.push_back(worldBounds);
+    }
+}
+
 void Ascent::Update() {
-    // CObject가 가지고 있는 위치, 회전, 크기 정보를 가져옴
+    // CObject  獵 치, 회, 크
     glm::vec3 pos = getPosition();
     glm::vec3 rot = getRotation();
     glm::vec3 scl = getScale();
 
-    // 각 내부 모델들에게 변환 정보 업데이트 요청
+    //   醍㉤涌� 환  트 청
     if (m_pModelDecoration) m_pModelDecoration->GetModel()->Update(pos, rot, scl);
     if (m_pModelFloor)      m_pModelFloor->GetModel()->Update(pos, rot, scl);
     if (m_pModelWall)       m_pModelWall->GetModel()->Update(pos, rot, scl);
     if (m_pModelProps)      m_pModelProps->GetModel()->Update(pos, rot, scl);
+
+    UpdateColliderTransforms();
 }
 
-// Render: 정적 모델 셰이더(shaderProgramID)를 활성화하고 모델을 렌더링합니다.
+// Render:   甄(shaderProgramID) 활화構  爛求.
 void Ascent::Render() {
     if (m_pModelDecoration) {
         glUseProgram(CCore::Instance()->shaderProgramID);

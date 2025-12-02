@@ -8,6 +8,7 @@
 #include "SceneMgr.h"
 #include "CCamera.h"
 #include "CScene.h"
+#include "Ascent.h"
 
 
 Player::Player()
@@ -97,6 +98,10 @@ void Player::Update()
         m_velocity.y = m_jumpVelocity;
     }
 
+    // 히트박스는 오브젝트 위치 기준으로 계산한다.
+    hitboxCenter = glm::vec3(0.0f);
+    hitboxSize = getScale();
+
     // 중력 적용
     ApplyGravity();
 
@@ -113,11 +118,48 @@ void Player::Update()
     glm::vec3 originalPos = this->position;
     bool isGroundedThisFrame = false;
 
+    auto computeAABB = [&](const glm::vec3& pos) {
+        glm::vec3 min = (pos + hitboxCenter) - (hitboxSize * 0.5f);
+        glm::vec3 max = (pos + hitboxCenter) + (hitboxSize * 0.5f);
+        return std::make_pair(min, max);
+    };
+
+    auto intersects = [](const std::pair<glm::vec3, glm::vec3>& a, const std::pair<glm::vec3, glm::vec3>& b) {
+        if (a.second.x < b.first.x || a.first.x > b.second.x) return false;
+        if (a.second.y < b.first.y || a.first.y > b.second.y) return false;
+        if (a.second.z < b.first.z || a.first.z > b.second.z) return false;
+        return true;
+    };
+
+    auto collidesWithAscent = [&](const glm::vec3& pos, Ascent* ascent, bool ignoreFloor) {
+        auto playerBounds = computeAABB(pos);
+        for (const auto& bounds : ascent->GetWorldColliders()) {
+            if (ignoreFloor && bounds.isFloor) {
+                continue;
+            }
+            if (intersects(playerBounds, { bounds.min, bounds.max })) {
+                return true;
+            }
+        }
+        return false;
+    };
+
     // Y축(중력/바닥) 충돌 검사
-    this->setPosition(glm::vec3(originalPos.x, nextPosition.y, originalPos.z));
+    glm::vec3 testPosY(originalPos.x, nextPosition.y, originalPos.z);
+    this->setPosition(testPosY);
 
     for (CObject* other : mapObjects) {
-        if (this->CheckCollision(*other)) {
+        if (auto* ascent = dynamic_cast<Ascent*>(other)) {
+            if (collidesWithAscent(testPosY, ascent, false)) {
+                if (m_velocity.y < 0) {
+                    isGroundedThisFrame = true;
+                }
+                m_velocity.y = 0;
+                nextPosition.y = originalPos.y;
+                break;
+            }
+        }
+        else if (this->CheckCollision(*other)) {
             if (m_velocity.y < 0) {
                 isGroundedThisFrame = true;
             }
@@ -131,9 +173,17 @@ void Player::Update()
     m_isOnGround = isGroundedThisFrame;
 
     // X축(좌우) 충돌 검사
-    this->setPosition(glm::vec3(nextPosition.x, originalPos.y, originalPos.z));
+    glm::vec3 testPosX(nextPosition.x, originalPos.y, originalPos.z);
+    this->setPosition(testPosX);
     for (CObject* other : mapObjects) {
-        if (this->CheckCollision(*other)) {
+        if (auto* ascent = dynamic_cast<Ascent*>(other)) {
+            if (collidesWithAscent(testPosX, ascent, true)) {
+                m_velocity.x = 0;
+                nextPosition.x = originalPos.x;
+                break;
+            }
+        }
+        else if (this->CheckCollision(*other)) {
             m_velocity.x = 0;
             nextPosition.x = originalPos.x;
             break;
@@ -148,9 +198,17 @@ void Player::Update()
     }
 
     // Z축(앞뒤) 충돌 검사
-    this->setPosition(glm::vec3(originalPos.x, originalPos.y, nextPosition.z));
+    glm::vec3 testPosZ(originalPos.x, originalPos.y, nextPosition.z);
+    this->setPosition(testPosZ);
     for (CObject* other : mapObjects) {
-        if (this->CheckCollision(*other)) {
+        if (auto* ascent = dynamic_cast<Ascent*>(other)) {
+            if (collidesWithAscent(testPosZ, ascent, true)) {
+                m_velocity.z = 0;
+                nextPosition.z = originalPos.z;
+                break;
+            }
+        }
+        else if (this->CheckCollision(*other)) {
             m_velocity.z = 0;
             nextPosition.z = originalPos.z;
             break;
@@ -236,8 +294,8 @@ void Player::Update()
     }
 
     // --- 7. 히트박스 업데이트 ---
-    hitboxCenter = position;
-    hitboxSize = scale;
+    hitboxCenter = glm::vec3(0.0f);
+    hitboxSize = getScale();
 
     if (CameraMgr::Instance()->getMainCamera()) {
         CCamera* pCam = CameraMgr::Instance()->getMainCamera();
@@ -362,25 +420,7 @@ C2S_FireAction Player::BuildFirePacket(const vec3& fireOrigin, const vec3& fireD
 void Player::ApplyGravity() {
     double dt = DT;
 
-    m_velocity.y += m_gravity * dt; // 중력 가속도 적용
-    position.y += m_velocity.y * dt; // Y축 속도를 위치에 반영
-
-    m_isOnGround = false; // 기본값은 공중
-
-    // 바닥과 충돌 처리 (단순 하드코딩된 영역 검사)
-    if (position.x < -2.31563 && position.z < -6.84576) {
-        if (position.y <= -0.5f) {
-            position.y = -0.5f;
-            m_velocity.y = 0.0f;
-            m_isOnGround = true; // 바닥 착지
-        }
-    }
-    else if (position.y <= -0.25f) {
-        position.y = -0.25f;
-        m_velocity.y = 0.0f;
-        m_isOnGround = true; // 바닥 착지
-        if (!m_isOnGround) {
-            m_velocity.y += m_gravity * dt;
-        }
+    if (!m_isOnGround) {
+        m_velocity.y += m_gravity * dt; // 중력 가속도 적용
     }
 }

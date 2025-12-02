@@ -18,7 +18,7 @@ void Enemy::Update() {
         m_pModel->GetModel()->Update(position, rotation, scale);
     }
 
-    // 히트박스
+    hitboxCenter = glm::vec3(0.0f);
     hitboxCenter = position;
     hitboxSize = scale;
 }
