@@ -36,6 +36,8 @@ NetworkIO::~NetworkIO()
 
 bool NetworkIO::Initialize(USHORT port, PacketQueue* worldln, ByteQueue* netOut, SessionManager* manager)
 {
+	int retval;
+
 	m_pWorldInputQueue		= worldln;
 	m_pNetworkOutputQueue	= netOut;
 	m_pSessionManager		= manager;
@@ -61,14 +63,17 @@ bool NetworkIO::Initialize(USHORT port, PacketQueue* worldln, ByteQueue* netOut,
 	// UDP socket
 	m_UDPGameSocket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 	if (m_UDPGameSocket == INVALID_SOCKET) return false;
+	printf("[NetworkIO] UDP Socket created.\n");
 
 	sockaddr_in udpAddr{};
 	udpAddr.sin_family		= AF_INET;
+	udpAddr.sin_addr.s_addr = htonl(INADDR_ANY);
 	udpAddr.sin_port		= htons(port);
-	udpAddr.sin_addr.s_addr = INADDR_ANY;
 
-	if (bind(m_UDPGameSocket, reinterpret_cast<sockaddr*>(&udpAddr), sizeof(udpAddr)) == SOCKET_ERROR)
+	retval = bind(m_UDPGameSocket, reinterpret_cast<sockaddr*>(&udpAddr), sizeof(udpAddr));
+	if (retval == SOCKET_ERROR)
 		return false;
+	printf("[NetworkIO] UDP Socket bound to port %d.\n", port);
 
 	m_Isrunning = true;
 
@@ -94,16 +99,12 @@ void NetworkIO::Run()
 		timeout.tv_sec = 0;
 		timeout.tv_usec = 10 * 1000; // 10ms
 
-		int nfds = 0;
-		SOCKET maxfd = m_TCPListenSocket;
-		if (m_UDPGameSocket > maxfd)
-			maxfd = m_UDPGameSocket;
-
-		int ret = select(static_cast<int>(maxfd + 1), &readSet, nullptr, nullptr, &timeout);
+		// windows select는 nfds 매개변수를 무시함
+		int ret = select(0, &readSet, nullptr, nullptr, &timeout);
 		if (ret == SOCKET_ERROR)
 		{
 			int err = WSAGetLastError();
-			printf("select() failed with error: %d\n", err);
+			printf("[NetworkIO] select() failed with error: %d\n", err);
 			continue;
 		}
 
@@ -172,91 +173,104 @@ void NetworkIO::HandleTCPAccept()
 
 void NetworkIO::HandleUDPRead()
 {
-	//char buffer[1500];
-	//sockaddr_in senderAddr{};
-	//int fromLen = sizeof(senderAddr);
+	char buffer[1500];
+	sockaddr_in senderAddr{};
+	int fromLen = sizeof(senderAddr);
 
-	//for (;;)
-	//{
-	//	int n = recvfrom(m_UDPGameSocket, buffer, sizeof(buffer), 0,
-	//		reinterpret_cast<sockaddr*>(&fromLen), &fromLen);
-	//	if (n == SOCKET_ERROR) 
-	//	{
-	//		int e = WSAGetLastError();
-	//		if (e == WSAEWOULDBLOCK || e == WSAEINTR)
-	//		{
-	//			// 더 이상 읽을 데이터 없음
-	//			printf("No more UDP data to read.\n");
-	//			break;
-	//		}
+	for (;;)
+	{
+		// 5번째 인자에 &senderAddr 넣어야함
+		int n = recvfrom(m_UDPGameSocket, buffer, sizeof(buffer), 0,
+			reinterpret_cast<sockaddr*>(&senderAddr), &fromLen);
 
-	//		if (n <= 0) break;
+		// 오류 처리
+		if (n == SOCKET_ERROR)
+		{
+			int e = WSAGetLastError();
+			if (e == WSAEWOULDBLOCK || e == WSAEINTR)
+			{
+				// 더 이상 읽을 데이터 없음
+				printf("[NetworkIO] No more UDP data to read.\n");
+				break;
+			}
 
-	//		PlayerID pid = static_cast<PlayerID>(-1);
-	//		if (m_pSessionManager)
-	//		{
-	//			pid = m_pSessionManager->FindPlayerIDByUdpAddress(senderAddr);
-	//		}
-	//		
-	//		if (pid == static_cast<PlayerID>(-1))
-	//		{
-	//			// 알 수 없는 송신자
-	//			printf("Received UDP packet from unknown sender.\n");
-	//			continue;
-	//		}
+			printf("[NetworkIO] UDP recvfrom failed code: %d\n", e);
+			break;
+		}
 
-	//		if (n < sizeof(MsgType))
-	//		{
-	//			// 패킷이 너무 작음
-	//			printf("Received UDP packet too small.\n");
-	//			continue;
-	//		}
+		if (n <= 0) break;
 
-	//		const MsgType* pType = reinterpret_cast<const MsgType*>(buffer);
+		// 성공 로직
 
-	//		WorldEvent event{};
-	//		event.playerID = pid;
+		// 송신자 주소로부터 PlayerID 찾기
+		PlayerID pid = static_cast<PlayerID>(-1);
+		if (m_pSessionManager)
+		{
+			pid = m_pSessionManager->FindPlayerIDByUdpAddress(senderAddr);
+		}
 
-	//		switch (*pType)
-	//		{
-	//			case MsgType::C2S_MOVEMENT_UPDATE:
-	//			{
-	//				if (n < sizeof(C2S_MovementUpdate))
-	//				{
-	//					printf("Invalid MovementUpdate packet size.\n");
-	//					continue;
-	//				}
-	//				event.type = WorldEventType::E_Packet_Movement;
-	//				std::memcpy(&event.movement, buffer, sizeof(C2S_MovementUpdate));
-	//				break;
+		if (pid == static_cast<PlayerID>(-1))
+		{
+			// 알 수 없는 송신자
+			printf("[NetworkIO] Received UDP packet from unknown sender.\n");
+			continue;
+		}
 
-	//			case MsgType::C2S_FIRE_ACTION:
-	//			{
-	//				if (n < sizeof(C2S_FireAction))
-	//					break;
+		if (n < sizeof(MsgType))
+		{
+			// 패킷이 너무 작음
+			printf("[NetworkIO] Received UDP packet too small.\n");
+			continue;
+		}
 
-	//				const C2S_FireAction* fa =
-	//					reinterpret_cast<const C2S_FireAction*>(buffer);
+		// 패킷 타입에 따라 처리
+		const MsgType* pType = reinterpret_cast<const MsgType*>(buffer);
 
-	//				event.type = E_Packet_Fire;
-	//				event.fire = *fa;
+		WorldEvent event{};
+		event.playerID = pid;
 
-	//				m_pWorldInputQueue->Push(event);
-	//			}
-	//			break;
+		bool bValidPacket = false;
 
-	//			default:
-	//				// 관심 없는 패킷 타입이면 무시
-	//				break;
-	//			}
-	//		}
-	//		
-	//		if (m_pWorldInputQueue) 
-	//		{
-	//			m_pWorldInputQueue->Push(std::vector<uint8_t>(buffer, buffer + n));
-	//		}
-	//	}
-	//}
+		switch (*pType)
+		{
+		case MsgType::C2S_MOVEMENT_UPDATE:
+		{
+			if (n < sizeof(C2S_MovementUpdate))
+			{
+				printf("[NetworkIO] Invalid MovementUpdate packet size.\n");
+				break;
+			}
+			event.type = WorldEventType::E_Packet_Movement;
+			std::memcpy(&event.movement, buffer, sizeof(C2S_MovementUpdate));
+			bValidPacket = true;
+		}
+		break;
+
+		case MsgType::C2S_FIRE_ACTION:
+		{
+			if (n < sizeof(C2S_FireAction))
+			{
+				printf("[NetworkIO] Invalid Movement Packet Size..\n");
+				break;
+			}
+
+			const C2S_FireAction* fa = reinterpret_cast<const C2S_FireAction*>(buffer);
+			event.type = E_Packet_Fire;
+			event.fire = *fa;
+			bValidPacket = true;
+		}
+		break;
+
+		default:
+			// 관심 없는 패킷 타입이면 무시
+			break;
+		}
+
+		if (bValidPacket && m_pWorldInputQueue)
+		{
+			m_pWorldInputQueue->Push(event);
+		}
+	}
 }
 
 void NetworkIO::HandleBroadcasts()
