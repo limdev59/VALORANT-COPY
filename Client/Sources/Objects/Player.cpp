@@ -222,7 +222,7 @@ void Player::Update()
     rightVec = glm::normalize(rightVec);
 
     bool isMoving = false;
-    float moveSpeed = 3.0f;
+    float moveSpeed = 0.8f;
     glm::vec3 moveDir = glm::vec3(0.0f);
 
     if (KeyMgr::Instance()->getKeyState(KEY::W) == KEY_TYPE::HOLD) { moveDir += viewVec; isMoving = true; }
@@ -323,7 +323,7 @@ void Player::Update()
         glm::vec3 camDir = glm::normalize(pCam->target - pCam->position);
         
         // 플레이어의 눈 위치 (캡슐 상단)
-        glm::vec3 eyePos = this->position + glm::vec3(0.0f, m_height * 10.0f, 0.0f);
+        glm::vec3 eyePos = this->position + glm::vec3(0.0f, m_height+0.09 , 0.0f);
         
         // 최종 카메라 위치 계산
         glm::vec3 finalCamPos;
