@@ -171,20 +171,17 @@ static vector<Group> ReadObj(const string& fileName, const string& folderName, c
 		iss >> prefix;
 
 		if (prefix == "v") {
-			// 정점 좌표 처리
 			glm::vec3 pos;
 			iss >> pos.x >> pos.y >> pos.z;
 			positions.push_back(pos);
 		}
 		else if (prefix == "vt") {
-			// 텍스처 좌표 처리
 			glm::vec2 vt;
 			iss >> vt.x >> vt.y;
-			vt.y = 1.0f - vt.y;  // OpenGL의 텍스처 좌표는 y가 반전되므로 수정
+			vt.y = 1.0f - vt.y;  
 			texCoords.push_back(vt);
 		}
 		else if (prefix == "vn") {
-			// 법선 벡터 처리
 			glm::vec3 vn;
 			iss >> vn.x >> vn.y >> vn.z;
 			normals.push_back(vn);
@@ -206,34 +203,30 @@ static vector<Group> ReadObj(const string& fileName, const string& folderName, c
 			std::string materialName;
 			iss >> materialName;
 
-			// 머티리얼 변경 시 서브매쉬를 이전 그룹에 추가
 			if (currentGroup != nullptr && !currentSubMesh.vertices.empty()) {
-				currentGroup->AddSubMesh(currentSubMesh);  // 현재 서브매쉬를 그룹에 추가
+				currentGroup->AddSubMesh(currentSubMesh);  
 			}
 
-			// 새로운 서브매쉬 시작
 			currentSubMesh = SubMesh();
 			currentSubMesh.strName = materialName;
 
-			// 머티리얼에 해당하는 텍스처 로드
 			auto it = std::find_if(materials.begin(), materials.end(),
 				[&materialName](const Material& mat) { return mat.strName == materialName; });
 			if (it != materials.end()) {
 				currentSubMesh.texture = LoadTexture("Models/" + folderName + "/textures/" + it->texture);
-				if (currentSubMesh.texture == 0) {
-					cout << currentGroup->strName << endl;
-				}
+				// (Texture Load fail handling removed for brevity)
 			}
 		}
 		else if (prefix == "f") {
-			// 얼굴(폴리곤) 처리
+			// [수정됨] 다각형(Quad) 처리 및 삼각형 분할 (Triangulation)
 			std::string vertexData;
+			std::vector<Vertex> faceVertices; // 한 면을 구성하는 정점들을 임시 저장
+
 			while (iss >> vertexData) {
 				std::istringstream vertexStream(vertexData);
 				std::string indexStr;
 				int posIdx = 0, texIdx = 0, normIdx = 0;
 
-				// /로 구분된 인덱스 처리
 				std::getline(vertexStream, indexStr, '/');
 				posIdx = std::stoi(indexStr);
 
@@ -249,14 +242,32 @@ static vector<Group> ReadObj(const string& fileName, const string& folderName, c
 				vertex.position = positions[posIdx - 1];
 				if (texIdx > 0) vertex.texCoord = texCoords[texIdx - 1];
 				if (normIdx > 0) vertex.normal = normals[normIdx - 1];
-				currentSubMesh.vertices.push_back(vertex);
-				currentSubMesh.indices.push_back(currentSubMesh.vertices.size() - 1);  // 인덱스 추가
+				
+				faceVertices.push_back(vertex);
+			}
+
+			// Triangle Fan 방식으로 분할 (점 3개 이상인 경우 처리)
+			// 예: 사각형(0,1,2,3) -> 삼각형(0,1,2), 삼각형(0,2,3)
+			if (faceVertices.size() >= 3) {
+				for (size_t i = 1; i < faceVertices.size() - 1; ++i) {
+					// 첫 번째 정점
+					currentSubMesh.vertices.push_back(faceVertices[0]);
+					currentSubMesh.indices.push_back(currentSubMesh.vertices.size() - 1);
+
+					// i 번째 정점
+					currentSubMesh.vertices.push_back(faceVertices[i]);
+					currentSubMesh.indices.push_back(currentSubMesh.vertices.size() - 1);
+
+					// i+1 번째 정점
+					currentSubMesh.vertices.push_back(faceVertices[i + 1]);
+					currentSubMesh.indices.push_back(currentSubMesh.vertices.size() - 1);
+				}
 			}
 		}
 	}
 
 	if (currentGroup != nullptr && !currentSubMesh.vertices.empty()) {
-		currentGroup->AddSubMesh(currentSubMesh);  // 마지막 서브매쉬를 그룹에 추가
+		currentGroup->AddSubMesh(currentSubMesh);  
 	}
 
 	file.close();
@@ -293,16 +304,7 @@ protected:
 	const Material* FindMaterial(const std::string& name) const;
 public:
 	static std::unordered_map<MODEL_TYPE, const std::pair<vector<Material>, vector<Group>>>& modelPairArr;
-	vector<vec3> getCrashVetex() {
-		vector<vec3> vet{};
-		for (Group g : groups) {
-			for (const auto& v : g.subMeshes) {
-				for (size_t i{}; i < v.vertices.size(); i += 3) {
-					vet.push_back(v.vertices[i].position);
-				}
-			}
-		}
-	}
+	vector<vec3> GetVerticesWorld();
 	Model(MODEL_TYPE type, GLenum mode);
 	void setScale(const vec3& newScale);
 	void Render(GLuint shaderProgramID);

@@ -1,6 +1,6 @@
 #pragma once
 #include "CObject.h"
-#include "IModel.h"      // 템플릿 래퍼 포함
+#include "IModel.h"
 
 // 전방 선언
 class Model;
@@ -13,6 +13,11 @@ private:
     IModel<Model>* m_pModelFloor;
     IModel<Model>* m_pModelWall;
     IModel<Model>* m_pModelProps;
+    
+    bool m_bShowHitbox = false;
+    
+    std::vector<glm::vec3> m_cachedTriangles;
+    bool m_bIsCacheDirty = true;
 
 public:
     Ascent();
@@ -20,4 +25,10 @@ public:
 
     virtual void Update() override;
     virtual void Render() override;
+    
+    void RenderHitbox();
+    void SetShowHitbox(bool show) { m_bShowHitbox = show; }
+    bool IsShowHitbox() const { return m_bShowHitbox; }
+    
+    const std::vector<glm::vec3>& GetAllTriangles();
 };

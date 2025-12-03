@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "Stage_1_Scene.h"
 
 #include "KeyMgr.h"
@@ -36,13 +36,13 @@ void Stage_1_Scene::Enter() {
   
         std::vector<glm::vec3> enemyPositions = {
             glm::vec3(-1.49554f, 0.125f,-5.42878),
-            glm::vec3(-3.76336f, 0.125f, -6.6219f),  //¹é»çÀ§
+            glm::vec3(-3.76336f, 0.125f, -6.6219f),  //ë°±ì‚¬ìœ„
             glm::vec3(-0.518212f, 0.125f, -6.9495f),
             glm::vec3(-1.4714f, 0.125f, -9.09569), //ct
-            glm::vec3(-4.81171f, -0.1f, -8.39536f),  //¹é»ç¿À¸¥
+            glm::vec3(-4.81171f, -0.1f, -8.39536f),  //ë°±ì‚¬ì˜¤ë¥¸
         };
 
-        std::vector<CObject*> enemies; // Àû °´Ã¼¸¦ °ü¸®ÇÏ´Â ÄÁÅ×ÀÌ³Ê
+        std::vector<CObject*> enemies; // ì  ê°ì²´ë¥¼ ê´€ë¦¬í•˜ëŠ” ì»¨í…Œì´ë„ˆ
 
         for (const auto& position : enemyPositions) {
             Enemy* enemy = new Enemy();
@@ -53,7 +53,7 @@ void Stage_1_Scene::Enter() {
             addObject(enemy, GROUP_TYPE::ENEMY);
         }
 
-        // --- 4. ¾À¿¡ °´Ã¼ Ãß°¡ ---
+        // --- 4. ì”¬ì— ê°ì²´ ì¶”ê°€ ---
         addObject(map_floor, GROUP_TYPE::DEFAULT);
         addObject(player, GROUP_TYPE::PLAYER);
         loaded = true;
@@ -74,32 +74,32 @@ void Stage_1_Scene::Update() {
         //ApplySnapshot
         if (g_pNetwork)
         {
-            // ÃÖ½Å ½º³À¼¦
+            // ìµœì‹  ìŠ¤ëƒ…ìƒ·
             const std::vector<PlayerSnapshot>& snapshots = g_pNetwork->GetLastSnapshots();
 
             for (const auto& snap : snapshots)
             {
-                // ³» Ä³¸¯ÅÍ´Â ½º³À¼¦ Àû¿ë Á¦¿Ü
+                // ë‚´ ìºë¦­í„°ëŠ” ìŠ¤ëƒ…ìƒ· ì ìš© ì œì™¸
                 if (snap.id == 0) continue;
 
-                // 3. ÇØ´ç IDÀÇ ÇÃ·¹ÀÌ¾î°¡ ÀÌ¹Ì ¾À¿¡ ÀÖ´ÂÁö È®ÀÎ
+                // 3. í•´ë‹¹ IDì˜ í”Œë ˆì´ì–´ê°€ ì´ë¯¸ ì”¬ì— ìˆëŠ”ì§€ í™•ì¸
                 auto it = m_remotePlayers.find(snap.id);
 
                 if (it != m_remotePlayers.end())
                 {
-                    // À§Ä¡ È¸Àü µ¿±âÈ­
+                    // ìœ„ì¹˜ íšŒì „ ë™ê¸°í™”
                     CObject* pRemoteObj = it->second;
                     pRemoteObj->setPosition(glm::vec3(snap.position.x, snap.position.y, snap.position.z));
                     pRemoteObj->setRotation(glm::vec3(snap.rotation.x, snap.rotation.y, snap.rotation.z));
                 }
                 else
                 {
-                    // [¾øÀ½] »õ·Î¿î ÇÃ·¹ÀÌ¾î °´Ã¼ »ı¼º (Enemy Å¬·¡½º ÀçÈ°¿ë)
+                    // [ì—†ìŒ] ìƒˆë¡œìš´ í”Œë ˆì´ì–´ ê°ì²´ ìƒì„± (Enemy í´ë˜ìŠ¤ ì¬í™œìš©)
                    Enemy* newRemotePlayer = new Enemy();
                     newRemotePlayer->setPosition(glm::vec3(snap.position.x, snap.position.y, snap.position.z));
-                    newRemotePlayer->setScale(glm::vec3(0.1f)); // Å©±â ¼³Á¤
+                    newRemotePlayer->setScale(glm::vec3(0.1f)); // í¬ê¸° ì„¤ì •
 
-                    // ¾À°ú °ü¸® ¸Ê¿¡ Ãß°¡
+                    // ì”¬ê³¼ ê´€ë¦¬ ë§µì— ì¶”ê°€
                     addObject(newRemotePlayer, GROUP_TYPE::ENEMY);
                     m_remotePlayers[snap.id] = newRemotePlayer;
 

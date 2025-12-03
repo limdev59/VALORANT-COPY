@@ -36,6 +36,24 @@ static GLvoid Update() {
 std::unordered_map<MODEL_TYPE, const std::pair<vector<Material>, vector<Group>>> modelPairs;
 std::unordered_map<MODEL_TYPE, const std::pair<vector<Material>, vector<Group>>>&  Model::modelPairArr = modelPairs;
 
+vector<vec3> Model::GetVerticesWorld() {
+    vector<vec3> worldVertices;
+    for (const auto& group : groups) {
+        for (const auto& subMesh : group.subMeshes) {
+            // ì¸ë±ìŠ¤ë¥¼ ì‚¬ìš©í•˜ì—¬ ì‚¼ê°í˜• êµ¬ì„±
+            for (size_t i = 0; i < subMesh.indices.size(); ++i) {
+                GLuint index = subMesh.indices[i];
+                if (index < subMesh.vertices.size()) {
+                    // ë¡œì»¬ ì¢Œí‘œë¥¼ ì›”ë“œ ì¢Œí‘œë¡œ ë³€í™˜
+                    glm::vec4 worldPos = transform * glm::vec4(subMesh.vertices[index].position, 1.0f);
+                    worldVertices.push_back(glm::vec3(worldPos));
+                }
+            }
+        }
+    }
+    return worldVertices;
+}
+
 int main(int argc, char** argv) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
@@ -46,7 +64,7 @@ int main(int argc, char** argv) {
     glewInit();
 
     g_pNetwork = new ClientNetwork();
-	// IP´Â ·çÇÁ¹é ÀÓ½Ã, Æ÷Æ®´Â ÀÓÀÇ ÁöÁ¤
+	// IPï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ó½ï¿½, ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     if (!g_pNetwork->ConnectToServer("127.0.0.1", 7777, 9001)) {
         std::cout << "[Main] Failed to connect to server." << std::endl;
     }
