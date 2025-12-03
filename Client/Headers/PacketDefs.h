@@ -1,8 +1,9 @@
 #pragma once
 
 #include <cstdint>
-#include <string>
-#include <vector>
+
+constexpr int MAX_NAME_LEN = 32; 
+constexpr int MAX_PLAYER_COUNT = 16; 
 
 using PlayerID = uint16_t;
 
@@ -39,7 +40,7 @@ struct MsgHeader {
 struct C2S_LoginRequest {
 	MsgType type = MsgType::C2S_LOGIN_REQUEST;
 
-	std::string playerName;
+	char playerName[MAX_NAME_LEN];
 	uint16_t    clientUdpPort{ 0 };
 };
 
@@ -75,5 +76,5 @@ struct C2S_FireAction {
 struct S2C_SnapshotState {
 	MsgType		type = MsgType::S2C_SNAPSHOT_STATE;
 
-	std::vector<PlayerSnapshot>	snapshots;
+	PlayerSnapshot snapshots[MAX_PLAYER_COUNT];
 };

@@ -49,18 +49,31 @@ void WorldState::Tick(float nowSec)
 
     // 스냅샷 생성
     S2C_SnapshotState snapshotPkt;
-    BuildSnapshotAll(nowSec, snapshotPkt);
+
+    int playerCount = BuildSnapshotAll(nowSec, snapshotPkt);
 
     // 스냅샷 출력 큐에 삽입
-    // TODO: snapshotPkt를 std::vector<uint8_t>로 직렬화(Serialize)해야함
-    if (!snapshotPkt.snapshots.empty())
+    if (playerCount > 0)
     {
-        m_SnapshotHistory.push_back(snapshotPkt);
+        // 1. 실제 데이터 크기 계산
+        int headerSize = sizeof(MsgType) + sizeof(uint16_t);
+        int dataSize = playerCount * sizeof(PlayerSnapshot);
+        int sendSize = headerSize + dataSize;
 
-        // 버퍼 크기 관리 (오래된 데이터 삭제)
-        while (m_SnapshotHistory.size() > MAX_SNAPSHOT_HISTORY_SIZE)
+        RawPacketBuffer buffer;
+        buffer.length = sendSize;
+
+        // 2. 메모리 복사 (구조체 -> 버퍼)
+        if (sendSize <= MAX_PACKET_SIZE)
         {
-            m_SnapshotHistory.pop_front();
+            std::memcpy(buffer.data, &snapshotPkt, sendSize);
+
+            // 3. 큐에 넣기
+            m_pOutputQueue->Push(buffer);
+        }
+        else
+        {
+            printf("[Error] Packet too big!\n");
         }
     }
 }
@@ -121,9 +134,11 @@ void WorldState::OnFire(PlayerID pid, const C2S_FireAction& pkt)
 }
 
 // 김도윤
-void WorldState::BuildSnapshotAll(float nowSec, S2C_SnapshotState& outPkt)
+int WorldState::BuildSnapshotAll(float nowSec, S2C_SnapshotState& outPkt)
 {
     outPkt.type = MsgType::S2C_SNAPSHOT_STATE;
+
+	int count = 0;
 
     for (auto& pair : m_PlayerStates)
     {
@@ -138,7 +153,11 @@ void WorldState::BuildSnapshotAll(float nowSec, S2C_SnapshotState& outPkt)
             snapshot.serverTime = nowSec;
 
             // 3. 패킷 벡터에 추가
-            outPkt.snapshots.push_back(snapshot);
+            outPkt.snapshots[count] = snapshot;
+
+            count++;
         }
     }
+
+	return count;
 }

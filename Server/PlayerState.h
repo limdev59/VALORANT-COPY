@@ -2,6 +2,8 @@
 
 #include "PacketDefs.h"
 
+#include <cstdio>
+
 /**
  * @class PlayerState
  * @brief 개별 플레이어의 상태 데이터.

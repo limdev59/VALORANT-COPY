@@ -119,7 +119,8 @@ bool ClientNetwork::ConnectToServer(const std::string& ip, uint16_t tcpPort, uin
 	// 2025.12.01 도윤 - 패킷 형태에 맞게 수정
     C2S_LoginRequest loginPkt;
     loginPkt.type = MsgType::C2S_LOGIN_REQUEST;
-	loginPkt.playerName = "Player1"; 
+	const char* name = "Player1";
+	strcpy_s(loginPkt.playerName, MAX_NAME_LEN, name);
 	loginPkt.clientUdpPort = udpPort;
 
     if (send(m_tcpSocket, (char*)&loginPkt, sizeof(loginPkt), 0) == SOCKET_ERROR) {

@@ -29,7 +29,7 @@ public:
     /**
      * @brief 과거 스냅샷 버퍼를 반환하는 함수 - 슝민
      */
-    const std::deque<S2C_SnapshotState>& GetLastSnapshots() const { return m_SnapshotHistory; }
+    // const std::deque<S2C_SnapshotState>& GetLastSnapshots() const { return m_SnapshotHistory; }
 
 private:
     // --- 이벤트 처리 함수 ---
@@ -41,7 +41,7 @@ private:
     /**
      * @brief 모든 PlayerState의 스냅샷 생성
      */
-    void BuildSnapshotAll(float nowSec, S2C_SnapshotState& outPkt);
+    int BuildSnapshotAll(float nowSec, S2C_SnapshotState& outPkt);
 
 private:
     PacketQueue* m_pInputQueue;  // NetworkIO -> WorldState
@@ -50,8 +50,8 @@ private:
     // 게임에 존재하는 모든 플레이어의 상태
     std::map<PlayerID, PlayerState*> m_PlayerStates;
 
-    // 스냅샷 히스토리 버퍼 (최근 N개의 스냅샷 저장)
-    std::deque<S2C_SnapshotState> m_SnapshotHistory;
+    //// 스냅샷 히스토리 버퍼 (최근 N개의 스냅샷 저장)
+    //std::deque<S2C_SnapshotState> m_SnapshotHistory;
 
-    const size_t MAX_SNAPSHOT_HISTORY_SIZE = 60;
+    //const size_t MAX_SNAPSHOT_HISTORY_SIZE = 60;
 };

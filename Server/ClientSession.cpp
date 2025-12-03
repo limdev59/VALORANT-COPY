@@ -97,7 +97,7 @@ void ClientSession::ReceiveLoop()
 
 	// 로그인 패킷 확인
 	printf("[ClientSession] 로그인 요청 받음: playerName='%s', clientUdpPort=%d\n",
-		loginPkt.playerName.c_str(), loginPkt.clientUdpPort);
+		loginPkt.playerName, loginPkt.clientUdpPort);
 
 	// 로그인
 	HandleLogin(loginPkt);
