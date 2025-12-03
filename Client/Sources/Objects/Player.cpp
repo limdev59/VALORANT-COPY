@@ -97,6 +97,22 @@ void Player::Update()
         m_velocity.y = m_jumpVelocity;
     }
 
+    bool isFlying = true;
+    float flySpeed = 5.0f; // 상승/하강 속도
+
+    if (KeyMgr::Instance()->getKeyState(KEY::NUM_8) == KEY_TYPE::HOLD) {
+        isFlying = !isFlying;
+    }
+    
+    if (KeyMgr::Instance()->getKeyState(KEY::NUM_9) == KEY_TYPE::HOLD) {
+        m_velocity.y = flySpeed;
+        m_isOnGround = false;
+    }
+    else if (KeyMgr::Instance()->getKeyState(KEY::NUM_0) == KEY_TYPE::HOLD) {
+        m_velocity.y = -flySpeed;
+        m_isOnGround = false;
+    }
+    
     // 중력 적용
     ApplyGravity();
 
