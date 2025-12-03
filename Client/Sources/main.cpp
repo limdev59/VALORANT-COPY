@@ -30,6 +30,27 @@ static GLvoid Reshape(int w, int h) {
 static GLvoid Update() {
     if (g_pNetwork) {
         g_pNetwork->PollIncomingPackets();
+
+        // movement 패킷 보내기 테스트용
+        bool bMove = false;
+        float x = 0.0f, z = 0.0f;
+        if (KeyMgr::Instance()->getKeyState(KEY::W) == KEY_TYPE::HOLD) { z += 1.0f; bMove = true; }
+        if (KeyMgr::Instance()->getKeyState(KEY::S) == KEY_TYPE::HOLD) { z -= 1.0f; bMove = true; }
+        if (KeyMgr::Instance()->getKeyState(KEY::A) == KEY_TYPE::HOLD) { x -= 1.0f; bMove = true; }
+        if (KeyMgr::Instance()->getKeyState(KEY::D) == KEY_TYPE::HOLD) { x += 1.0f; bMove = true; }
+
+        if (bMove)
+        {
+            // 대각선 이동 시 속도 보정 (Normalize) 로직이 필요하다면 추가
+            // 여기서는 단순 전송
+            C2S_MovementUpdate pkt{};
+            pkt.type = MsgType::C2S_MOVEMENT_UPDATE;
+            pkt.position.x = x * 0.1f; // 속도 계수 적용 (예시)
+            pkt.position.z = z * 0.1f;
+            pkt.position.y = 0.0f;
+
+            g_pNetwork->SendMovement(pkt);
+        }
     }
     CCore::Instance()->Update();
 }

@@ -46,6 +46,13 @@ bool NetworkIO::Initialize(USHORT port, PacketQueue* worldln, ByteQueue* netOut,
 	m_TCPListenSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (m_TCPListenSocket == INVALID_SOCKET) return false;
 
+	u_long mode = 1;
+	if (ioctlsocket(m_TCPListenSocket, FIONBIO, &mode) == SOCKET_ERROR)
+	{
+		printf("[NetworkIO] TCP ioctlsocket failed.\n");
+		return false;
+	}
+
 	sockaddr_in tcpAddr{};
 	tcpAddr.sin_family		= AF_INET;
 	tcpAddr.sin_port		= htons(port);
@@ -63,6 +70,15 @@ bool NetworkIO::Initialize(USHORT port, PacketQueue* worldln, ByteQueue* netOut,
 	// UDP socket
 	m_UDPGameSocket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 	if (m_UDPGameSocket == INVALID_SOCKET) return false;
+
+	// Non-Blocking 모드로 전환
+	mode = 1; // 1: Non-Blocking, 0: Blocking
+	if (ioctlsocket(m_UDPGameSocket, FIONBIO, &mode) == SOCKET_ERROR)
+	{
+		printf("[NetworkIO] UDP ioctlsocket failed.\n");
+		return false;
+	}
+
 	printf("[NetworkIO] UDP Socket created.\n");
 
 	sockaddr_in udpAddr{};
@@ -145,17 +161,6 @@ void NetworkIO::HandleTCPAccept()
 				break;
 			}
 
-			//// 논블로킹
-			//u_long mode = 1;
-			//ioctlsocket(clientSocket, FIONBIO, &mode);
-
-			//bool registered = false;
-			//if (m_pSessionManager)
-			//	// registered = m_pSessionManager->OnSessionLoggedIn(clientSocket, clientAddr);
-			//	// sessionManager-> OnSessionLoggedIn 구현 필요
-
-			//if (!registered)
-			//	closesocket(clientSocket);
 		}
 		// 2025.12.01 도윤 - 연결 성공 시 수행할 초기화 작업 추가 필요
 		else {
@@ -163,6 +168,14 @@ void NetworkIO::HandleTCPAccept()
 			inet_ntop(AF_INET, &clientAddr.sin_addr, clientIP, INET_ADDRSTRLEN);
 
 			printf("[NetworkIO] New TCP Connection from %s\n", clientIP);
+
+			u_long blockMode = 0; // 0 = Blocking
+			if (ioctlsocket(clientSocket, FIONBIO, &blockMode) == SOCKET_ERROR)
+			{
+				printf("ioctlsocket failed to set blocking mode\n");
+				closesocket(clientSocket);
+				continue;
+			}
 
 			// 새로운 ClientSession 생성 및 스레드 시작
 			ClientSession* newSession = new ClientSession(clientSocket, m_pSessionManager, m_pWorldInputQueue);
@@ -179,7 +192,6 @@ void NetworkIO::HandleUDPRead()
 
 	for (;;)
 	{
-		// 5번째 인자에 &senderAddr 넣어야함
 		int n = recvfrom(m_UDPGameSocket, buffer, sizeof(buffer), 0,
 			reinterpret_cast<sockaddr*>(&senderAddr), &fromLen);
 
@@ -190,7 +202,6 @@ void NetworkIO::HandleUDPRead()
 			if (e == WSAEWOULDBLOCK || e == WSAEINTR)
 			{
 				// 더 이상 읽을 데이터 없음
-				printf("[NetworkIO] No more UDP data to read.\n");
 				break;
 			}
 
@@ -201,7 +212,6 @@ void NetworkIO::HandleUDPRead()
 		if (n <= 0) break;
 
 		// 성공 로직
-
 		// 송신자 주소로부터 PlayerID 찾기
 		PlayerID pid = static_cast<PlayerID>(-1);
 		if (m_pSessionManager)
@@ -243,6 +253,12 @@ void NetworkIO::HandleUDPRead()
 			event.type = WorldEventType::E_Packet_Movement;
 			std::memcpy(&event.movement, buffer, sizeof(C2S_MovementUpdate));
 			bValidPacket = true;
+			printf("[Server] Move Recv - PID:%d | Pos(%.2f, %.2f, %.2f)\n",
+				pid,
+				event.movement.position.x,
+				event.movement.position.y,
+				event.movement.position.z
+			);
 		}
 		break;
 
@@ -254,9 +270,8 @@ void NetworkIO::HandleUDPRead()
 				break;
 			}
 
-			const C2S_FireAction* fa = reinterpret_cast<const C2S_FireAction*>(buffer);
-			event.type = E_Packet_Fire;
-			event.fire = *fa;
+			event.type = WorldEventType::E_Packet_Fire;
+			std::memcpy(&event.fire, buffer, sizeof(C2S_FireAction));
 			bValidPacket = true;
 		}
 		break;

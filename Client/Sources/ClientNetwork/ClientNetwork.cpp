@@ -13,7 +13,7 @@ ClientNetwork::ClientNetwork() // 슝민
     WSADATA wsaData;
     int result = WSAStartup(MAKEWORD(2, 2), &wsaData);
     if (result != 0) {
-        std::cerr << "WSAStartup failed: " << result << std::endl;
+        std::cerr << "[ClientNetwork] WSAStartup failed: " << result << std::endl;
     }
 }
 
@@ -36,7 +36,7 @@ bool ClientNetwork::ConnectToServer(const std::string& ip, uint16_t tcpPort, uin
     // 2. TCP 소켓 생성
     m_tcpSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (m_tcpSocket == INVALID_SOCKET) {
-        std::cerr << "TCP socket creation failed: " << WSAGetLastError() << std::endl;
+        std::cerr << "[ClientNetwork] TCP socket creation failed: " << WSAGetLastError() << std::endl;
         return false;
     }
 
@@ -45,7 +45,7 @@ bool ClientNetwork::ConnectToServer(const std::string& ip, uint16_t tcpPort, uin
     serverTcpAddr.sin_family = AF_INET;
     serverTcpAddr.sin_port = htons(tcpPort);
     if (inet_pton(AF_INET, ip.c_str(), &serverTcpAddr.sin_addr) <= 0) {
-        std::cerr << "Invalid server IP address: " << ip << std::endl;
+        std::cerr << "[ClientNetwork] Invalid server IP address: " << ip << std::endl;
         closesocket(m_tcpSocket);
         m_tcpSocket = INVALID_SOCKET;
         return false;
@@ -55,20 +55,27 @@ bool ClientNetwork::ConnectToServer(const std::string& ip, uint16_t tcpPort, uin
     // Server.cpp가 listen/accept를 구현하지 않았으므로,
     // 실제 실행 시 여기서 100% 실패
     if (connect(m_tcpSocket, (SOCKADDR*)&serverTcpAddr, sizeof(serverTcpAddr)) == SOCKET_ERROR) {
-        std::cerr << "TCP connect failed (is server running and listening?): " << WSAGetLastError() << std::endl;
+        std::cerr << "[ClientNetwork] TCP connect failed (is server running and listening?): " << WSAGetLastError() << std::endl;
         closesocket(m_tcpSocket);
         m_tcpSocket = INVALID_SOCKET;
         return false;
     }
 
-    std::cout << "TCP connected to server " << ip << ":" << tcpPort << std::endl;
+    std::cout << "[ClientNetwork] TCP connected to server " << ip << ":" << tcpPort << std::endl;
 
     // 5. UDP 소켓 생성
     m_udpSocket = socket(AF_INET, SOCK_DGRAM, 0);
     if (m_udpSocket == INVALID_SOCKET) {
-        std::cerr << "UDP socket creation failed: " << WSAGetLastError() << std::endl;
+        std::cerr << "[ClientNetwork] UDP socket creation failed: " << WSAGetLastError() << std::endl;
         closesocket(m_tcpSocket); 
         m_tcpSocket = INVALID_SOCKET;
+        return false;
+    }
+
+    // udp 소켓 논블로킹 설정
+	u_long nonBlockingMode = 1;
+    if (ioctlsocket(m_udpSocket, FIONBIO, &nonBlockingMode) == SOCKET_ERROR) {
+        std::cerr << "UDP ioctlsocket failed.\n";
         return false;
     }
 
@@ -78,7 +85,7 @@ bool ClientNetwork::ConnectToServer(const std::string& ip, uint16_t tcpPort, uin
     localUdpAddr.sin_port = htons(udpPort);
     localUdpAddr.sin_addr.s_addr = htonl(INADDR_ANY);
     if (bind(m_udpSocket, (SOCKADDR*)&localUdpAddr, sizeof(localUdpAddr)) == SOCKET_ERROR) {
-        std::cerr << "UDP bind failed: " << WSAGetLastError() << std::endl;
+        std::cerr << "[ClientNetwork] UDP bind failed: " << WSAGetLastError() << std::endl;
         closesocket(m_tcpSocket);
         closesocket(m_udpSocket);
         m_tcpSocket = INVALID_SOCKET;
@@ -86,7 +93,7 @@ bool ClientNetwork::ConnectToServer(const std::string& ip, uint16_t tcpPort, uin
         return false;
     }
 
-    std::cout << "UDP socket bound to local port " << udpPort << std::endl;
+    std::cout << "[ClientNetwork] UDP socket bound to local port " << udpPort << std::endl;
 
     // 7. 서버 UDP 주소 저장 (클라이언트가 패킷을 *송신*할 목적지 주소)
     //    서버의 UDP 수신 포트가 TCP 포트와 동일하다고 가정합니다
@@ -98,7 +105,7 @@ bool ClientNetwork::ConnectToServer(const std::string& ip, uint16_t tcpPort, uin
     m_serverUdpAddr.sin_family = AF_INET;
     m_serverUdpAddr.sin_port = htons(tcpPort);
     if (inet_pton(AF_INET, ip.c_str(), &m_serverUdpAddr.sin_addr) <= 0) {
-        std::cerr << "Invalid server IP address for UDP: " << ip << std::endl;
+        std::cerr << "[ClientNetwork] Invalid server IP address for UDP: " << ip << std::endl;
         closesocket(m_tcpSocket);
         closesocket(m_udpSocket);
         m_tcpSocket = INVALID_SOCKET;
@@ -124,34 +131,21 @@ bool ClientNetwork::ConnectToServer(const std::string& ip, uint16_t tcpPort, uin
 	loginPkt.clientUdpPort = udpPort;
 
     if (send(m_tcpSocket, (char*)&loginPkt, sizeof(loginPkt), 0) == SOCKET_ERROR) {
-        std::cerr << "send C2S_LOGIN_REQUEST failed: " << WSAGetLastError() << std::endl;
+        std::cerr << "[ClientNetwork] send C2S_LOGIN_REQUEST failed: " << WSAGetLastError() << std::endl;
         // 소켓 정리 및 false 반환
         return false;
     }
-    std::cout << "Sent Login Request. My UDP Port: " << udpPort << std::endl;
+    std::cout << "[ClientNetwork] Sent Login Request. My UDP Port: " << udpPort << std::endl;
 
     // 9. S2C_LOGIN_RESPONSE 패킷 수신 (TCP) 및 m_myPlayerId 설정
-    //    (PacketDefs.h에 S2C_LOGIN_RESPONSE 구조체가 정의되어 있어야 함)
-    // std::cout << "TODO: Receive S2C_LOGIN_RESPONSE (TCP) and set m_myPlayerId" << std::endl;
-    /*
-    S2C_LOGIN_RESPONSE loginResp;
-    int bytesRecv = recv(m_tcpSocket, (char*)&loginResp, sizeof(loginResp), 0);
-    
-    if (bytesRecv <= 0 || loginResp.header.packetType != PacketType::S2C_LOGIN_RESPONSE) {
-        std::cerr << "Failed to receive valid S2C_LOGIN_RESPONSE: " << WSAGetLastError() << std::endl;
-        // 소켓 정리 및 false 반환
-        return false;
-    }
-    m_myPlayerId = loginResp.playerId;
-    std::cout << "Login successful. Player ID: " << m_myPlayerId << std::endl;
-    */
-
     // 2025.12.01 도윤 - 패킷 형태에 맞게 수정
 	S2C_LoginAccept loginResp;
-	int bytesRecv = recv(m_tcpSocket, (char*)&loginResp, sizeof(loginResp), 0);
+
+	// MSG_WAITALL 플래그를 사용하여 전체 패킷을 받을 때까지 대기
+    int bytesRecv = recv(m_tcpSocket, (char*)&loginResp, sizeof(loginResp), MSG_WAITALL);
 
     if (bytesRecv <= 0) {
-        std::cerr << "Failed to receive Login Response or Server disconnected." << std::endl;
+        std::cerr << "[ClientNetwork] Failed to receive Login Response or Server disconnected." << std::endl;
         closesocket(m_tcpSocket);
         closesocket(m_udpSocket);
         return false;
@@ -159,7 +153,7 @@ bool ClientNetwork::ConnectToServer(const std::string& ip, uint16_t tcpPort, uin
 
     // 패킷 타입 검증
     if (loginResp.type != MsgType::S2C_LOGIN_ACCEPT) {
-        std::cerr << "Invalid Packet Received during login: " << (int)loginResp.type << std::endl;
+        std::cerr << "[ClientNetwork] Invalid Packet Received during login: " << (int)loginResp.type << std::endl;
         closesocket(m_tcpSocket);
         closesocket(m_udpSocket);
         return false;
@@ -167,27 +161,26 @@ bool ClientNetwork::ConnectToServer(const std::string& ip, uint16_t tcpPort, uin
 
     // 로그인 성공 ID 저장
     m_myPlayerId = loginResp.playerId;
-    std::cout << "Login Successful! Assigned PlayerID: " << m_myPlayerId << std::endl;
+    std::cout << "[ClientNetwork] Login Successful! Assigned PlayerID: " << m_myPlayerId << std::endl;
     
 
     // TCP 소켓 논블로킹 전환 (PollIncomingPackets 위함)
-    u_long nonBlockingMode = 1;
+    nonBlockingMode = 1;
     if (ioctlsocket(m_tcpSocket, FIONBIO, &nonBlockingMode) == SOCKET_ERROR) {
-       std::cerr << "ioctlsocket (non-blocking) failed: " << WSAGetLastError() << std::endl;
-       // 오류 처리
+       std::cerr << "[ClientNetwork] ioctlsocket (non-blocking) failed: " << WSAGetLastError() << std::endl;
        return false;
     }
 
     // 로그인 로직이 구현되지 않았지만,
     // TCP 연결 및 UDP 바인딩까지 성공했다면 true 반환
-    std::cout << "ConnectToServer finished (TODO: Login logic)." << std::endl;
+    std::cout << "[ClientNetwork] ConnectToServer finished (TODO: Login logic)." << std::endl;
     return true; 
 } // 슝민
 
 void ClientNetwork::SendMovement(const C2S_MovementUpdate& pkt) 
 {
     if (m_udpSocket == INVALID_SOCKET) {
-        std::cerr << "[이동] UDP 소켓이 유효하지 않습니다.\n";
+        std::cerr << "[ClientNetwork] 이동 UDP 소켓이 유효하지 않습니다.\n";
         return;
     }
 
@@ -204,8 +197,10 @@ void ClientNetwork::SendMovement(const C2S_MovementUpdate& pkt)
         sizeof(m_serverUdpAddr)
     );
 
+    std::cerr << "[ClientNetwork] 이동" << "(" << pkt.position.x << "," << pkt.position.y << "," << pkt.position.z << ")" << "\n";
+
     if (sent == SOCKET_ERROR) {
-        std::cerr << "[이동] sendto 실패, WSA=" << WSAGetLastError() << "\n";
+        std::cerr << "[ClientNetwork] 이동 sendto 실패, WSA=" << WSAGetLastError() << "\n";
         return;
     }
 }   // 2025.11.12 지훈 -> SendMovement 수정
@@ -213,7 +208,7 @@ void ClientNetwork::SendMovement(const C2S_MovementUpdate& pkt)
 void ClientNetwork::SendFire(const C2S_FireAction& pkt) 
 {
     if (m_udpSocket == INVALID_SOCKET) {
-        std::cerr << "[사격] UDP 소켓이 유효하지 않습니다.\n";
+        std::cerr << "[ClientNetwork] 사격 UDP 소켓이 유효하지 않습니다.\n";
         return;
     }
 
@@ -230,7 +225,7 @@ void ClientNetwork::SendFire(const C2S_FireAction& pkt)
     );
 
     if (sent == SOCKET_ERROR) {
-        std::cerr << "[사격] sendto 실패, WSA=" << WSAGetLastError() << "\n";
+        std::cerr << "[ClientNetwork] 사격 sendto 실패, WSA=" << WSAGetLastError() << "\n";
         return;
     }
 }   // 2025.11.12 지훈 -> SendFire 구현
@@ -273,7 +268,7 @@ void ClientNetwork::PollIncomingPackets() // 슝민
     if (bytesRecv == SOCKET_ERROR) {
         int err = WSAGetLastError();
         if (err != WSAEWOULDBLOCK) {
-            std::cerr << "[Poll] recvfrom error: " << err << std::endl;
+            std::cerr << "[ClientNetwork] [Poll] recvfrom error: " << err << std::endl;
         }
         return;
     }
@@ -305,6 +300,7 @@ void ClientNetwork::PollIncomingPackets() // 슝민
         }
     }
 }
+
 const std::vector<PlayerSnapshot>& ClientNetwork::GetLastSnapshots() const // 슝민
 {
     return m_lastSnapshots;
