@@ -298,8 +298,8 @@ void Player::Update()
         }
     }
 
-    // 이동 패킷 생성 (필요 시 전송 로직 추가)
-    C2S_MovementUpdate movementPkt = BuildMovementPacket();
+    //// 이동 패킷 생성 (필요 시 전송 로직 추가)
+    //C2S_MovementUpdate movementPkt = BuildMovementPacket();
 
     // 애니메이션 상태 업데이트
     if (isMoving && m_isOnGround) {

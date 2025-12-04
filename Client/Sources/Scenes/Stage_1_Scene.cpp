@@ -77,6 +77,7 @@ void Stage_1_Scene::Update() {
             // 최신 스냅샷
             const std::vector<PlayerSnapshot>& snapshots = g_pNetwork->GetLastSnapshots();
 
+            glm::vec3 markerOffset(0.0f, 0.2f, 0.0f);
             for (const auto& snap : snapshots)
             {
                 // 내 캐릭터는 스냅샷 적용 제외
@@ -91,6 +92,12 @@ void Stage_1_Scene::Update() {
                     CObject* pRemoteObj = it->second;
                     pRemoteObj->setPosition(glm::vec3(snap.position.x, snap.position.y, snap.position.z));
                     pRemoteObj->setRotation(glm::vec3(snap.rotation.x, snap.rotation.y, snap.rotation.z));
+
+                    auto markerIt = m_remotePlayerMarkers.find(snap.id);
+                    if (markerIt != m_remotePlayerMarkers.end())
+                    {
+                        markerIt->second->setPosition(glm::vec3(snap.position.x, snap.position.y, snap.position.z) + markerOffset);
+                    }
                 }
                 else
                 {
@@ -102,6 +109,13 @@ void Stage_1_Scene::Update() {
                     // 씬과 관리 맵에 추가
                     addObject(newRemotePlayer, GROUP_TYPE::ENEMY);
                     m_remotePlayers[snap.id] = newRemotePlayer;
+
+                    Enemy* playerMarker = new Enemy();
+                    playerMarker->setPosition(glm::vec3(snap.position.x, snap.position.y, snap.position.z) + markerOffset);
+                    playerMarker->setScale(glm::vec3(0.05f));
+
+                    addObject(playerMarker, GROUP_TYPE::DEFAULT);
+                    m_remotePlayerMarkers[snap.id] = playerMarker;
 
                     std::cout << "[ApplySnapshot] New Player Joined: ID " << snap.id << std::endl;
                 }

@@ -56,5 +56,6 @@ public:
 
     int GetHealth() const { return m_health; }
     void SetHealth(int health) { m_health = health; }
-
+    glm::vec3 GetVelocity() const { return m_velocity; }
+    bool IsOnGround() const { return m_isOnGround; }
 };

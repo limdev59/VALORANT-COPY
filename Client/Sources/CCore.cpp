@@ -3,17 +3,37 @@
 
 #include "TimeMgr.h"
 #include "KeyMgr.h"
-#include "SceneMgr.h"
+#include "SceneMgr.h"   
 #include "MouseMgr.h"
 #include "CameraMgr.h"
+#include "ClientNetwork.h"
+#include "Player.h"
 
 #include "CObject.h"
 #include "CCamera.h"
 #include "AnimModel.h"
 
-CCore::CCore() {}
+ClientNetwork* g_pNetwork = nullptr;
 
-CCore::~CCore() {}
+CCore::CCore() 
+{
+    if (m_network)
+    {
+        delete m_network;
+        m_network = nullptr;
+        g_pNetwork = nullptr;
+    }
+}
+
+CCore::~CCore() 
+{
+    if (m_network)
+    {
+        delete m_network;
+        m_network = nullptr;
+        g_pNetwork = nullptr;
+    }
+}
 
 GLvoid CCore::Reshape(int w, int h) {
     MouseMgr::Instance()->setWindowSize(w, h);
@@ -30,10 +50,12 @@ GLvoid CCore::Init() {
     KeyMgr::Instance()->Init();
     SceneMgr::Instance()->Init();
     MouseMgr::Instance()->Init(WINDOW_WIDTH, WINDOW_HEIGHT);
+
+    InitNetwork();
 }
 
 GLvoid CCore::Update() {
-    
+    UpdateNetwork();
     CameraMgr::Instance()->Update();
     KeyMgr::Instance()->Update();
     SceneMgr::Instance()->Update();
@@ -72,4 +94,56 @@ void CCore::Render() {
     TimeMgr::Instance()->Render();
     SceneMgr::Instance()->Render();
 }
+
+void CCore::InitNetwork()
+{
+    if (m_network)
+        return;
+
+    m_network = new ClientNetwork();
+    g_pNetwork = m_network;
+
+    if (!m_network->ConnectToServer("127.0.0.1", 7777, 9001))
+    {
+        std::cout << "[CCore] Failed to connect to server." << std::endl;
+    }
+}
+
+void CCore::UpdateNetwork()
+{
+    if (!m_network)
+        return;
+
+    m_network->PollIncomingPackets();
+
+    CScene* scene = SceneMgr::Instance()->getScene();
+    if (!scene)
+        return;
+
+    const auto& players = scene->GetObjects(GROUP_TYPE::PLAYER);
+    if (players.empty())
+        return;
+
+    Player* player = dynamic_cast<Player*>(players[0]);
+    if (player)
+    {
+        SendPlayerMovement(player);
+    }
+}
+
+void CCore::SendPlayerMovement(Player* player)
+{
+    if (!g_pNetwork)
+        return;
+
+    glm::vec3 velocity = player->GetVelocity();
+    bool isMoving = glm::length(glm::vec2(velocity.x, velocity.z)) > 0.0001f || std::abs(velocity.y) > 0.0001f;
+
+    if (!isMoving)
+        return;
+
+    C2S_MovementUpdate pkt = player->BuildMovementPacket();
+    g_pNetwork->SendMovement(pkt);
+}
+
 
