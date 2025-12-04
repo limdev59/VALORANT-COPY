@@ -290,33 +290,39 @@ void NetworkIO::HandleUDPRead()
 
 void NetworkIO::HandleBroadcasts()
 {
-	//if(!m_pNetworkOutputQueue || !m_pSessionManager|| m_UDPGameSocket == INVALID_SOCKET)
-	//	return;
+	if (!m_pNetworkOutputQueue || !m_pSessionManager || m_UDPGameSocket == INVALID_SOCKET)
+		return;
 
-	//std::vector<uint8_t> bytes;
+	RawPacketBuffer packet{};
 
-	//// 큐에 쌓인 데이터 모두 처리
-	//while (m_pNetworkOutputQueue->TryPop(bytes))
-	//{
-	//	// 모든 세션에 브로드캐스트
-	//	std::vector<sockaddr_in> clientAddrs = m_pSessionManager->GetAllClientUdpAddresses();
-	//	for (const auto& addr : clientAddrs)
-	//	{
-	//		int n = sendto(m_UDPGameSocket,
-	//			reinterpret_cast<const char*>(bytes.data()),
-	//			static_cast<int>(bytes.size()),
-	//			0,
-	//			reinterpret_cast<const sockaddr*>(&addr),
-	//			sizeof(addr));
-	//		if (n == SOCKET_ERROR)
-	//		{
-	//			int err = WSAGetLastError();
-	//			printf("sendto() failed with error: %d\n", err);
-	//		}
-	//	}
-	//}
+	// Process pending packets from the world thread
+	while (m_pNetworkOutputQueue->TryPop(packet))
+	{
+		if (packet.length <= 0)
+			continue;
 
-	
+		// Broadcast to every connected client's UDP endpoint
+		std::vector<ClientSession*> sessions = m_pSessionManager->GetAllSessions();
+		for (ClientSession* session : sessions)
+		{
+			if (!session)
+				continue;
+
+			sockaddr_in addr = session->GetUdpAddress();
+			int n = sendto(m_UDPGameSocket,
+				reinterpret_cast<const char*>(packet.data),
+				packet.length,
+				0,
+				reinterpret_cast<const sockaddr*>(&addr),
+				sizeof(addr));
+
+			if (n == SOCKET_ERROR)
+			{
+				int err = WSAGetLastError();
+				printf("sendto() failed with error: %d\n", err);
+			}
+		}
+	}
 }
 
-// 2025.11.12 지훈 -> NetworkIO.cpp 작성 완료, SessionManager와의 연동 필요
+// 2025.12.04 지훈 -> fix HandleBroadcast
