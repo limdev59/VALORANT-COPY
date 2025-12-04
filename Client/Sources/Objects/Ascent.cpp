@@ -59,45 +59,75 @@ void Ascent::Render() {
 }
 
 void Ascent::RenderHitbox() {
-    // 1. 셰이더 해제 (단색 라인 드로잉을 위해 고정 파이프라인 사용)
+    // 1. 셰이더 및 텍스처 해제
     glUseProgram(0);
     glDisable(GL_LIGHTING);
     glDisable(GL_TEXTURE_2D);
 
-    // 2. 파란색 선 설정
-    glLineWidth(2.0f); // 선을 좀 더 굵게
-    glColor3f(0.0f, 0.0f, 1.0f); // 파란색 (R, G, B)
+    // [수정됨] 은면 제거(Cull Face) 끄기
+    // 뒤집힌 면이나 트리거 박스 등도 모두 시각화하여 "투명 벽"의 정체를 확인합니다.
+    glDisable(GL_CULL_FACE);
+
+    // 2. 반투명 블렌딩 활성화
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // 3. 카메라 행렬 적용
-    // (Model::Render를 통하지 않으므로 직접 행렬을 로드해야 함)
     glMatrixMode(GL_PROJECTION);
     glLoadMatrixf(glm::value_ptr(CameraMgr::Instance()->getMainCamera()->getProjectionMatrix()));
-    
+
     glMatrixMode(GL_MODELVIEW);
     glLoadMatrixf(glm::value_ptr(CameraMgr::Instance()->getMainCamera()->getViewMatrix()));
 
-    // 4. 충돌체(Floor, Wall, Props)의 모든 삼각형 정점 가져오기
-    std::vector<glm::vec3> triangles = GetAllTriangles();
+    // 맵 데이터 가져오기
+    const std::vector<glm::vec3>& triangles = GetAllTriangles();
 
-    // 5. 와이어프레임 그리기 (GL_LINES)
+    // ---------------------------------------------------------
+    // [1] 면(Face) 그리기 - 반투명 파란색
+    // ---------------------------------------------------------
+    glDepthMask(GL_FALSE); // 투명 물체 깊이 기록 끄기
+
+    glColor4f(0.0f, 0.0f, 1.0f, 0.3f); // 파란색, 투명도 30%
+
+    glEnable(GL_POLYGON_OFFSET_FILL);
+    glPolygonOffset(-1.0f, -1.0f); // 면을 앞으로 당김
+
+    glBegin(GL_TRIANGLES);
+    for (size_t i = 0; i < triangles.size(); i += 3) {
+        if (i + 2 >= triangles.size()) break;
+        glVertex3fv(glm::value_ptr(triangles[i]));
+        glVertex3fv(glm::value_ptr(triangles[i + 1]));
+        glVertex3fv(glm::value_ptr(triangles[i + 2]));
+    }
+    glEnd();
+
+    glDisable(GL_POLYGON_OFFSET_FILL);
+    glDepthMask(GL_TRUE);
+
+    // ---------------------------------------------------------
+    // [2] 외곽선(Wireframe) 그리기 - 진한 파란색
+    // ---------------------------------------------------------
+    glLineWidth(1.5f);
+    glColor4f(0.0f, 0.0f, 0.8f, 1.0f);
+
     glBegin(GL_LINES);
     for (size_t i = 0; i < triangles.size(); i += 3) {
         if (i + 2 >= triangles.size()) break;
-
         glm::vec3 v0 = triangles[i];
         glm::vec3 v1 = triangles[i + 1];
         glm::vec3 v2 = triangles[i + 2];
 
-        // 삼각형의 세 변(Edge)을 그립니다.
         glVertex3fv(glm::value_ptr(v0)); glVertex3fv(glm::value_ptr(v1));
         glVertex3fv(glm::value_ptr(v1)); glVertex3fv(glm::value_ptr(v2));
         glVertex3fv(glm::value_ptr(v2)); glVertex3fv(glm::value_ptr(v0));
     }
     glEnd();
 
-    // 6. 상태 복구
-    glColor3f(1.0f, 1.0f, 1.0f);
+    // 4. 상태 복구
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glLineWidth(1.0f);
+    glDisable(GL_BLEND);
+    glEnable(GL_CULL_FACE); // [중요] 렌더링이 끝나면 다시 켜줍니다.
     glEnable(GL_LIGHTING);
     glEnable(GL_TEXTURE_2D);
 }

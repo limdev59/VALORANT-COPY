@@ -29,8 +29,8 @@ protected:
     float   m_jumpVelocity = 2.0f;
     int     m_health = 150;
     
-    float   m_radius = 0.02f; 
-    float   m_height = 0.06f;
+    float   m_radius = 0.03f; 
+    float   m_height = 0.27f;
     bool    m_bShowHitbox = false;
     
     bool    m_bThirdPerson = false;

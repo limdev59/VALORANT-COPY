@@ -323,7 +323,7 @@ void Player::Update()
         glm::vec3 camDir = glm::normalize(pCam->target - pCam->position);
         
         // 플레이어의 눈 위치 (캡슐 상단)
-        glm::vec3 eyePos = this->position + glm::vec3(0.0f, m_height+0.09 , 0.0f);
+        glm::vec3 eyePos = this->position + glm::vec3(0.0f, m_height-0.07 , 0.0f);
         
         // 최종 카메라 위치 계산
         glm::vec3 finalCamPos;
@@ -561,50 +561,82 @@ void Player::CheckFloorCollision(const std::vector<glm::vec3>& mapTriangles) {
 }
 
 void Player::ResolveWallCollision(const std::vector<glm::vec3>& mapTriangles, glm::vec3& nextPos) {
-    // 캡슐 정의: 
-    // Segment A (바닥 구 중심): nextPos + (0, radius, 0)
-    // Segment B (천장 구 중심): nextPos + (0, height - radius, 0)
-    
-    glm::vec3 segA = nextPos + glm::vec3(0.0f, m_radius, 0.0f);
-    glm::vec3 segB = nextPos + glm::vec3(0.0f, m_height - m_radius, 0.0f);
+    // 캡슐 정의
+    glm::vec3 segA = nextPos + glm::vec3(0.0f, m_radius, 0.0f);           // 하단 구 중심
+    glm::vec3 segB = nextPos + glm::vec3(0.0f, m_height - m_radius, 0.0f); // 상단 구 중심
+    glm::vec3 segDir = segB - segA;
+    float segLenSq = glm::dot(segDir, segDir); // 세그먼트 길이 제곱
 
     for (size_t i = 0; i < mapTriangles.size(); i += 3) {
-        glm::vec3 v0 = mapTriangles[i];
-        glm::vec3 v1 = mapTriangles[i + 1];
-        glm::vec3 v2 = mapTriangles[i + 2];
+        const glm::vec3& v0 = mapTriangles[i];
+        const glm::vec3& v1 = mapTriangles[i + 1];
+        const glm::vec3& v2 = mapTriangles[i + 2];
 
-        // 바닥 평면은 제외 (CheckFloorCollision이 처리)
         glm::vec3 normal = glm::normalize(glm::cross(v1 - v0, v2 - v0));
-        if (normal.y > 0.7f) continue; 
+        if (normal.y >= 0.5f) continue; // 바닥은 무시
 
-        // [간이 캡슐 충돌]
-        // 1. 삼각형의 높이(Y)를 캡슐 세그먼트 범위 내로 클램핑하여 "가장 가까울 법한 높이"를 찾음
-        glm::vec3 triCenter = (v0 + v1 + v2) / 3.0f;
-        float t = glm::clamp((triCenter.y - segA.y) / (segB.y - segA.y), 0.0f, 1.0f);
-        
-        // 2. 그 높이에서의 캡슐 축 상의 점 (Sphere Center 역할)
-        glm::vec3 sphereCenter = segA + t * (segB - segA);
+        // [이전 문제] 삼각형 중심(triCenter)을 쓰면 벽이 높을 때 t가 무조건 1.0(머리)이 됨
+        // glm::vec3 triCenter = (v0 + v1 + v2) / 3.0f; <-- 삭제
 
-        // 3. 해당 구와 삼각형 간의 최단 거리 검사
+        // [해결책] 캡슐의 현재 위치에서 "삼각형 상의 가장 가까운 점"을 먼저 찾습니다.
+        // 1. 캡슐의 대략적인 중심점
+        glm::vec3 capsuleCenter = (segA + segB) * 0.5f;
+
+        // 2. 캡슐 중심에서 삼각형까지의 최단점(Closest Point) 계산
+        glm::vec3 closestOnTri = ClosestPointOnTriangle(capsuleCenter, v0, v1, v2);
+
+        // 3. 그 점을 캡슐의 축(Axis)에 투영(Projection)하여 가장 가까운 높이(t)를 구함
+        //    이렇게 하면 발 밑에 장애물이 있으면 t가 0에 가까워지고, 머리 쪽이면 1에 가까워집니다.
+        float t = 0.5f;
+        if (segLenSq > 0.00001f) {
+            t = glm::dot(closestOnTri - segA, segDir) / segLenSq;
+            t = glm::clamp(t, 0.0f, 1.0f);
+        }
+
+        // 4. 계산된 높이(t)에 위치한 구(Sphere)를 기준으로 정밀 충돌 검사
+        glm::vec3 sphereCenter = segA + t * segDir;
         glm::vec3 closest = ClosestPointOnTriangle(sphereCenter, v0, v1, v2);
-        glm::vec3 diff = sphereCenter - closest;
-        
-        // 벽 밀어내기는 수평(XZ)으로만 제한 (계단 현상 방지)
-        diff.y = 0.0f; 
-        
-        float distSq = glm::dot(diff, diff);
+        glm::vec3 diff3D = sphereCenter - closest;
+        float distSq3D = glm::dot(diff3D, diff3D);
 
-        if (distSq > 0.0001f && distSq < m_radius * m_radius) {
-            float dist = sqrt(distSq);
-            glm::vec3 pushDir = diff / dist;
-            float pushDist = m_radius - dist;
-            
-            // 위치 보정
-            nextPos += pushDir * pushDist;
-            
-            // 캡슐 축도 같이 이동시켜서 다음 삼각형 검사에 반영
-            segA += pushDir * pushDist;
-            segB += pushDir * pushDist;
+        // Step Clearance: 발이 걸리는 낮은 턱이나 이미 올라탄 장애물은 벽 충돌 무시
+        if (this->position.y >= closest.y - 0.05f) {
+            continue;
+        }
+
+        // 실제 충돌 처리 (밀어내기)
+        if (distSq3D > 0.00001f && distSq3D < m_radius * m_radius) {
+            float dist3D = sqrt(distSq3D);
+
+            // 1. 천장 충돌 (아래로 튕김)
+            if (normal.y < -0.5f) {
+                if (m_velocity.y > 0.0f) m_velocity.y = 0.0f;
+
+                float pushDist = m_radius - dist3D;
+                glm::vec3 pushDir = glm::normalize(diff3D);
+
+                nextPos += pushDir * pushDist;
+
+                // 캡슐 축 업데이트 (연쇄 충돌 대비)
+                segA += pushDir * pushDist;
+                segB += pushDir * pushDist;
+            }
+            // 2. 벽 충돌 (수평 밀어내기)
+            else {
+                glm::vec3 diffHorizontal = diff3D;
+                diffHorizontal.y = 0.0f; // 수평 성분만 사용
+
+                if (glm::length(diffHorizontal) > 0.001f) {
+                    glm::vec3 pushDir = glm::normalize(diffHorizontal);
+                    float pushDist = m_radius - dist3D;
+                    if (pushDist < 0) pushDist = 0;
+
+                    nextPos += pushDir * pushDist;
+
+                    segA += pushDir * pushDist;
+                    segB += pushDir * pushDist;
+                }
+            }
         }
     }
 }
