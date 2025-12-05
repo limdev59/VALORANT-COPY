@@ -253,11 +253,11 @@ void NetworkIO::HandleUDPRead()
 			event.type = WorldEventType::E_Packet_Movement;
 			std::memcpy(&event.movement, buffer, sizeof(C2S_MovementUpdate));
 			bValidPacket = true;
-			printf("[Server] Move Recv - PID:%d | Pos(%.2f, %.2f, %.2f)\n",
+				printf("[Server] Move Recv - PID:%d | Pos(%.2f, %.2f, %.2f) | ViewS(%.2f, %.2f, %.2f) -> ViewE(%.2f, %.2f, %.2f)\n",
 				pid,
-				event.movement.position.x,
-				event.movement.position.y,
-				event.movement.position.z
+				event.movement.position.x, event.movement.position.y, event.movement.position.z,
+				event.movement.viewStart.x, event.movement.viewStart.y, event.movement.viewStart.z,
+				event.movement.viewEnd.x, event.movement.viewEnd.y, event.movement.viewEnd.z
 			);
 		}
 		break;

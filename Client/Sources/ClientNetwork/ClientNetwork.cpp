@@ -197,7 +197,10 @@ void ClientNetwork::SendMovement(const C2S_MovementUpdate& pkt)
         sizeof(m_serverUdpAddr)
     );
 
-    std::cerr << "[ClientNetwork] 이동" << "(" << pkt.position.x << "," << pkt.position.y << "," << pkt.position.z << ")" << "\n";
+    std::cerr << "[ClientNetwork] 이동" << "\n"
+    << "위치(" << pkt.position.x << "," << pkt.position.y << "," << pkt.position.z << ") |" 
+    << "시선b("<< pkt.viewStart.x<< "," << pkt.viewStart.y << "," << pkt.viewStart.z << ") |"
+    << "시선e("<< pkt.viewEnd.x<< "," << pkt.viewEnd.y << "," << pkt.viewEnd.z << ")"  << "\n";
 
     if (sent == SOCKET_ERROR) {
         std::cerr << "[ClientNetwork] 이동 sendto 실패, WSA=" << WSAGetLastError() << "\n";

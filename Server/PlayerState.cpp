@@ -4,7 +4,8 @@ PlayerState::PlayerState(PlayerID id)
 	: m_PlayerID(id)
 	, m_Health(100)
 	, m_Position(0.f, 0.f, 0.f)
-	, m_Rotation(0.f, 0.f, 0.f)
+	, ViewStart(0.f, 0.f, 0.f)
+	, ViewEnd(0.f, 0.f, 0.f)
 	, m_Velocity(0.f, 0.f, 0.f)
 {
 
@@ -12,10 +13,9 @@ PlayerState::PlayerState(PlayerID id)
 
 void PlayerState::ApplyMovementFromClient(const C2S_MovementUpdate& pkt, float serverNow)
 {
-	// ÆÐÅ¶¿¡¼­ ¹ÞÀº Á¤º¸¸¦ ±×´ë·Î ¹Ý¿µ
+	// ï¿½ï¿½Å¶ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×´ï¿½ï¿½ ï¿½Ý¿ï¿½
 	m_Position = pkt.position;
-	m_Rotation = pkt.rotation;
-	m_Velocity = pkt.velocity;
+	
 }
 
 void PlayerState::ApplyFireFromClient(const C2S_FireAction& pkt)
@@ -38,7 +38,7 @@ void PlayerState::ApplyDamage(int dmg)
 	{
 		printf("[PlayerState] Player %u DIED.\n", m_PlayerID);
 		
-		// Áï½Ã ¸®½ºÆù
+		// ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		// m_Health = 100;
 		// m_Position = { 0, 0, 0 }; 
 	}
@@ -50,7 +50,9 @@ PlayerSnapshot PlayerState::ToSnapshot() const
 
 	snap.id = m_PlayerID;
 	snap.position = m_Position;
-	snap.rotation = m_Rotation;
+	snap.viewStart = ViewStart;
+	snap.viewEnd = ViewEnd;
+	snap.position = m_Position;
 	snap.velocity = m_Velocity;
 	snap.health = m_Health;
 	snap.serverTime = 0.0f;

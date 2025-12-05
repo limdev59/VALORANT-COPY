@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-constexpr int MAX_NAME_LEN = 32; 
+constexpr int MAX_NAME_LEN = 32;     
 constexpr int MAX_PLAYER_COUNT = 16; 
 
 using PlayerID = uint16_t;
@@ -55,9 +55,11 @@ struct C2S_MovementUpdate {
 
 	uint32_t	msgSeq;
 	PlayerID	playerId;
-	Vec3		position;
-	Vec3		rotation;
-	Vec3		velocity;
+	
+	Vec3		position;   // 현재 플레이어 위치
+	Vec3		viewStart;  // 시야 시작점 (카메라 위치)
+	Vec3		viewEnd;    // 시야 끝점 (카메라 타겟) - 슝민
+	
 	float		clientTime{ 0.f };
 };
 

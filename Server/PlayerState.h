@@ -42,7 +42,8 @@ public:
 private:
     PlayerID	m_PlayerID;
     Vec3		m_Position;
-    Vec3		m_Rotation;
+    Vec3        ViewStart;
+    Vec3        ViewEnd;
     Vec3		m_Velocity;
     float		m_Health;
 

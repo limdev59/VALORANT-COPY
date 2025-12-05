@@ -299,7 +299,22 @@ void Player::Update()
     }
 
     // 이동 패킷 생성 (필요 시 전송 로직 추가)
-    C2S_MovementUpdate movementPkt = BuildMovementPacket();
+    C2S_MovementUpdate pkt = BuildMovementPacket();    
+    if (g_pNetwork) {
+        g_pNetwork->PollIncomingPackets();
+
+        if (KeyMgr::Instance()->getKeyState(KEY::W) == KEY_TYPE::HOLD) {m_isMoving = true; }
+        if (KeyMgr::Instance()->getKeyState(KEY::S) == KEY_TYPE::HOLD) {m_isMoving = true; }
+        if (KeyMgr::Instance()->getKeyState(KEY::A) == KEY_TYPE::HOLD) { m_isMoving = true; }
+        if (KeyMgr::Instance()->getKeyState(KEY::D) == KEY_TYPE::HOLD) { m_isMoving = true; }
+
+        if (m_isMoving&&!m_isOnGround)
+        {
+            g_pNetwork->SendMovement(pkt);
+            m_isMoving = false;
+        }
+    }
+    
 
     // 애니메이션 상태 업데이트
     if (isMoving && m_isOnGround) {
@@ -458,25 +473,36 @@ C2S_MovementUpdate Player::BuildMovementPacket()
     m_movementSeq++;
     pkt.msgSeq = m_movementSeq;
 
-    // PlayerID 임시로 0 처리
-    pkt.playerId = 0;
+    // PlayerID
+    pkt.playerId = 0; 
 
-    // 현재 위치, 회전, 속도 정보 패킷에 담기
+    // 1. 플레이어 위치 설정
     pkt.position.x = position.x;
     pkt.position.y = position.y;
     pkt.position.z = position.z;
 
-    pkt.rotation.x = rotation.x;
-    pkt.rotation.y = rotation.y;
-    pkt.rotation.z = rotation.z;
+    // 2. 카메라 정보 가져오기 (시야 시작점/끝점)
+    CCamera* pCam = CameraMgr::Instance()->getMainCamera();
+    if (pCam) {
+        // 시야 시작점 (Camera Position)
+        pkt.viewStart.x = pCam->position.x;
+        pkt.viewStart.y = pCam->position.y;
+        pkt.viewStart.z = pCam->position.z;
 
-    pkt.velocity.x = m_velocity.x;
-    pkt.velocity.y = m_velocity.y;
-    pkt.velocity.z = m_velocity.z;
+        // 시야 끝점 (Camera Target)
+        pkt.viewEnd.x = pCam->target.x;
+        pkt.viewEnd.y = pCam->target.y;
+        pkt.viewEnd.z = pCam->target.z;
+    }
+    else
+    {
+        // 카메라가 없을 경우 기본값 (또는 플레이어 위치)
+        pkt.viewStart = pkt.position;
+        pkt.viewEnd = pkt.position;
+    }
 
     // 클라이언트 시간 타임스탬프 설정
     pkt.clientTime = (float)TimeMgr::Instance()->getCurrTime();
-
 
     return pkt;
 }

@@ -16,7 +16,8 @@ struct Vec3 {
 struct PlayerSnapshot {
 	PlayerID id;
 	Vec3 position;
-	Vec3 rotation;
+	Vec3 viewStart;
+	Vec3 viewEnd;
 	Vec3 velocity;
 	float health;
 	float serverTime{ 0.0f };
@@ -55,9 +56,11 @@ struct C2S_MovementUpdate {
 
 	uint32_t	msgSeq;
 	PlayerID	playerId;
-	Vec3		position;
-	Vec3		rotation;
-	Vec3		velocity;
+	
+	Vec3		position;   // 현재 플레이어 위치
+	Vec3		viewStart;  // 시야 시작점 (카메라 위치)
+	Vec3		viewEnd;    // 시야 끝점 (카메라 타겟) - 슝민
+	
 	float		clientTime{ 0.f };
 };
 
