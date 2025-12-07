@@ -229,10 +229,17 @@ void Player::Update()
     glm::vec3 tar = cam->target;
     glm::vec3 pos = cam->position;
 
-    // 카메라 기준 이동 방향 계산
     glm::vec3 viewVec = tar - pos;
-    viewVec.y = 0.0f;
-    viewVec = glm::normalize(viewVec);
+    viewVec.y = 0.0f; 
+
+    if (glm::length(viewVec) > 0.001f) {
+        viewVec = glm::normalize(viewVec);
+        
+        float targetYaw = glm::degrees(atan2(viewVec.x, viewVec.z));
+
+        this->rotation.y = targetYaw-90.f; 
+    }
+
     glm::vec3 rightVec = glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), viewVec);
     rightVec = glm::normalize(rightVec);
 
