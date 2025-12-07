@@ -415,18 +415,31 @@ public:
 
 		material = nullptr;
 	}
-	void LoadModel(const std::string& fileName)
+	void LoadModel(const std::string& fileName, const std::string& folderName)
 	{
 		int firstSlashIdx = fileName.find('/', 0);
 		modelName = fileName.substr(0, firstSlashIdx);
 
 		Assimp::Importer importer;
 
-		const aiScene* scene = importer.ReadFile("Models/" + fileName + "/" + fileName + ".gltf",aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices | aiProcess_CalcTangentSpace);
+		std::string path = "Models/" + folderName + "/" + fileName + ".gltf";
+		
+		std::ifstream f(path.c_str());
+		if (!f.good()) {
+			path = "Models/" + folderName + "/" + fileName + ".fbx";
+		}
+		const aiScene* scene = importer.ReadFile(path, 
+		aiProcess_Triangulate | 
+		aiProcess_FlipUVs | 
+		aiProcess_GenSmoothNormals | 
+		aiProcess_JoinIdenticalVertices | 
+		aiProcess_CalcTangentSpace |
+		aiProcess_LimitBoneWeights // FBX는 가중치 제한이 필요할 수 있음 (보통 4개)
+	);
 
 		if (!scene)
 		{
-			std::cout << fileName << " Failed to load model : " << importer.GetErrorString() << std::endl;
+			std::cout << "Failed to load model (" << path << ") : " << importer.GetErrorString() << std::endl;
 			return;
 		}
 

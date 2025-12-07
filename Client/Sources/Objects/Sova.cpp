@@ -8,12 +8,21 @@
 Sova::Sova()
     : CObject() {
 
-    string modelPath = "first2";
-    m_pModel = new IModel<AnimModel>(modelPath);
+    string modelName = "jettSimple";
+    string pathName = "jettSimple";
+    m_pModel = new IModel<AnimModel>(modelName, pathName);
 
-    AnimModel* currModel = m_pModel->GetModel(); // 래퍼에서 실제 모델 포인터 가져오기
+    AnimModel* currModel = m_pModel->GetModel(); // 모델에서 본 정보를 가져옴
 
-    m_pIdleAnim = new Animation("Models/first2/firstIdle.gltf", currModel);
+    m_pIdleAnim = new Animation("Animations/jettSimple/jettSimple_aim.gltf", currModel);
+    m_pWalkFrontAnim = new Animation("Animations/jettSimple/jettSimple_aim_walkN.gltf", currModel);
+    m_pWalkFrontLeftAnim = new Animation("Animations/jettSimple/jettSimple_aim_walkNW.gltf", currModel);
+    m_pWalkFrontRightAnim = new Animation("Animations/jettSimple/jettSimple_aim_walkNE.gltf", currModel);
+    m_pWalkRightAnim = new Animation("Animations/jettSimple/jettSimple_aim_walkE.gltf", currModel);
+    m_pWalkLeftAnim = new Animation("Animations/jettSimple/jettSimple_aim_walkW.gltf", currModel);
+    m_pWalkBackLeftAnim = new Animation("Animations/jettSimple/jettSimple_aim_walkSW.gltf", currModel);
+    m_pWalkBackRightAnim = new Animation("Animations/jettSimple/jettSimple_aim_walkSE.gltf", currModel);
+    m_pWalkBackAnim = new Animation("Animations/jettSimple/jettSimple_aim_walkS.gltf", currModel);
     m_pAnimator = new Animator(m_pIdleAnim);
 
     m_gravity = -9.81f;

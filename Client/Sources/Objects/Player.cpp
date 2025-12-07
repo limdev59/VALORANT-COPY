@@ -15,13 +15,21 @@ Player::Player()
     : CObject() {
 
     // --- 1. Model / Animation 로드 (기존 Player 사용) ---
-    string modelPath = "first2";
-    m_pModel = new IModel<AnimModel>(modelPath);
+    string modelName = "jettSimple";
+    string pathName = "jettSimple";
+    m_pModel = new IModel<AnimModel>(modelName, pathName);
 
     AnimModel* currModel = m_pModel->GetModel(); // 모델에서 본 정보를 가져옴
 
-    m_pIdleAnim = new Animation("Models/first2/firstIdle.gltf", currModel);
-    m_pRunAnim = new Animation("Models/first2/first.gltf", currModel);
+    m_pIdleAnim = new Animation("Animations/jettSimple/jettSimple_aim.gltf", currModel);
+    m_pWalkFrontAnim = new Animation("Animations/jettSimple/jettSimple_aim_walkN.gltf", currModel);
+    m_pWalkFrontLeftAnim = new Animation("Animations/jettSimple/jettSimple_aim_walkNW.gltf", currModel);
+    m_pWalkFrontRightAnim = new Animation("Animations/jettSimple/jettSimple_aim_walkNE.gltf", currModel);
+    m_pWalkRightAnim = new Animation("Animations/jettSimple/jettSimple_aim_walkE.gltf", currModel);
+    m_pWalkLeftAnim = new Animation("Animations/jettSimple/jettSimple_aim_walkW.gltf", currModel);
+    m_pWalkBackLeftAnim = new Animation("Animations/jettSimple/jettSimple_aim_walkSW.gltf", currModel);
+    m_pWalkBackRightAnim = new Animation("Animations/jettSimple/jettSimple_aim_walkSE.gltf", currModel);
+    m_pWalkBackAnim = new Animation("Animations/jettSimple/jettSimple_aim_walkS.gltf", currModel);
     
     m_pAnimator = new Animator(m_pIdleAnim);
 
@@ -42,7 +50,14 @@ Player::~Player() {
     if (m_pModel) delete m_pModel;
     if (m_pAnimator) delete m_pAnimator;
     if (m_pIdleAnim) delete m_pIdleAnim;
-    if (m_pRunAnim) delete m_pRunAnim;
+    if (m_pWalkFrontAnim) delete m_pWalkFrontAnim;
+    if (m_pWalkFrontLeftAnim) delete m_pWalkFrontLeftAnim;
+    if (m_pWalkFrontRightAnim) delete m_pWalkFrontRightAnim;
+    if (m_pWalkLeftAnim) delete m_pWalkLeftAnim;
+    if (m_pWalkRightAnim) delete m_pWalkRightAnim;
+    if (m_pWalkBackAnim) delete m_pWalkBackAnim;
+    if (m_pWalkBackLeftAnim) delete m_pWalkBackLeftAnim;
+    if (m_pWalkBackRightAnim) delete m_pWalkBackRightAnim;
 }
 
 bool IntersectRayTriangle(const glm::vec3& orig, const glm::vec3& dir,
@@ -289,9 +304,8 @@ void Player::Update()
     
     // 발사 패킷 전송
     if (KeyMgr::Instance()->getKeyState(KEY::E) == KEY_TYPE::TAP) {
-        CCamera* cam = CameraMgr::Instance()->getMainCamera();
-        glm::vec3 fireDir = glm::normalize(cam->target - cam->position);
-        C2S_FireAction firePkt = BuildFirePacket(cam->position, fireDir, -1);
+        glm::vec3 fireDir = glm::normalize(CameraMgr::Instance()->getMainCamera()->target - CameraMgr::Instance()->getMainCamera()->position);
+        C2S_FireAction firePkt = BuildFirePacket(CameraMgr::Instance()->getMainCamera()->position, fireDir, -1);
         
         if (g_pNetwork) {
             g_pNetwork->SendFire(firePkt);
@@ -316,16 +330,47 @@ void Player::Update()
     }
     
 
-    // 애니메이션 상태 업데이트
-    if (isMoving && m_isOnGround) {
-        if (m_pAnimator->GetCurrAnimation() != m_pRunAnim) 
-            m_pAnimator->PlayAnimation(m_pRunAnim);
-    }
-    else if (!isMoving && m_isOnGround) {
-        if (m_pAnimator->GetCurrAnimation() != m_pIdleAnim) 
-            m_pAnimator->PlayAnimation(m_pIdleAnim);
+    bool bW = KeyMgr::Instance()->getKeyState(KEY::W) == KEY_TYPE::HOLD;
+    bool bS = KeyMgr::Instance()->getKeyState(KEY::S) == KEY_TYPE::HOLD;
+    bool bA = KeyMgr::Instance()->getKeyState(KEY::A) == KEY_TYPE::HOLD;
+    bool bD = KeyMgr::Instance()->getKeyState(KEY::D) == KEY_TYPE::HOLD;
+    
+    Animation* targetAnim = m_pIdleAnim; // 기본은 아이들
+
+    // 땅에 붙어 있을 때만 걷기/달리기 애니메이션 적용 (점프 중엔 보통 유지하거나 점프 모션)
+    if (m_isOnGround) {
+        if (bW && bA) {
+            targetAnim = m_pWalkFrontLeftAnim;  // 앞+왼쪽
+        }
+        else if (bW && bD) {
+            targetAnim = m_pWalkFrontRightAnim; // 앞+오른쪽
+        }
+        else if (bS && bA) {
+            targetAnim = m_pWalkBackLeftAnim;   // 뒤+왼쪽
+        }
+        else if (bS && bD) {
+            targetAnim = m_pWalkBackRightAnim;  // 뒤+오른쪽
+        }
+        else if (bW) {
+            targetAnim = m_pWalkFrontAnim;      // 앞
+        }
+        else if (bS) {
+            targetAnim = m_pWalkBackAnim;       // 뒤
+        }
+        else if (bA) {
+            targetAnim = m_pWalkLeftAnim;       // 왼쪽
+        }
+        else if (bD) {
+            targetAnim = m_pWalkRightAnim;      // 오른쪽
+        }
     }
     
+    // 현재 재생 중인 애니메이션과 목표 애니메이션이 다르면 교체
+    if (m_pAnimator && m_pAnimator->GetCurrAnimation() != targetAnim) {
+        m_pAnimator->PlayAnimation(targetAnim);
+    }
+    
+    // 애니메이션 프레임 업데이트
     if (m_pAnimator) {
         m_pAnimator->UpdateAnimation(DT);
     }

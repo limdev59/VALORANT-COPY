@@ -20,7 +20,15 @@ protected:
     // --- Animation Members (from main.cpp logic) ---
     Animator* m_pAnimator;
     Animation* m_pIdleAnim;
-    Animation* m_pRunAnim;
+    
+    Animation* m_pWalkFrontAnim;
+    Animation* m_pWalkFrontLeftAnim;
+    Animation* m_pWalkFrontRightAnim;
+    Animation* m_pWalkRightAnim;
+    Animation* m_pWalkLeftAnim;
+    Animation* m_pWalkBackLeftAnim;
+    Animation* m_pWalkBackRightAnim;
+    Animation* m_pWalkBackAnim;
 
     // --- Physics Members (from existing Player.h) ---
     float   m_gravity = -9.81f;

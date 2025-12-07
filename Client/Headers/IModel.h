@@ -36,10 +36,10 @@ public:
      */
     template <typename T_ = T,
         std::enable_if_t<std::is_same_v<T_, AnimModel>, int> = 0>
-    IModel(const std::string& fileName) {
+    IModel(const std::string& fileName, const std::string& folderName) {
         // AnimModel의 기본 생성자 호출 후 LoadModel 실행
         m_pModel = new AnimModel();
-        m_pModel->LoadModel(fileName);
+        m_pModel->LoadModel(fileName, folderName);
     }
 
     /**
