@@ -7,10 +7,22 @@ constexpr int MAX_PLAYER_COUNT = 16;
 
 using PlayerID = uint16_t;
 
+enum InputKey : uint8_t {
+	KEY_NONE = 0,
+	KEY_W = 1 << 0,
+	KEY_A = 1 << 1,
+	KEY_S = 1 << 2,
+	KEY_D = 1 << 3,
+};
+
 struct Vec3 {
 	float x, y, z;
 	Vec3() : x(0), y(0), z(0) {}
 	Vec3(float _x, float _y, float _z) : x(_x), y(_y), z(_z) {}
+	
+	Vec3 operator+(const Vec3& other) const { return Vec3(x + other.x, y + other.y, z + other.z); }
+	Vec3 operator-(const Vec3& other) const { return Vec3(x - other.x, y - other.y, z - other.z); }
+	Vec3 operator*(float scalar) const { return Vec3(x * scalar, y * scalar, z * scalar); }
 };
 
 struct PlayerSnapshot {
@@ -18,6 +30,8 @@ struct PlayerSnapshot {
 	Vec3 position;
 	Vec3 rotation;
 	Vec3 velocity;
+	uint8_t inputKeys;
+	bool isOnGround;
 	float health;
 	float serverTime{ 0.0f };
 	// 추가 필드 필요시 여기에 추가
@@ -56,9 +70,11 @@ struct C2S_MovementUpdate {
 	uint32_t	msgSeq;
 	PlayerID	playerId;
 	
-	Vec3		position;   // 현재 플레이어 위치
-	Vec3		viewStart;  // 시야 시작점 (카메라 위치)
-	Vec3		viewEnd;    // 시야 끝점 (카메라 타겟) - 슝민
+	Vec3		position;      // 현재 위치
+	Vec3		rotation;      // 바라보는 방향 (회전값)
+	Vec3		velocity;      // 이동 방향 및 속도
+	uint8_t		inputKeys; 
+	bool		isOnGround;
 	
 	float		clientTime{ 0.f };
 };

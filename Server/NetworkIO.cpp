@@ -1,5 +1,6 @@
 #include "NetworkIO.h"
 #include <cstdio>
+#include <string>
 #include <vector>
 #include "WorldEvent.h"
 #include "PacketDefs.h"
@@ -253,12 +254,23 @@ void NetworkIO::HandleUDPRead()
 			event.type = WorldEventType::E_Packet_Movement;
 			std::memcpy(&event.movement, buffer, sizeof(C2S_MovementUpdate));
 			bValidPacket = true;
-				printf("[Server] Move Recv - PID:%d | Pos(%.2f, %.2f, %.2f) | ViewS(%.2f, %.2f, %.2f) -> ViewE(%.2f, %.2f, %.2f)\n",
-				pid,
-				event.movement.position.x, event.movement.position.y, event.movement.position.z,
-				event.movement.viewStart.x, event.movement.viewStart.y, event.movement.viewStart.z,
-				event.movement.viewEnd.x, event.movement.viewEnd.y, event.movement.viewEnd.z
-			);
+			{ // µð¹ö±ë¿ë Ãâ·Â - ½¹¹Î
+				std::string keyStr = "";
+				if (event.movement.inputKeys & KEY_W) keyStr += "W";
+				if (event.movement.inputKeys & KEY_A) keyStr += "A";
+				if (event.movement.inputKeys & KEY_S) keyStr += "S";
+				if (event.movement.inputKeys & KEY_D) keyStr += "D";
+				if (keyStr.empty()) keyStr = "-";
+
+				printf("[Server] Move Recv - PID:%d | Pos(%.2f, %.2f, %.2f) | Rot(%.2f, %.2f, %.2f) | Vel(%.2f, %.2f, %.2f) | Keys(%s) | Ground(%d)\n",
+					pid,
+					event.movement.position.x, event.movement.position.y, event.movement.position.z,
+					event.movement.rotation.x, event.movement.rotation.y, event.movement.rotation.z,
+					event.movement.velocity.x, event.movement.velocity.y, event.movement.velocity.z,
+					keyStr.c_str(), 
+					event.movement.isOnGround ? 1 : 0
+				);
+			}
 		}
 		break;
 

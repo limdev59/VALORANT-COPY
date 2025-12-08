@@ -528,30 +528,31 @@ C2S_MovementUpdate Player::BuildMovementPacket()
     // PlayerID
     pkt.playerId = 0; 
 
-    // 1. 플레이어 위치 설정
+    // 플레이어 위치 설정
     pkt.position.x = position.x;
     pkt.position.y = position.y;
     pkt.position.z = position.z;
 
-    // 2. 카메라 정보 가져오기 (시야 시작점/끝점)
-    CCamera* pCam = CameraMgr::Instance()->getMainCamera();
-    if (pCam) {
-        // 시야 시작점 (Camera Position)
-        pkt.viewStart.x = pCam->position.x;
-        pkt.viewStart.y = pCam->position.y;
-        pkt.viewStart.z = pCam->position.z;
+    // 회전(Rotation) 사용
+    pkt.rotation.x = rotation.x;
+    pkt.rotation.y = rotation.y;
+    pkt.rotation.z = rotation.z;
 
-        // 시야 끝점 (Camera Target)
-        pkt.viewEnd.x = pCam->target.x;
-        pkt.viewEnd.y = pCam->target.y;
-        pkt.viewEnd.z = pCam->target.z;
-    }
-    else
-    {
-        // 카메라가 없을 경우 기본값 (또는 플레이어 위치)
-        pkt.viewStart = pkt.position;
-        pkt.viewEnd = pkt.position;
-    }
+    // 현재 속도(Velocity) 설정
+    pkt.velocity.x = m_velocity.x;
+    pkt.velocity.y = m_velocity.y;
+    pkt.velocity.z = m_velocity.z;
+
+    // 4. 입력 키 상태 비트마스크 생성
+    uint8_t keys = 0;
+    if (KeyMgr::Instance()->getKeyState(KEY::W) == KEY_TYPE::HOLD) keys |= (1 << 0); // KEY_W
+    if (KeyMgr::Instance()->getKeyState(KEY::A) == KEY_TYPE::HOLD) keys |= (1 << 1); // KEY_A
+    if (KeyMgr::Instance()->getKeyState(KEY::S) == KEY_TYPE::HOLD) keys |= (1 << 2); // KEY_S
+    if (KeyMgr::Instance()->getKeyState(KEY::D) == KEY_TYPE::HOLD) keys |= (1 << 3); // KEY_D
+    pkt.inputKeys = keys;
+
+    // 5. 착지 상태 (애니메이션 동기화용)
+    pkt.isOnGround = m_isOnGround;
 
     // 클라이언트 시간 타임스탬프 설정
     pkt.clientTime = (float)TimeMgr::Instance()->getCurrTime();

@@ -42,11 +42,10 @@ public:
 private:
     PlayerID	m_PlayerID;
     Vec3		m_Position;
-    Vec3        ViewStart;
-    Vec3        ViewEnd;
+    Vec3        m_Rotation;
     Vec3		m_Velocity;
+    uint8_t     m_InputKeys;
+    bool        m_IsOnGround; 
     float		m_Health;
-
-    // TODO: 마지막으로 처리한 클라시간 등 상태 동기화를 위한 변수 필요
 };
 

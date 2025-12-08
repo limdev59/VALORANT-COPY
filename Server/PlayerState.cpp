@@ -4,9 +4,9 @@ PlayerState::PlayerState(PlayerID id)
 	: m_PlayerID(id)
 	, m_Health(100)
 	, m_Position(0.f, 0.f, 0.f)
-	, ViewStart(0.f, 0.f, 0.f)
-	, ViewEnd(0.f, 0.f, 0.f)
 	, m_Velocity(0.f, 0.f, 0.f)
+	, m_InputKeys(0)
+	, m_IsOnGround(false)
 {
 
 }
@@ -50,13 +50,14 @@ PlayerSnapshot PlayerState::ToSnapshot() const
 
 	snap.id = m_PlayerID;
 	snap.position = m_Position;
-	snap.viewStart = ViewStart;
-	snap.viewEnd = ViewEnd;
-	snap.position = m_Position;
+	snap.rotation = m_Rotation;
 	snap.velocity = m_Velocity;
+	snap.inputKeys = m_InputKeys;
+	
+	snap.isOnGround = m_IsOnGround; 
+	
 	snap.health = m_Health;
 	snap.serverTime = 0.0f;
 
 	return snap;
 }
-

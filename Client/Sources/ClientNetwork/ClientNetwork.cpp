@@ -197,11 +197,21 @@ void ClientNetwork::SendMovement(const C2S_MovementUpdate& pkt)
         sizeof(m_serverUdpAddr)
     );
 
-    std::cerr << "[ClientNetwork] 이동" << "\n"
-    << "위치(" << pkt.position.x << "," << pkt.position.y << "," << pkt.position.z << ") |" 
-    << "시선b("<< pkt.viewStart.x<< "," << pkt.viewStart.y << "," << pkt.viewStart.z << ") |"
-    << "시선e("<< pkt.viewEnd.x<< "," << pkt.viewEnd.y << "," << pkt.viewEnd.z << ")"  << "\n";
-
+    { // 디버깅용 출력 - 슝민
+        std::string keyStr = "";
+        if (pkt.inputKeys & KEY_W) keyStr += "W";
+        if (pkt.inputKeys & KEY_A) keyStr += "A";
+        if (pkt.inputKeys & KEY_S) keyStr += "S";
+        if (pkt.inputKeys & KEY_D) keyStr += "D";
+        if (keyStr.empty()) keyStr = "-";
+        std::cerr << "[ClientNetwork] 이동 | "
+            << "Pos(" << pkt.position.x << "," << pkt.position.y << "," << pkt.position.z << ") | "
+            << "Rot(" << pkt.rotation.x << "," << pkt.rotation.y << "," << pkt.rotation.z << ") | "
+            << "Vel(" << pkt.velocity.x << "," << pkt.velocity.y << "," << pkt.velocity.z << ") | "
+            << "Keys(" << keyStr << ") | "
+            << "Ground(" << (pkt.isOnGround ? "Y" : "N") << ")" << "\n";
+    }
+    
     if (sent == SOCKET_ERROR) {
         std::cerr << "[ClientNetwork] 이동 sendto 실패, WSA=" << WSAGetLastError() << "\n";
         return;
