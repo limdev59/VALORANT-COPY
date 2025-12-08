@@ -55,6 +55,8 @@ public:
      */
     const std::vector<PlayerSnapshot>& GetLastSnapshots() const; // ½¹¹Î
 
+	const uint64_t& GetMyPlayerID() const { return m_myPlayerId; } 
+
 private:
     // WinSock2 ÇÚµé
     SOCKET m_tcpSocket;

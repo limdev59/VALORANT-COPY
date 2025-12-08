@@ -329,7 +329,7 @@ void Player::Update()
         if (KeyMgr::Instance()->getKeyState(KEY::A) == KEY_TYPE::HOLD) { m_isMoving = true; }
         if (KeyMgr::Instance()->getKeyState(KEY::D) == KEY_TYPE::HOLD) { m_isMoving = true; }
 
-        if (m_isMoving&&!m_isOnGround)
+        if (m_isMoving || !m_isOnGround)    // &&
         {
             g_pNetwork->SendMovement(pkt);
             m_isMoving = false;
@@ -526,7 +526,7 @@ C2S_MovementUpdate Player::BuildMovementPacket()
     pkt.msgSeq = m_movementSeq;
 
     // PlayerID
-    pkt.playerId = 0; 
+    pkt.playerId = g_pNetwork->GetMyPlayerID();
 
     // 플레이어 위치 설정
     pkt.position.x = position.x;
@@ -569,7 +569,7 @@ C2S_FireAction Player::BuildFirePacket(const vec3& fireOrigin, const vec3& fireD
     pkt.msgSeq = m_fireSeq;
 
     // PlayerID 임시로 0 처리
-    pkt.playerId = 0;
+    pkt.playerId = g_pNetwork->GetMyPlayerID();
 
     // 발사 원점 및 방향 설정
     pkt.fireOrigin.x = fireOrigin.x;
