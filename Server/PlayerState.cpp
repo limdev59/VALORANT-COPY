@@ -15,7 +15,10 @@ void PlayerState::ApplyMovementFromClient(const C2S_MovementUpdate& pkt, float s
 {
 	// ��Ŷ���� ���� ������ �״�� �ݿ�
 	m_Position = pkt.position;
-	
+	m_Rotation = pkt.rotation;
+	m_Velocity = pkt.velocity;
+	m_InputKeys = pkt.inputKeys;
+	m_IsOnGround = pkt.isOnGround;
 }
 
 void PlayerState::ApplyFireFromClient(const C2S_FireAction& pkt)
