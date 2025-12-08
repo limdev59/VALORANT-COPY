@@ -204,12 +204,12 @@ void ClientNetwork::SendMovement(const C2S_MovementUpdate& pkt)
         if (pkt.inputKeys & KEY_S) keyStr += "S";
         if (pkt.inputKeys & KEY_D) keyStr += "D";
         if (keyStr.empty()) keyStr = "-";
-        std::cerr << "[ClientNetwork] 이동 | "
+        /*std::cerr << "[ClientNetwork] 이동 | "
             << "Pos(" << pkt.position.x << "," << pkt.position.y << "," << pkt.position.z << ") | "
             << "Rot(" << pkt.rotation.x << "," << pkt.rotation.y << "," << pkt.rotation.z << ") | "
             << "Vel(" << pkt.velocity.x << "," << pkt.velocity.y << "," << pkt.velocity.z << ") | "
             << "Keys(" << keyStr << ") | "
-            << "Ground(" << (pkt.isOnGround ? "Y" : "N") << ")" << "\n";
+            << "Ground(" << (pkt.isOnGround ? "Y" : "N") << ")" << "\n";*/
     }
     
     if (sent == SOCKET_ERROR) {
@@ -288,28 +288,37 @@ void ClientNetwork::PollIncomingPackets() // 슝민
 
     // 패킷 파싱
     if (bytesRecv < sizeof(uint16_t)) return;
+    
+    S2C_SnapshotState* packet = reinterpret_cast<S2C_SnapshotState*>(buffer);
 
-    MsgType type = *reinterpret_cast<MsgType*>(buffer);
-
-    if (type == MsgType::S2C_SNAPSHOT_STATE)
+    if (packet->type == MsgType::S2C_SNAPSHOT_STATE)
     {
-        size_t headerSize = sizeof(uint16_t);
-        size_t payloadSize = bytesRecv - headerSize;
-        size_t snapshotSize = sizeof(PlayerSnapshot);
+        size_t offsetOfSnapshots = offsetof(S2C_SnapshotState, snapshots);
 
-        if (payloadSize % snapshotSize != 0) return;
+        // 받은 데이터가 배열 시작 위치보다 작으면 에러
+        if (bytesRecv < offsetOfSnapshots) return;
+
+        size_t payloadSize = bytesRecv - offsetOfSnapshots;
+        size_t snapshotSize = sizeof(PlayerSnapshot);
 
         int count = static_cast<int>(payloadSize / snapshotSize);
 
-        m_lastSnapshots.clear();
-        m_lastSnapshots.reserve(count);
+        std::cout << "[Snapshot] Parsing " << count << " snapshots." << std::endl;
 
-        char* ptr = buffer + headerSize;
+        m_lastSnapshots.clear();
+
         for (int i = 0; i < count; ++i)
         {
-            PlayerSnapshot sn = *reinterpret_cast<PlayerSnapshot*>(ptr);
+            const PlayerSnapshot& sn = packet->snapshots[i];
+
             m_lastSnapshots.push_back(sn);
-            ptr += snapshotSize;
+
+            std::cout << "   [" << i << "] ID: " << sn.id
+            << " | Pos: " << sn.position.x << ", " << sn.position.y << ", " << sn.position.z
+            << " | Rot: " << sn.rotation.x << ", " << sn.rotation.y << ", " << sn.rotation.z
+            << " | Vel: " << sn.velocity.x << ", " << sn.velocity.y << ", " << sn.velocity.z
+            << " | Time: " << sn.serverTime
+            << std::endl;
         }
     }
 }
