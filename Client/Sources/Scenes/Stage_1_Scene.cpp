@@ -89,13 +89,18 @@ void Stage_1_Scene::Update() {
                 {
                     // 위치 회전 동기화
                     CObject* pRemoteObj = it->second;
-                    pRemoteObj->setPosition(glm::vec3(snap.position.x, snap.position.y, snap.position.z));
-                    pRemoteObj->setRotation(glm::vec3(snap.rotation.x, snap.rotation.y, snap.rotation.z));
+                    /*pRemoteObj->setPosition(glm::vec3(snap.position.x, snap.position.y, snap.position.z));
+                    pRemoteObj->setRotation(glm::vec3(snap.rotation.x, snap.rotation.y, snap.rotation.z));*/
+
+                    Enemy* pEnemyObj = reinterpret_cast<Enemy*> (pRemoteObj);
+                    pEnemyObj->SyncNetworkState(glm::vec3(snap.position.x, snap.position.y, snap.position.z),
+                                                glm::vec3(snap.rotation.x, snap.rotation.y, snap.rotation.z),
+                                                snap.inputKeys, snap.isOnGround);
                 }
                 else
                 {
                     // [없음] 새로운 플레이어 객체 생성 (Enemy 클래스 재활용)
-                   Enemy* newRemotePlayer = new Enemy();
+                    Enemy* newRemotePlayer = new Enemy();
                     newRemotePlayer->setPosition(glm::vec3(snap.position.x, snap.position.y, snap.position.z));
                     newRemotePlayer->setScale(glm::vec3(0.1f)); // 크기 설정
 

@@ -303,7 +303,7 @@ void ClientNetwork::PollIncomingPackets() // ½¹¹Î
 
         int count = static_cast<int>(payloadSize / snapshotSize);
 
-        std::cout << "[Snapshot] Parsing " << count << " snapshots." << std::endl;
+        // std::cout << "[Snapshot] Parsing " << count << " snapshots." << std::endl;
 
         m_lastSnapshots.clear();
 
@@ -313,12 +313,12 @@ void ClientNetwork::PollIncomingPackets() // ½¹¹Î
 
             m_lastSnapshots.push_back(sn);
 
-            std::cout << "   [" << i << "] ID: " << sn.id
+            /*std::cout << "   [" << i << "] ID: " << sn.id
             << " | Pos: " << sn.position.x << ", " << sn.position.y << ", " << sn.position.z
             << " | Rot: " << sn.rotation.x << ", " << sn.rotation.y << ", " << sn.rotation.z
             << " | Vel: " << sn.velocity.x << ", " << sn.velocity.y << ", " << sn.velocity.z
             << " | Time: " << sn.serverTime
-            << std::endl;
+            << std::endl;*/
         }
     }
 }

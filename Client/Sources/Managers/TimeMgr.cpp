@@ -44,6 +44,6 @@ void TimeMgr::Render() {
         std::ostringstream oss;
         oss << "FPS: " << iFPS << ", DT: " << dDT;
         glutSetWindowTitle(oss.str().c_str());
-        std::cout << "FPS: " << iFPS << ", Delta Time: " << dDT << std::endl;
+        // std::cout << "FPS: " << iFPS << ", Delta Time: " << dDT << std::endl;
     }
 }
