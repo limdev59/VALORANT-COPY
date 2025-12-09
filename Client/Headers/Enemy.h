@@ -1,6 +1,7 @@
 #pragma once
 #include "CObject.h"
 #include "IModel.h"
+#include "PacketDefs.h"
 
 // 전방 선언
 class AnimModel;
@@ -26,6 +27,9 @@ protected:
     Animation* m_pWalkBackLeftAnim;
     Animation* m_pWalkBackRightAnim;
     Animation* m_pWalkBackAnim;
+    
+    uint8_t m_inputKeys = 0;   // 서버에서 받은 키 입력 비트마스크
+    bool    m_isOnGround = true; // 착지 여부
 
 public:
     Enemy();
@@ -36,6 +40,9 @@ public:
 
     void TakeDamage(int damage);
     void OnDeath();
+    
+    // 네트워크 패킷 핸들러 동기화 함수
+    void SyncNetworkState(const glm::vec3& pos, const glm::vec3& rot, uint8_t keys, bool onGround);
 
     // 외부(네트워크 핸들러 등)에서 애니메이션 상태를 설정할 수 있도록 접근자나 함수가 필요할 수 있음
     Animator* GetAnimator() const { return m_pAnimator; }

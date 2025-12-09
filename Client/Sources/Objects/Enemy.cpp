@@ -59,6 +59,45 @@ void Enemy::Update() {
     if (m_pModel) {
         m_pModel->GetModel()->UpdateTransform(position, rotation, scale);
     }
+    
+    Animation* targetAnim = m_pIdleAnim;
+    
+    bool bW = (m_inputKeys & KEY_W);
+    bool bA = (m_inputKeys & KEY_A);
+    bool bS = (m_inputKeys & KEY_S);
+    bool bD = (m_inputKeys & KEY_D);
+    
+    if (m_isOnGround) {
+        if (bW && bA) {
+            targetAnim = m_pWalkFrontLeftAnim;  // 앞+왼쪽
+        }
+        else if (bW && bD) {
+            targetAnim = m_pWalkFrontRightAnim; // 앞+오른쪽
+        }
+        else if (bS && bA) {
+            targetAnim = m_pWalkBackLeftAnim;   // 뒤+왼쪽
+        }
+        else if (bS && bD) {
+            targetAnim = m_pWalkBackRightAnim;  // 뒤+오른쪽
+        }
+        else if (bW) {
+            targetAnim = m_pWalkFrontAnim;      // 앞
+        }
+        else if (bS) {
+            targetAnim = m_pWalkBackAnim;       // 뒤
+        }
+        else if (bA) {
+            targetAnim = m_pWalkLeftAnim;       // 왼쪽
+        }
+        else if (bD) {
+            targetAnim = m_pWalkRightAnim;      // 오른쪽
+        }
+    }
+    
+    // 현재 애니메이션과 다르면 교체
+    if (m_pAnimator && m_pAnimator->GetCurrAnimation() != targetAnim) {
+        m_pAnimator->PlayAnimation(targetAnim);
+    }
 
     // 2. 애니메이션 업데이트
     if (m_pAnimator) {
@@ -130,4 +169,11 @@ void Enemy::TakeDamage(int damage) {
 
 void Enemy::OnDeath() {
     std::cout << "Enemy died!" << std::endl;
+}
+
+void Enemy::SyncNetworkState(const glm::vec3& pos, const glm::vec3& rot, uint8_t keys, bool onGround) {
+    this->position = pos;
+    this->rotation = rot;
+    m_inputKeys = keys;
+    m_isOnGround = onGround;
 }
