@@ -171,9 +171,18 @@ void Enemy::OnDeath() {
     std::cout << "Enemy died!" << std::endl;
 }
 
-void Enemy::SyncNetworkState(const glm::vec3& pos, const glm::vec3& rot, uint8_t keys, bool onGround) {
-    this->position = pos;
-    this->rotation = rot;
-    m_inputKeys = keys;
-    m_isOnGround = onGround;
+void Enemy::SyncNetworkState(const PlayerSnapshot& snap) {
+    this->position.x = snap.position.x;
+    this->position.y = snap.position.y;
+    this->position.z = snap.position.z;
+    
+    this->rotation.x = snap.rotation.x;
+    this->rotation.y = snap.rotation.y;
+    this->rotation.z = snap.rotation.z;
+    
+    this->m_velocity.x = snap.velocity.x;
+    this->m_velocity.y = snap.velocity.y;
+    this->m_velocity.z = snap.velocity.z;
+    m_inputKeys = snap.inputKeys;
+    m_isOnGround = snap.isOnGround;
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include "pch.h"
 #include "assimp/anim.h"
+#include <gl/glm/gtx/matrix_decompose.hpp>
 #include <chrono>
 
 
@@ -850,9 +851,13 @@ public:
 	{
 		currentTime = 0.f;
 		currentAnimation = animation;
-
+		
+		prevAnimation = nullptr;
+		prevTime = 0.f;
+		currentBlendTime = 0.f;
+		blendTime = 0.2f;
+		
 		finalBoneMatrices.reserve(MAX_BONE_COUNT);
-
 		for (int i = 0; i < MAX_BONE_COUNT; i++)
 		{
 			finalBoneMatrices.push_back(glm::mat4(1.f));
@@ -866,25 +871,80 @@ public:
 		{
 			currentTime += currentAnimation->GetTicksPerSecond() * deltaTime;
 			currentTime = fmod(currentTime, currentAnimation->GetDuration());
+		}
+		if (prevAnimation)
+		{
+			prevTime += prevAnimation->GetTicksPerSecond() * deltaTime;
+			prevTime = fmod(prevTime, prevAnimation->GetDuration());
+
+			currentBlendTime += deltaTime;
+			if (currentBlendTime >= blendTime)
+			{
+				prevAnimation = nullptr; // 블렌딩 종료
+			}
+		}
+
+		if (currentAnimation) {
 			CalculateBoneTransform(&currentAnimation->GetRootNode(), glm::mat4(1.f));
 		}
 	}
 	void PlayAnimation(Animation* pAnimation)
 	{
+		if (currentAnimation == pAnimation) return;
+
+		// [추가] 블렌딩 시작 설정
+		prevAnimation = currentAnimation;
+		prevTime = currentTime;
+        
 		currentAnimation = pAnimation;
 		currentTime = 0.f;
+		currentBlendTime = 0.f;
 	}
+	
+	glm::mat4 InterpolateTransforms(const glm::mat4& prev, const glm::mat4& curr, float factor)
+	{
+		glm::vec3 s1, t1, sk1; glm::vec4 p1; glm::quat r1;
+		glm::vec3 s2, t2, sk2; glm::vec4 p2; glm::quat r2;
+
+		glm::decompose(prev, s1, r1, t1, sk1, p1);
+		glm::decompose(curr, s2, r2, t2, sk2, p2);
+
+		glm::vec3 s = glm::mix(s1, s2, factor);
+		glm::vec3 t = glm::mix(t1, t2, factor);
+		glm::quat r = glm::slerp(r1, r2, factor);
+
+		glm::mat4 mS = glm::scale(glm::mat4(1.0f), s);
+		glm::mat4 mR = glm::mat4_cast(r);
+		glm::mat4 mT = glm::translate(glm::mat4(1.0f), t);
+
+		return mT * mR * mS;
+	}
+	
 	void CalculateBoneTransform(const AssimpNodeData* node, glm::mat4 parentTransform)
 	{
 		std::string nodeName = node->name;
 		glm::mat4 nodeTransform = node->transformation;
-
 		Bone* bone = currentAnimation->FindBone(nodeName);
-
 		if (bone)
 		{
 			bone->Update(currentTime);
 			nodeTransform = bone->GetLocalTransform();
+		}
+		
+		if (prevAnimation)
+		{
+			glm::mat4 prevNodeTransform = node->transformation;
+			Bone* prevBone = prevAnimation->FindBone(nodeName);
+			if (prevBone)
+			{
+				prevBone->Update(prevTime);
+				prevNodeTransform = prevBone->GetLocalTransform();
+			}
+            
+			float factor = currentBlendTime / blendTime;
+			factor = glm::clamp(factor, 0.0f, 1.0f);
+            
+			nodeTransform = InterpolateTransforms(prevNodeTransform, nodeTransform, factor);
 		}
 
 		glm::mat4 globalTransformation = parentTransform * nodeTransform;
@@ -902,14 +962,12 @@ public:
 			CalculateBoneTransform(&node->children[i], globalTransformation);
 		}
 	}
-	std::vector<glm::mat4> GetFinalBoneMatrices()
-	{
-		return finalBoneMatrices;
-	}
+	std::vector<glm::mat4> GetFinalBoneMatrices() { return finalBoneMatrices; }
 	Animation* GetCurrAnimation() { return currentAnimation; }
 	void Reset()
 	{
 		currentAnimation = nullptr;
+		prevAnimation = nullptr;
 		currentTime = 0.f;
 		fill(finalBoneMatrices.begin(), finalBoneMatrices.end(), glm::mat4(1.f));
 	}
@@ -918,6 +976,10 @@ public:
 private:
 	std::vector<glm::mat4> finalBoneMatrices;
 	Animation* currentAnimation;
+	Animation* prevAnimation;
 	float currentTime;
+	float prevTime;
 	float deltaTime;
+	float currentBlendTime;
+	float blendTime;
 };

@@ -35,7 +35,7 @@ protected:
     vec3    m_velocity = vec3(0.0f);
     bool    m_isOnGround = false;
     bool    m_isMoving = false;
-    float   m_jumpVelocity = 2.0f;
+    float   m_jumpVelocity = 0.5f;
     int     m_health = 150;
     
     

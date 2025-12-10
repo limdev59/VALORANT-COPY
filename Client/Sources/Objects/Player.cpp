@@ -244,7 +244,7 @@ void Player::Update()
     rightVec = glm::normalize(rightVec);
 
     bool isMoving = false;
-    float moveSpeed = 0.8f;
+    float moveSpeed = 0.455f;// 픟레이어 이속
     glm::vec3 moveDir = glm::vec3(0.0f);
 
     if (KeyMgr::Instance()->getKeyState(KEY::W) == KEY_TYPE::HOLD) { moveDir += viewVec; isMoving = true; }
@@ -379,7 +379,15 @@ void Player::Update()
     
     // 애니메이션 프레임 업데이트
     if (m_pAnimator) {
-        m_pAnimator->UpdateAnimation(DT);
+        float animSpeed = 1.0f;
+
+        // Idle이 아닐 때만 속도 조절
+        if (targetAnim != m_pIdleAnim) {
+            float horzSpeed = glm::length(glm::vec3(m_velocity.x, 0.0f, m_velocity.z));
+            animSpeed = horzSpeed / 0.31f; //발 속도
+        }
+
+        m_pAnimator->UpdateAnimation(DT * animSpeed);
     }
 
     // 카메라 위치 동기화 (눈 높이 설정)
@@ -396,9 +404,7 @@ void Player::Update()
         glm::vec3 finalCamPos;
 
         if (m_bThirdPerson) {
-            // [3인칭] 눈 위치에서 시선 반대 방향으로 2.5m 뒤로 이동
-            float distance = 2.5f; 
-            // 약간 위로 올려서(Up Vector) 숄더뷰 느낌을 낼 수도 있음
+            float distance = 0.8f;  //3인칭 거리
             // finalCamPos = eyePos - (camDir * distance) + glm::vec3(0, 0.5f, 0); 
             finalCamPos = eyePos - (camDir * distance);
         }

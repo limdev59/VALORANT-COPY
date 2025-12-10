@@ -3,9 +3,9 @@
 
 enum class COLLIDER_TYPE {
     NONE,
-    AABB,   // Axis-Aligned Bounding Box    Ãà
-    OBB,    // Oriented Bounding Box        ¹Ú½º
-    SPHERE, // Spherical Bounding Box       ±¸
+    AABB,   // Axis-Aligned Bounding Box    ï¿½ï¿½
+    OBB,    // Oriented Bounding Box        ï¿½Ú½ï¿½
+    SPHERE, // Spherical Bounding Box       ï¿½ï¿½
 };
 
 class CObject {

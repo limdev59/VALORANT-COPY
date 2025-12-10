@@ -67,9 +67,7 @@ void Stage_1_Scene::Update() {
 
     if (loaded) {
         CObject& player = getObject(GROUP_TYPE::PLAYER, 0);
-
-        //CObject& mapFloor = getObject(GROUP_TYPE::DEFAULT, 0);
-        //mapFloor.setPosition(vec3(0.0f, 0.0f, 0.0f));
+        
 
         //ApplySnapshot
         if (g_pNetwork)
@@ -84,32 +82,21 @@ void Stage_1_Scene::Update() {
 
                 // 3. 해당 ID의 플레이어가 이미 씬에 있는지 확인
                 auto it = m_remotePlayers.find(snap.id);
-
-                if (it != m_remotePlayers.end())
-                {
-                    // 위치 회전 동기화
-                    CObject* pRemoteObj = it->second;
-                    /*pRemoteObj->setPosition(glm::vec3(snap.position.x, snap.position.y, snap.position.z));
-                    pRemoteObj->setRotation(glm::vec3(snap.rotation.x, snap.rotation.y, snap.rotation.z));*/
-
-                    Enemy* pEnemyObj = reinterpret_cast<Enemy*> (pRemoteObj);
-                    pEnemyObj->SyncNetworkState(glm::vec3(snap.position.x, snap.position.y, snap.position.z),
-                                                glm::vec3(snap.rotation.x, snap.rotation.y, snap.rotation.z),
-                                                snap.inputKeys, snap.isOnGround);
+                Enemy* pEnemy = nullptr;
+                
+                if (it != m_remotePlayers.end()) {
+                    pEnemy = dynamic_cast<Enemy*>(it->second);
+                } else {
+                    pEnemy = new Enemy();
+                    pEnemy->setScale(glm::vec3(0.1f));
+                    addObject(pEnemy, GROUP_TYPE::ENEMY);
+                    m_remotePlayers[snap.id] = pEnemy;
+                    std::cout << "New Player: " << snap.id << std::endl;
                 }
-                else
-                {
-                    // [없음] 새로운 플레이어 객체 생성 (Enemy 클래스 재활용)
-                    Enemy* newRemotePlayer = new Enemy();
-                    newRemotePlayer->setPosition(glm::vec3(snap.position.x, snap.position.y, snap.position.z));
-                    newRemotePlayer->setScale(glm::vec3(0.1f)); // 크기 설정
-
-                    // 씬과 관리 맵에 추가
-                    addObject(newRemotePlayer, GROUP_TYPE::ENEMY);
-                    m_remotePlayers[snap.id] = newRemotePlayer;
-
-                    std::cout << "[ApplySnapshot] New Player Joined: ID " << snap.id << std::endl;
+                if (pEnemy) {
+                    pEnemy->SyncNetworkState(snap);
                 }
+                
             }
         }
     }
