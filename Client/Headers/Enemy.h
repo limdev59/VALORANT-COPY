@@ -60,6 +60,5 @@ public:
     Animation* GetWalkBackAnim() const { return m_pWalkBackAnim; }
 
 private:
-    int hp = 100;
-    int atk = 30;
+    int     m_health = 150;
 };

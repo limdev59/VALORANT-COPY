@@ -161,8 +161,8 @@ void Enemy::Render() {
 }
 
 void Enemy::TakeDamage(int damage) {
-    hp -= damage;
-    if (hp <= 0) {
+    m_health -= damage;
+    if (m_health <= 0) {
         OnDeath();
     }
 }

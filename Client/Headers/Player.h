@@ -35,12 +35,12 @@ protected:
     vec3    m_velocity = vec3(0.0f);
     bool    m_isOnGround = false;
     bool    m_isMoving = false;
-    float   m_jumpVelocity = 0.5f;
+    float   m_jumpVelocity = 2.5f;
     int     m_health = 150;
     
     
     float   m_radius = 0.03f; 
-    float   m_height = 0.27f;
+    float   m_height = 0.23f;
     bool    m_bShowHitbox = false;
     
     bool    m_bThirdPerson = false;

@@ -47,7 +47,7 @@ void Stage_1_Scene::Enter() {
         for (const auto& position : enemyPositions) {
             Enemy* enemy = new Enemy();
             enemy->setPosition(position);
-            enemy->setScale(glm::vec3(0.1f));
+            enemy->setScale(glm::vec3(0.08f));
 
             enemies.push_back(enemy);
             addObject(enemy, GROUP_TYPE::ENEMY);

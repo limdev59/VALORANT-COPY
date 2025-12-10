@@ -37,7 +37,6 @@ Player::Player()
     m_gravity = -9.81f;
     m_velocity = vec3(0.0f);
     m_isOnGround = true; // (바닥에 서있다고 가정)
-    m_jumpVelocity = 3.0f;
 
     // --- 3. CObject 기본값 설정 (기본 Render 설정을 위함) ---
     // main.cpp의 하드코딩을 대신해 CObject의 기본값으로 설정
@@ -263,7 +262,11 @@ void Player::Update()
     }
 
     // 점프 처리
-    if (KeyMgr::Instance()->getKeyState(KEY::SPACE) == KEY_TYPE::HOLD /*&& m_isOnGround*/) {
+    if (KeyMgr::Instance()->getKeyState(KEY::SPACE) == KEY_TYPE::HOLD && m_isOnGround) {
+        m_isOnGround = false;
+        m_velocity.y = m_jumpVelocity;
+    }
+    if (KeyMgr::Instance()->getKeyState(KEY::Q) == KEY_TYPE::HOLD) {
         m_isOnGround = false;
         m_velocity.y = m_jumpVelocity;
     }
@@ -300,9 +303,16 @@ void Player::Update()
     this->position = nextPos;
 
     // (7) [중요] 바닥 충돌 처리 (Ground Snap)
-    // 발 위치를 바닥 높이에 맞추고 착지 상태(m_isOnGround)를 갱신합니다.
+    // 발 위치를 바닥 높이에 맞추고 착지 상태(m_isOnGround)를 갱신
     if (pMapTriangles && !pMapTriangles->empty()) {
-        CheckFloorCollision(*pMapTriangles);
+        if (m_velocity.y <= 0.0f) { 
+            // 하강
+            CheckFloorCollision(*pMapTriangles);
+        }
+        else {
+            // 상승
+            m_isOnGround = false; 
+        }
     }
 
     // ---------------------------------------------------------
