@@ -14,6 +14,7 @@ public:
     PlayerState(PlayerID id);
 
     PlayerID GetPlayerID() const { return m_PlayerID; }
+    bool IsAlive() const { return m_IsAlive; }
 
     /**
      * @brief Applies movement update from client.
@@ -30,13 +31,22 @@ public:
     /**
      * @brief Applies damage to this player.
      */
-    void ApplyDamage(int dmg);
+    void ApplyDamage(int dmg, float nowSec);
+
+    /**
+     * @brief Updates timers such as respawn countdowns.
+     */
+    void Update(float nowSec);
 
     /**
      * @brief Converts PlayerState to PlayerSnapshot.
      * (11/5 단계) 제공
      */
     PlayerSnapshot ToSnapshot() const;
+
+private:
+    void Respawn();
+    Vec3 GetRandomSpawnPosition() const;
 
 private:
     PlayerID    m_PlayerID;
@@ -47,4 +57,9 @@ private:
     bool        m_IsOnGround;
     float       m_Health;
     bool        m_IsAlive;
+
+    float       m_NextRespawnTime;
+
+    static constexpr float kMaxHealth = 150.0f;
+    static constexpr float kRespawnDelay = 3.0f;
 };
