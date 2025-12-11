@@ -289,10 +289,12 @@ void ClientNetwork::PollIncomingPackets() // 슝민
     // 패킷 파싱
     if (bytesRecv < sizeof(uint16_t)) return;
     
-    S2C_SnapshotState* packet = reinterpret_cast<S2C_SnapshotState*>(buffer);
+    MsgType* pType = reinterpret_cast<MsgType*>(buffer);
 
-    if (packet->type == MsgType::S2C_SNAPSHOT_STATE)
+    if (*pType == MsgType::S2C_SNAPSHOT_STATE)
     {
+        S2C_SnapshotState* packet = reinterpret_cast<S2C_SnapshotState*>(buffer);
+
         size_t offsetOfSnapshots = offsetof(S2C_SnapshotState, snapshots);
 
         // 받은 데이터가 배열 시작 위치보다 작으면 에러
@@ -320,6 +322,16 @@ void ClientNetwork::PollIncomingPackets() // 슝민
             << " | Time: " << sn.serverTime
             << std::endl;*/
         }
+    }
+    else if (*pType == MsgType::S2C_FIRE_EVENT)
+    {
+        if (bytesRecv < sizeof(S2C_FireEvent)) return;
+
+        S2C_FireEvent* firePkt = reinterpret_cast<S2C_FireEvent*>(buffer);
+
+        // 로그 출력 (디버깅)
+        std::cout << "[ClientNetwork] Fire Event Recv! Shooter: " << firePkt->shooterID
+            << " -> Hit: " << (int)firePkt->hitPlayerID << std::endl;
     }
 }
 

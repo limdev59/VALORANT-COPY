@@ -3,7 +3,7 @@
 #include "DecodedPacket.h"        
 
 #include "MovementUpdateHandler.h" 
-// #include "FireActionHandler.h"  // [발사] 핸들러
+#include "FireActionHandler.h"  // [발사] 핸들러
 
 PacketDispatcher::PacketDispatcher()
     : m_pWorldInputQueue(nullptr)
@@ -27,7 +27,7 @@ void PacketDispatcher::Initialize(PacketQueue* worldInQueue)
     m_Handlers[MsgType::C2S_MOVEMENT_UPDATE] = new MovementUpdateHandler();
 
     // 발사 패킷 핸들러 (Fire)
-    // m_Handlers[MsgType::C2S_FIRE_ACTION] = new FireActionHandler();
+    m_Handlers[MsgType::C2S_FIRE_ACTION] = new FireActionHandler();
 
     printf("[PacketDispatcher] Initialized. Handlers registered: %zu\n", m_Handlers.size());
 }
@@ -68,11 +68,11 @@ void PacketDispatcher::DispatchUDP(const uint8_t* data, size_t len, ClientSessio
             event.type = E_Packet_Movement;
             event.movement = decodedPkt.movement;
         }
-        //else if (type == MsgType::C2S_FIRE_ACTION)
-        //{
-        //    event.type = E_Packet_Fire;
-        //    event.fire = decodedPkt.fire;
-        //}
+        else if (type == MsgType::C2S_FIRE_ACTION)
+        {
+            event.type = E_Packet_Fire;
+            event.fire = decodedPkt.fire;
+        }
 
         // 큐에 이벤트 푸시
         if (m_pWorldInputQueue)

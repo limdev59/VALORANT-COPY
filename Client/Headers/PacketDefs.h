@@ -2,8 +2,8 @@
 
 #include <cstdint>
 
-constexpr int MAX_NAME_LEN = 32;     
-constexpr int MAX_PLAYER_COUNT = 16; 
+constexpr int MAX_NAME_LEN = 32;
+constexpr int MAX_PLAYER_COUNT = 16;
 
 using PlayerID = uint16_t;
 
@@ -19,7 +19,7 @@ struct Vec3 {
 	float x, y, z;
 	Vec3() : x(0), y(0), z(0) {}
 	Vec3(float _x, float _y, float _z) : x(_x), y(_y), z(_z) {}
-	
+
 	Vec3 operator+(const Vec3& other) const { return Vec3(x + other.x, y + other.y, z + other.z); }
 	Vec3 operator-(const Vec3& other) const { return Vec3(x - other.x, y - other.y, z - other.z); }
 	Vec3 operator*(float scalar) const { return Vec3(x * scalar, y * scalar, z * scalar); }
@@ -43,6 +43,7 @@ enum class MsgType : uint16_t {
 	C2S_MOVEMENT_UPDATE = 3,  // UDP
 	C2S_FIRE_ACTION = 4,  // UDP
 	S2C_SNAPSHOT_STATE = 5,  // UDP
+	S2C_FIRE_EVENT = 6	// UDP
 };
 
 struct MsgHeader {
@@ -69,13 +70,13 @@ struct C2S_MovementUpdate {
 
 	uint32_t	msgSeq;
 	PlayerID	playerId;
-	
+
 	Vec3		position;      // 현재 위치
 	Vec3		rotation;      // 바라보는 방향 (회전값)
 	Vec3		velocity;      // 이동 방향 및 속도
-	uint8_t		inputKeys; 
+	uint8_t		inputKeys;
 	bool		isOnGround;
-	
+
 	float		clientTime{ 0.f };
 };
 
@@ -95,4 +96,13 @@ struct S2C_SnapshotState {
 	MsgType		type = MsgType::S2C_SNAPSHOT_STATE;
 
 	PlayerSnapshot snapshots[MAX_PLAYER_COUNT];
+};
+
+struct S2C_FireEvent {
+	MsgType		type = MsgType::S2C_FIRE_EVENT;
+
+	PlayerID	shooterID;
+	Vec3		origin;
+	Vec3		direction;
+	PlayerID    hitPlayerID;
 };

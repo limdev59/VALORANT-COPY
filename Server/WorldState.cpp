@@ -131,6 +131,26 @@ void WorldState::OnFire(PlayerID pid, const C2S_FireAction& pkt)
             itVictim->second->ApplyDamage(20);
         }
     }
+
+    // 3. [신규 로직] 발사 사실을 모든 클라이언트에게 브로드캐스트
+    //    S2C_FireEvent 패킷을 만들어 출력 큐에 넣습니다.
+    S2C_FireEvent fireEvt;
+    fireEvt.type = MsgType::S2C_FIRE_EVENT;
+    fireEvt.shooterID = pid;
+    fireEvt.origin = pkt.fireOrigin;
+    fireEvt.direction = pkt.fireDirection;
+    fireEvt.hitPlayerID = pkt.hitPlayerID;
+
+    // 패킷 버퍼에 담기
+    RawPacketBuffer buffer;
+    buffer.length = sizeof(S2C_FireEvent);
+    std::memcpy(buffer.data, &fireEvt, buffer.length);
+
+    // 출력 큐에 넣으면 NetworkIO 스레드가 모든 클라이언트에게 전송합니다.
+    if (m_pOutputQueue) {
+        m_pOutputQueue->Push(buffer);
+        printf("[WorldState] FireEvent Queued for broadcast (Shooter: %d)\n", pid);
+    }
 }
 
 // 김도윤

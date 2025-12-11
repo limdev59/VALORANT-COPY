@@ -43,6 +43,7 @@ enum class MsgType : uint16_t {
 	C2S_MOVEMENT_UPDATE = 3,  // UDP
 	C2S_FIRE_ACTION = 4,  // UDP
 	S2C_SNAPSHOT_STATE = 5,  // UDP
+	S2C_FIRE_EVENT = 6	// UDP
 };
 
 struct MsgHeader {
@@ -95,4 +96,13 @@ struct S2C_SnapshotState {
 	MsgType		type = MsgType::S2C_SNAPSHOT_STATE;
 
 	PlayerSnapshot snapshots[MAX_PLAYER_COUNT];
+};
+
+struct S2C_FireEvent {
+	MsgType		type = MsgType::S2C_FIRE_EVENT;
+
+	PlayerID	shooterID;      
+	Vec3		origin;        
+	Vec3		direction;      
+	PlayerID    hitPlayerID;   
 };
