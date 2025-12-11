@@ -8,101 +8,102 @@ constexpr int MAX_PLAYER_COUNT = 16;
 using PlayerID = uint16_t;
 
 enum InputKey : uint8_t {
-	KEY_NONE = 0,
-	KEY_W = 1 << 0,
-	KEY_A = 1 << 1,
-	KEY_S = 1 << 2,
-	KEY_D = 1 << 3,
+        KEY_NONE = 0,
+        KEY_W = 1 << 0,
+        KEY_A = 1 << 1,
+        KEY_S = 1 << 2,
+        KEY_D = 1 << 3,
 };
 
 struct Vec3 {
-	float x, y, z;
-	Vec3() : x(0), y(0), z(0) {}
-	Vec3(float _x, float _y, float _z) : x(_x), y(_y), z(_z) {}
+        float x, y, z;
+        Vec3() : x(0), y(0), z(0) {}
+        Vec3(float _x, float _y, float _z) : x(_x), y(_y), z(_z) {}
 
-	Vec3 operator+(const Vec3& other) const { return Vec3(x + other.x, y + other.y, z + other.z); }
-	Vec3 operator-(const Vec3& other) const { return Vec3(x - other.x, y - other.y, z - other.z); }
-	Vec3 operator*(float scalar) const { return Vec3(x * scalar, y * scalar, z * scalar); }
+        Vec3 operator+(const Vec3& other) const { return Vec3(x + other.x, y + other.y, z + other.z); }
+        Vec3 operator-(const Vec3& other) const { return Vec3(x - other.x, y - other.y, z - other.z); }
+        Vec3 operator*(float scalar) const { return Vec3(x * scalar, y * scalar, z * scalar); }
 };
 
 struct PlayerSnapshot {
-	PlayerID id;
-	Vec3 position;
-	Vec3 rotation;
-	Vec3 velocity;
-	uint8_t inputKeys;
-	bool isOnGround;
-	float health;
-	float serverTime{ 0.0f };
-	// Ãß°¡ ÇÊµå ÇÊ¿ä½Ã ¿©±â¿¡ Ãß°¡
+        PlayerID id;
+        Vec3 position;
+        Vec3 rotation;
+        Vec3 velocity;
+        uint8_t inputKeys;
+        bool isOnGround;
+        float health;
+        bool isAlive;
+        float serverTime{ 0.0f };
+        // ì¶”ê°€ í•„ë“œ í•„ìš”ì‹œ ì—¬ê¸°ì— ì¶”ê°€
 };
 
 enum class MsgType : uint16_t {
-	C2S_LOGIN_REQUEST = 1,  // TCP
-	S2C_LOGIN_ACCEPT = 2,  // TCP
-	C2S_MOVEMENT_UPDATE = 3,  // UDP
-	C2S_FIRE_ACTION = 4,  // UDP
-	S2C_SNAPSHOT_STATE = 5,  // UDP
-	S2C_FIRE_EVENT = 6	// UDP
+        C2S_LOGIN_REQUEST = 1,  // TCP
+        S2C_LOGIN_ACCEPT = 2,  // TCP
+        C2S_MOVEMENT_UPDATE = 3,  // UDP
+        C2S_FIRE_ACTION = 4,  // UDP
+        S2C_SNAPSHOT_STATE = 5,  // UDP
+        S2C_FIRE_EVENT = 6      // UDP
 };
 
 struct MsgHeader {
-	uint16_t type{ 0 };   // MsgType
-	uint16_t reserved{ 0 };
-	uint32_t length{ 0 }; // payload ±æÀÌ(byte)
+        uint16_t type{ 0 };   // MsgType
+        uint16_t reserved{ 0 };
+        uint32_t length{ 0 }; // payload (byte)
 };
 
 struct C2S_LoginRequest {
-	MsgType type = MsgType::C2S_LOGIN_REQUEST;
+        MsgType type = MsgType::C2S_LOGIN_REQUEST;
 
-	char playerName[MAX_NAME_LEN];
-	uint16_t    clientUdpPort{ 0 };
+        char playerName[MAX_NAME_LEN];
+        uint16_t    clientUdpPort{ 0 };
 };
 
 struct S2C_LoginAccept {
-	MsgType		type = MsgType::S2C_LOGIN_ACCEPT;
+        MsgType         type = MsgType::S2C_LOGIN_ACCEPT;
 
-	PlayerID	playerId;
+        PlayerID        playerId;
 };
 
 struct C2S_MovementUpdate {
-	MsgType		type = MsgType::C2S_MOVEMENT_UPDATE;
+        MsgType         type = MsgType::C2S_MOVEMENT_UPDATE;
 
-	uint32_t	msgSeq;
-	PlayerID	playerId;
+        uint32_t        msgSeq;
+        PlayerID        playerId;
 
-	Vec3		position;      // ÇöÀç À§Ä¡
-	Vec3		rotation;      // ¹Ù¶óº¸´Â ¹æÇâ (È¸Àü°ª)
-	Vec3		velocity;      // ÀÌµ¿ ¹æÇâ ¹× ¼Óµµ
-	uint8_t		inputKeys;
-	bool		isOnGround;
+        Vec3            position;      // ìœ„ì¹˜
+        Vec3            rotation;      // ìºë¦­í„°ê°€ ë³´ëŠ” ë°©í–¥ (íšŒì „)
+        Vec3            velocity;      // ì´ë™í•  ë•Œì˜ ì†ë„
+        uint8_t         inputKeys;
+        bool            isOnGround;
 
-	float		clientTime{ 0.f };
+        float           clientTime{ 0.f };
 };
 
 struct C2S_FireAction {
-	MsgType		type = MsgType::C2S_FIRE_ACTION;
+        MsgType         type = MsgType::C2S_FIRE_ACTION;
 
-	uint32_t	msgSeq;
-	PlayerID	playerId;
-	Vec3		fireOrigin;
-	Vec3		fireDirection;
-	float		clientTime{ 0.f };
+        uint32_t        msgSeq;
+        PlayerID        playerId;
+        Vec3            fireOrigin;
+        Vec3            fireDirection;
+        float           clientTime{ 0.f };
 
-	PlayerID    hitPlayerID;
+        PlayerID    hitPlayerID;
 };
 
 struct S2C_SnapshotState {
-	MsgType		type = MsgType::S2C_SNAPSHOT_STATE;
+        MsgType         type = MsgType::S2C_SNAPSHOT_STATE;
 
-	PlayerSnapshot snapshots[MAX_PLAYER_COUNT];
+        PlayerSnapshot snapshots[MAX_PLAYER_COUNT];
 };
 
 struct S2C_FireEvent {
-	MsgType		type = MsgType::S2C_FIRE_EVENT;
+        MsgType         type = MsgType::S2C_FIRE_EVENT;
 
-	PlayerID	shooterID;
-	Vec3		origin;
-	Vec3		direction;
-	PlayerID    hitPlayerID;
+        PlayerID        shooterID;
+        Vec3            origin;
+        Vec3            direction;
+        PlayerID    hitPlayerID;
 };

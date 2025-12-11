@@ -6,8 +6,7 @@
 
 /**
  * @class PlayerState
- * @brief °³º° ÇÃ·¹ÀÌ¾îÀÇ »óÅÂ µ¥ÀÌÅÍ.
- *
+ * @brief Player state on server.
  */
 class PlayerState
 {
@@ -17,35 +16,35 @@ public:
     PlayerID GetPlayerID() const { return m_PlayerID; }
 
     /**
-     * @brief Å¬¶óÀÌ¾ğÆ®ÀÇ ÀÌµ¿ ÀÔ·ÂÀ» ¹Ş¾Æ ¼­¹ö¿¡ ¹İ¿µ
-     * (2ÁÖÂ÷ ÀÛ¾÷)
+     * @brief Applies movement update from client.
+     * (2 ë‹¨ê³„)
      */
     void ApplyMovementFromClient(const C2S_MovementUpdate& pkt, float serverNow);
 
     /**
-     * @brief Å¬¶óÀÌ¾ğÆ®ÀÇ ¹ß»ç ÀÔ·ÂÀ» ¹Ş¾Æ ¼­¹ö¿¡¼­ Ã³¸®
-     * (3ÁÖÂ÷ ÀÛ¾÷)
+     * @brief Applies fire update from client.
+     * (3 ë‹¨ê³„)
      */
     void ApplyFireFromClient(const C2S_FireAction& pkt);
 
     /**
-     * @brief ÇÃ·¹ÀÌ¾î¿¡°Ô µ¥¹ÌÁö¸¦ Àû¿ë
+     * @brief Applies damage to this player.
      */
     void ApplyDamage(int dmg);
 
     /**
-     * @brief PlayerStateÀÇ ÇöÀç »óÅÂ¸¦ ÆĞÅ¶¿ë PlayerSnapshotÀ¸·Î º¯È¯
-     * (11/5 ÀÛ¾÷) ±èµµÀ±
+     * @brief Converts PlayerState to PlayerSnapshot.
+     * (11/5 ë‹¨ê³„) ì œê³µ
      */
     PlayerSnapshot ToSnapshot() const;
 
 private:
-    PlayerID	m_PlayerID;
-    Vec3		m_Position;
+    PlayerID    m_PlayerID;
+    Vec3        m_Position;
     Vec3        m_Rotation;
-    Vec3		m_Velocity;
+    Vec3        m_Velocity;
     uint8_t     m_InputKeys;
-    bool        m_IsOnGround; 
-    float		m_Health;
+    bool        m_IsOnGround;
+    float       m_Health;
+    bool        m_IsAlive;
 };
-
