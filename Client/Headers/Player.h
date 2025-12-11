@@ -36,7 +36,8 @@ protected:
     bool    m_isOnGround = false;
     bool    m_isMoving = false;
     float   m_jumpVelocity = 2.5f;
-    int     m_health = 150;
+    const int m_maxHealth = 150;
+    int     m_health = m_maxHealth;
     bool    m_isDead = false;
 
     float   m_respawnTimer = 0.0f;
@@ -81,5 +82,6 @@ public:
     bool IsDead() const { return m_isDead; }
 
     void ApplyServerState(const PlayerSnapshot& snap);
+    void RespawnAtRandomPosition();
 
 };

@@ -30,6 +30,20 @@ namespace
 }
 
 
+void Player::RespawnAtRandomPosition()
+{
+    m_isDead = false;
+    m_respawnTimer = 0.0f;
+    m_health = m_maxHealth;
+    this->position = GetRandomSpawnPosition();
+    m_velocity = vec3(0.0f);
+    m_isOnGround = false;
+    m_isMoving = true;
+
+    std::cout << "[Player] Respawned." << std::endl;
+}
+
+
 Player::Player()
     : CObject() {
 
@@ -212,13 +226,7 @@ void Player::Update()
 
         if (m_respawnTimer <= 0.0f)
         {
-            m_isDead = false;
-            m_health = 150;
-            this->position = GetRandomSpawnPosition();
-            m_velocity = vec3(0.0f);
-            m_isOnGround = false;
-            m_isMoving = true;
-            std::cout << "[Player] Respawned." << std::endl;
+            RespawnAtRandomPosition();
         }
 
         m_velocity = vec3(0.0f);
@@ -935,10 +943,11 @@ void Player::ResolveWallCollision(const std::vector<glm::vec3>& mapTriangles, gl
 
 void Player::ApplyServerState(const PlayerSnapshot& snap)
 {
+    bool wasDead = m_isDead;
     m_health = static_cast<int>(snap.health);
 
-    bool wasDead = m_isDead;
-    m_isDead = !snap.isAlive || m_health <= 0;
+    const bool shouldBeAlive = snap.isAlive && m_health > 0;
+    m_isDead = !shouldBeAlive;
 
     if (m_isDead)
     {
@@ -948,5 +957,9 @@ void Player::ApplyServerState(const PlayerSnapshot& snap)
             std::cout << "[Player] You died." << std::endl;
             m_respawnTimer = m_respawnDelay;
         }
+    }
+    else if (wasDead)
+    {
+        RespawnAtRandomPosition();
     }
 }
