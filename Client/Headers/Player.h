@@ -38,6 +38,9 @@ protected:
     float   m_jumpVelocity = 2.5f;
     int     m_health = 150;
     bool    m_isDead = false;
+
+    float   m_respawnTimer = 0.0f;
+    const float m_respawnDelay = 3.0f;
     
     
     float   m_radius = 0.03f; 
@@ -63,6 +66,7 @@ public:
 
     void RenderHitbox();
     void RenderFireRay();
+    void RenderRespawnCountdown();
 
     C2S_MovementUpdate BuildMovementPacket();  
     C2S_FireAction BuildFirePacket(const vec3& fireOrigin, const vec3& fireDirection, PlayerID targetID);

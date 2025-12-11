@@ -183,6 +183,22 @@ void Player::Update()
 
     if (m_isDead)
     {
+        if (m_respawnTimer > 0.0f)
+        {
+            m_respawnTimer -= static_cast<float>(DT);
+            if (m_respawnTimer < 0.0f)
+            {
+                m_respawnTimer = 0.0f;
+            }
+        }
+
+        if (m_respawnTimer <= 0.0f)
+        {
+            m_isDead = false;
+            m_health = 150;
+            std::cout << "[Player] Respawned." << std::endl;
+        }
+
         m_velocity = vec3(0.0f);
         return;
     }
@@ -551,6 +567,8 @@ void Player::Render() {
         if (m_bShowFireRay) {
             RenderFireRay();
         }
+
+        RenderRespawnCountdown();
     }
 }
 
@@ -616,22 +634,71 @@ void Player::RenderFireRay() {
     glLoadMatrixf(glm::value_ptr(CameraMgr::Instance()->getMainCamera()->getViewMatrix()));
 
     // 3. 라인 그리기
-    glLineWidth(2.0f); // 선 두께
+    glEnable(GL_LINE_SMOOTH);
+    glLineWidth(5.0f); // 더 두껍게
     glBegin(GL_LINES);
     {
-        glColor3f(1.0f, 0.0f, 0.0f); // 빨간색
+        glColor3f(1.0f, 0.2f, 0.0f); // 더 선명한 오렌지 톤 시작
         glVertex3f(m_fireRayStart.x, m_fireRayStart.y, m_fireRayStart.z);
-        
-        glColor3f(1.0f, 1.0f, 0.0f); // 끝은 노란색 (그라데이션 효과)
+
+        glColor3f(1.0f, 0.9f, 0.2f); // 끝은 밝은 노란색 (그라데이션 효과)
         glVertex3f(m_fireRayEnd.x, m_fireRayEnd.y, m_fireRayEnd.z);
     }
     glEnd();
     glLineWidth(1.0f); // 두께 원복
+    glDisable(GL_LINE_SMOOTH);
 
     // 4. 상태 복구
     glEnable(GL_LIGHTING);
     glEnable(GL_TEXTURE_2D);
     glColor3f(1.0f, 1.0f, 1.0f);
+}
+
+void Player::RenderRespawnCountdown() {
+    if (!m_isDead || m_respawnTimer <= 0.0f)
+    {
+        return;
+    }
+
+    std::string text = std::to_string(static_cast<int>(std::ceil(m_respawnTimer)));
+    void* font = GLUT_BITMAP_TIMES_ROMAN_24;
+    int textWidth = 0;
+    for (char c : text)
+    {
+        textWidth += glutBitmapWidth(font, c);
+    }
+
+    int x = (WINDOW_WIDTH - textWidth) / 2;
+    int y = WINDOW_HEIGHT / 2;
+
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    glOrtho(0, WINDOW_WIDTH, 0, WINDOW_HEIGHT, -1, 1);
+
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+
+    glDisable(GL_LIGHTING);
+    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_DEPTH_TEST);
+
+    glColor3f(1.0f, 0.25f, 0.25f);
+    glRasterPos2i(x, y);
+    for (char c : text)
+    {
+        glutBitmapCharacter(font, c);
+    }
+
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_LIGHTING);
+
+    glPopMatrix();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
 }
 
 C2S_MovementUpdate Player::BuildMovementPacket()
@@ -850,6 +917,7 @@ void Player::ApplyServerState(const PlayerSnapshot& snap)
         if (!wasDead)
         {
             std::cout << "[Player] You died." << std::endl;
+            m_respawnTimer = m_respawnDelay;
         }
     }
 }
