@@ -60,9 +60,17 @@ int main(int argc, char** argv) {
     glewExperimental = GL_TRUE;
     glewInit();
 
+    std::string serverIP = "26.169.232.115";
+
+    if (argc > 1) {
+        serverIP = argv[1];
+    }
+
+    std::cout << "[Main] Target Server IP: " << serverIP << std::endl;
+
     g_pNetwork = new ClientNetwork();
-	// IP�� ������ �ӽ�, ��Ʈ�� ���� ����
-    if (!g_pNetwork->ConnectToServer("26.169.232.115", 7777, 9001)) {
+    
+    if (!g_pNetwork->ConnectToServer(serverIP.c_str(), 7777, 9001)) {
         std::cout << "[Main] Failed to connect to server." << std::endl;
     }
 

@@ -32,27 +32,6 @@ void Stage_1_Scene::Enter() {
         player->setPosition(vec3(-2.56633, 0.225f, -4.68781));
         player->setScale(vec3(0.1f));
 
-
-  
-        std::vector<glm::vec3> enemyPositions = {
-            glm::vec3(-1.49554f, 0.125f,-5.42878),
-            glm::vec3(-3.76336f, 0.125f, -6.6219f),  //백사위
-            glm::vec3(-0.518212f, 0.125f, -6.9495f),
-            glm::vec3(-1.4714f, 0.125f, -9.09569), //ct
-            glm::vec3(-4.81171f, -0.1f, -8.39536f),  //백사오른
-        };
-
-        std::vector<CObject*> enemies; // 적 객체를 관리하는 컨테이너
-
-        for (const auto& position : enemyPositions) {
-            Enemy* enemy = new Enemy();
-            enemy->setPosition(position);
-            enemy->setScale(glm::vec3(0.08f));
-
-            enemies.push_back(enemy);
-            addObject(enemy, GROUP_TYPE::ENEMY);
-        }
-
         // --- 4. 씬에 객체 추가 ---
         addObject(map_floor, GROUP_TYPE::DEFAULT);
         addObject(player, GROUP_TYPE::PLAYER);
