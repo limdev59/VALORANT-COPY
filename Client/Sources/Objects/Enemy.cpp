@@ -9,6 +9,9 @@
 #include "TimeMgr.h"
 #include "CCamera.h"
 
+float IntersectRaySphere(const glm::vec3& rayOrigin, const glm::vec3& rayDir, const glm::vec3& sphereCenter, float sphereRadius);
+float IntersectRayCylinder(const glm::vec3& rayOrigin, const glm::vec3& rayDir, const glm::vec3& cylBase, float height, float radius);
+
 Enemy::Enemy()
     : CObject() {
     
@@ -158,6 +161,59 @@ void Enemy::Render() {
         // 그리기
         currModel->Render();
     }
+    if (m_bShowHitbox) {
+        RenderHitbox();
+    }
+}
+
+void Enemy::RenderHitbox() {
+    glUseProgram(0);            // 셰이더 끄기
+    glDisable(GL_LIGHTING);     // 라이팅 끄기
+    glDisable(GL_TEXTURE_2D);   // 텍스처 끄기
+    glDisable(GL_CULL_FACE);    // 양면 렌더링
+
+    // 카메라 행렬 가져오기
+    glMatrixMode(GL_PROJECTION);
+    glLoadMatrixf(glm::value_ptr(CameraMgr::Instance()->getMainCamera()->getProjectionMatrix()));
+    glMatrixMode(GL_MODELVIEW);
+    glLoadMatrixf(glm::value_ptr(CameraMgr::Instance()->getMainCamera()->getViewMatrix()));
+
+    glPushMatrix();
+    // 적 위치로 이동
+    glTranslatef(position.x, position.y, position.z);
+
+    // [색상 설정] 적 히트박스는 빨간색 (Red)
+    glColor3f(1.0f, 0.0f, 0.0f);
+
+    // 1. 하단 구
+    glPushMatrix();
+    glTranslatef(0.0f, m_radius, 0.0f);
+    glutWireSphere(m_radius, 16, 16);
+    glPopMatrix();
+
+    // 2. 상단 구
+    glPushMatrix();
+    glTranslatef(0.0f, m_height - m_radius, 0.0f);
+    glutWireSphere(m_radius, 16, 16);
+    glPopMatrix();
+
+    // 3. 몸통 (4방향 선으로 연결)
+    glBegin(GL_LINES);
+    {
+        glVertex3f(m_radius, m_radius, 0);   glVertex3f(m_radius, m_height - m_radius, 0);
+        glVertex3f(-m_radius, m_radius, 0);  glVertex3f(-m_radius, m_height - m_radius, 0);
+        glVertex3f(0, m_radius, m_radius);   glVertex3f(0, m_height - m_radius, m_radius);
+        glVertex3f(0, m_radius, -m_radius);  glVertex3f(0, m_height - m_radius, -m_radius);
+    }
+    glEnd();
+
+    glPopMatrix();
+
+    // 상태 복구
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_TEXTURE_2D);
+    glColor3f(1.0f, 1.0f, 1.0f); // 색상 초기화
 }
 
 void Enemy::TakeDamage(int damage) {
@@ -169,6 +225,40 @@ void Enemy::TakeDamage(int damage) {
 
 void Enemy::OnDeath() {
     std::cout << "Enemy died!" << std::endl;
+}
+
+float Enemy::CheckRayHit(const glm::vec3& rayOrigin, const glm::vec3& rayDir) {
+    // 1. 히트박스 정의 (World Space)
+    // RenderHitbox와 동일한 기준 사용
+    glm::vec3 basePos = this->position + glm::vec3(0.0f, m_radius, 0.0f);           // 하단 구 중심
+    glm::vec3 topPos  = this->position + glm::vec3(0.0f, m_height - m_radius, 0.0f); // 상단 구 중심
+    float cylinderHeight = (m_height - m_radius) - m_radius; // 순수 원기둥 높이
+
+    float closestDist = 99999.0f;
+    bool hit = false;
+
+    // 2. 하단 구 검사
+    float tSphere1 = IntersectRaySphere(rayOrigin, rayDir, basePos, m_radius);
+    if (tSphere1 > 0.0f && tSphere1 < closestDist) {
+        closestDist = tSphere1;
+        hit = true;
+    }
+
+    // 3. 상단 구 검사
+    float tSphere2 = IntersectRaySphere(rayOrigin, rayDir, topPos, m_radius);
+    if (tSphere2 > 0.0f && tSphere2 < closestDist) {
+        closestDist = tSphere2;
+        hit = true;
+    }
+
+    // 4. 몸통 원기둥 검사
+    float tCyl = IntersectRayCylinder(rayOrigin, rayDir, basePos, cylinderHeight, m_radius);
+    if (tCyl > 0.0f && tCyl < closestDist) {
+        closestDist = tCyl;
+        hit = true;
+    }
+
+    return hit ? closestDist : -1.0f;
 }
 
 void Enemy::SyncNetworkState(const PlayerSnapshot& snap) {
@@ -185,4 +275,39 @@ void Enemy::SyncNetworkState(const PlayerSnapshot& snap) {
     this->m_velocity.z = snap.velocity.z;
     m_inputKeys = snap.inputKeys;
     m_isOnGround = snap.isOnGround;
+}
+
+float IntersectRaySphere(const glm::vec3& rayOrigin, const glm::vec3& rayDir, const glm::vec3& sphereCenter, float sphereRadius) {
+    glm::vec3 oc = rayOrigin - sphereCenter;
+    float a = glm::dot(rayDir, rayDir);
+    float b = 2.0f * glm::dot(oc, rayDir);
+    float c = glm::dot(oc, oc) - sphereRadius * sphereRadius;
+    float discriminant = b * b - 4 * a * c;
+
+    if (discriminant < 0) return -1.0f;
+    else return (-b - sqrt(discriminant)) / (2.0f * a);
+}
+
+// 광선-원기둥(Y축 정렬) 충돌 헬퍼 함수
+float IntersectRayCylinder(const glm::vec3& rayOrigin, const glm::vec3& rayDir, const glm::vec3& cylBase, float height, float radius) {
+    glm::vec3 d = rayDir;
+    glm::vec3 o = rayOrigin - cylBase; // 원기둥 밑면 기준 상대 좌표
+
+    // x, z 평면에서의 원과 광선 교차 판별 (a*t^2 + b*t + c = 0)
+    float a = d.x * d.x + d.z * d.z;
+    float b = 2.0f * (o.x * d.x + o.z * d.z);
+    float c = o.x * o.x + o.z * o.z - radius * radius;
+
+    float discriminant = b * b - 4 * a * c;
+    if (discriminant < 0) return -1.0f;
+
+    // 가장 가까운 교차점 t 계산
+    float t = (-b - sqrt(discriminant)) / (2.0f * a);
+    
+    // 높이(y) 범위 체크
+    float yHit = o.y + t * d.y;
+    if (yHit >= 0.0f && yHit <= height) {
+        return t;
+    }
+    return -1.0f;
 }

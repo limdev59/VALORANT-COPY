@@ -47,6 +47,12 @@ protected:
 
     uint32_t m_movementSeq = 0;
     uint32_t m_fireSeq = 0;
+    
+    bool      m_bShowFireRay = false;
+    float     m_fireRayTimer = 0.0f;
+    glm::vec3 m_fireRayStart = glm::vec3(0.0f);
+    glm::vec3 m_fireRayEnd = glm::vec3(0.0f);
+    
 public:
     Player();
     virtual ~Player();
@@ -55,6 +61,7 @@ public:
     virtual void Render() override;
 
     void RenderHitbox();
+    void RenderFireRay();
 
     C2S_MovementUpdate BuildMovementPacket();  
     C2S_FireAction BuildFirePacket(const vec3& fireOrigin, const vec3& fireDirection, PlayerID targetID);

@@ -9,6 +9,7 @@
 #include "CCamera.h"
 #include "CScene.h"
 #include "Ascent.h"
+#include "Enemy.h"
 
 
 Player::Player()
@@ -132,7 +133,7 @@ void Player::PreventTunneling(const std::vector<glm::vec3>& mapTriangles, glm::v
 
     glm::vec3 dir = glm::normalize(moveVec);
     // 캡슐의 허리(중심) 높이에서 검사
-    glm::vec3 rayOrigin = this->position + glm::vec3(0.0f, m_height * 0.5f, 0.0f);
+    glm::vec3 rayOrigin = this->position + glm::vec3(0.0f, m_height * 0.3f, 0.0f);
     
     // 검사 거리: 이동할 거리 + 반지름 (여유분)
     // 반지름만큼 더 검사해야 몸체가 닿기 전에 감지 가능
@@ -198,6 +199,14 @@ void Player::Update()
                 Ascent* ascent = dynamic_cast<Ascent*>(obj);
                 if (ascent) {
                     ascent->SetShowHitbox(m_bShowHitbox);
+                }
+            }
+            
+            const auto& enemyObjs = pScene->GetObjects(GROUP_TYPE::ENEMY);
+            for (auto obj : enemyObjs) {
+                Enemy* enemy = dynamic_cast<Enemy*>(obj);
+                if (enemy) {
+                    enemy->SetShowHitbox(m_bShowHitbox); // Enemy에 추가한 함수 호출
                 }
             }
         }
@@ -321,11 +330,63 @@ void Player::Update()
     
     // 발사 패킷 전송
     if (KeyMgr::Instance()->getKeyState(KEY::E) == KEY_TYPE::TAP) {
-        glm::vec3 fireDir = glm::normalize(CameraMgr::Instance()->getMainCamera()->target - CameraMgr::Instance()->getMainCamera()->position);
-        C2S_FireAction firePkt = BuildFirePacket(CameraMgr::Instance()->getMainCamera()->position, fireDir, -1);
         
+        // 1. 발사 원점 및 방향 계산 (기존 유지)
+        glm::vec3 eyePos = this->position + glm::vec3(0.0f, m_height - 0.03f, 0.0f);
+        glm::vec3 fireOrigin = eyePos;
+        CCamera* pCam = CameraMgr::Instance()->getMainCamera();
+        glm::vec3 fireDir = glm::normalize(pCam->target - pCam->position);
+
+        int hitPlayerID = -1; // 기본값: 맞은 사람 없음
+        float minHitDist = 1000.0f; // 최대 사거리
+
+        // 씬에서 모든 Enemy 가져오기
+        CScene* pScene = SceneMgr::Instance()->getScene();
+        if (pScene) {
+            const auto& enemies = pScene->GetObjects(GROUP_TYPE::ENEMY);
+            for (auto obj : enemies) {
+                Enemy* pEnemy = dynamic_cast<Enemy*>(obj);
+                if (!pEnemy) continue;
+
+                // 충돌 검사 함수 호출
+                float dist = pEnemy->CheckRayHit(fireOrigin, fireDir);
+                
+                // 가장 가까운 적 선택
+                if (dist > 0.0f && dist < minHitDist) {
+                    minHitDist = dist;
+                    hitPlayerID = pEnemy->GetPlayerID();
+                }
+            }
+        }
+
+        // --- [추가] 적중 시 로깅 ---
+        if (hitPlayerID != -1) {
+            std::cout << "[HIT] Player " << g_pNetwork->GetMyPlayerID() 
+                      << " hit Enemy " << hitPlayerID << "!" << std::endl;
+        } else {
+            std::cout << "Miss!" << std::endl;
+        }
+
+        // 2. 디버그 광선 설정 (기존 유지)
+        m_fireRayStart = fireOrigin;
+        m_fireRayEnd = fireOrigin + (fireDir * minHitDist); // 맞은 곳까지만 그리거나 끝까지 그림
+        if (hitPlayerID == -1) m_fireRayEnd = fireOrigin + (fireDir * 100.0f); // 안 맞으면 멀리
+        
+        m_bShowFireRay = true;
+        m_fireRayTimer = 0.1f;
+
+        // 3. 서버 전송 (hitPlayerID 포함)
+        C2S_FireAction firePkt = BuildFirePacket(fireOrigin, fireDir, hitPlayerID);
         if (g_pNetwork) {
             g_pNetwork->SendFire(firePkt);
+        }
+    }
+
+    // [광선 타이머 갱신]
+    if (m_bShowFireRay) {
+        m_fireRayTimer -= DT; // DT: 델타 타임
+        if (m_fireRayTimer <= 0.0f) {
+            m_bShowFireRay = false;
         }
     }
 
@@ -408,7 +469,7 @@ void Player::Update()
         glm::vec3 camDir = glm::normalize(pCam->target - pCam->position);
         
         // 플레이어의 눈 위치 (캡슐 상단)
-        glm::vec3 eyePos = this->position + glm::vec3(0.0f, m_height-0.07 , 0.0f);
+        glm::vec3 eyePos = this->position + glm::vec3(0.0f, m_height -0.03f , 0.0f);
         
         // 최종 카메라 위치 계산
         glm::vec3 finalCamPos;
@@ -481,6 +542,9 @@ void Player::Render() {
         if (m_bShowHitbox) {
             RenderHitbox();
         }
+        if (m_bShowFireRay) {
+            RenderFireRay();
+        }
     }
 }
 
@@ -528,6 +592,37 @@ void Player::RenderHitbox() {
 
     // 상태 복구
     glEnable(GL_CULL_FACE); // 다시 켜기
+    glEnable(GL_LIGHTING);
+    glEnable(GL_TEXTURE_2D);
+    glColor3f(1.0f, 1.0f, 1.0f);
+}
+
+void Player::RenderFireRay() {
+    // 1. 셰이더 및 텍스처 비활성화 (순수 색상 라인 그리기 위해)
+    glUseProgram(0);
+    glDisable(GL_LIGHTING);
+    glDisable(GL_TEXTURE_2D);
+
+    // 2. 카메라 행렬 로드 (월드 좌표계 기준)
+    glMatrixMode(GL_PROJECTION);
+    glLoadMatrixf(glm::value_ptr(CameraMgr::Instance()->getMainCamera()->getProjectionMatrix()));
+    glMatrixMode(GL_MODELVIEW);
+    glLoadMatrixf(glm::value_ptr(CameraMgr::Instance()->getMainCamera()->getViewMatrix()));
+
+    // 3. 라인 그리기
+    glLineWidth(2.0f); // 선 두께
+    glBegin(GL_LINES);
+    {
+        glColor3f(1.0f, 0.0f, 0.0f); // 빨간색
+        glVertex3f(m_fireRayStart.x, m_fireRayStart.y, m_fireRayStart.z);
+        
+        glColor3f(1.0f, 1.0f, 0.0f); // 끝은 노란색 (그라데이션 효과)
+        glVertex3f(m_fireRayEnd.x, m_fireRayEnd.y, m_fireRayEnd.z);
+    }
+    glEnd();
+    glLineWidth(1.0f); // 두께 원복
+
+    // 4. 상태 복구
     glEnable(GL_LIGHTING);
     glEnable(GL_TEXTURE_2D);
     glColor3f(1.0f, 1.0f, 1.0f);

@@ -6,7 +6,7 @@ CScene::CScene()
     :loaded(false)
 {
     for (GLuint i = 0; i < (GLuint)GROUP_TYPE::END; ++i) {
-        arrObj[i] = std::vector<CObject*>();  // °¢ ¿ä¼Ò¸¦ º¤ÅÍ·Î ¸í½ÃÀûÀ¸·Î ÃÊ±âÈ­
+        arrObj[i] = std::vector<CObject*>();  // ï¿½ï¿½ ï¿½ï¿½Ò¸ï¿½ ï¿½ï¿½ï¿½Í·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
     }
 }
 

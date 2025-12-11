@@ -180,7 +180,7 @@ bool ClientNetwork::ConnectToServer(const std::string& ip, uint16_t tcpPort, uin
 void ClientNetwork::SendMovement(const C2S_MovementUpdate& pkt) 
 {
     if (m_udpSocket == INVALID_SOCKET) {
-        std::cerr << "[ClientNetwork] 이동 UDP 소켓이 유효하지 않습니다.\n";
+        //std::cerr << "[ClientNetwork] 이동 UDP 소켓이 유효하지 않습니다.\n";
         return;
     }
 

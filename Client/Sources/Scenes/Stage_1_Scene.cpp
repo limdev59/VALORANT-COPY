@@ -88,6 +88,7 @@ void Stage_1_Scene::Update() {
                     pEnemy = dynamic_cast<Enemy*>(it->second);
                 } else {
                     pEnemy = new Enemy();
+                    pEnemy->SetPlayerID(snap.id);
                     pEnemy->setScale(glm::vec3(0.1f));
                     addObject(pEnemy, GROUP_TYPE::ENEMY);
                     m_remotePlayers[snap.id] = pEnemy;

@@ -31,6 +31,12 @@ protected:
     uint8_t m_inputKeys = 0;   // 서버에서 받은 키 입력 비트마스크
     bool    m_isOnGround = true; // 착지 여부
     vec3    m_velocity = vec3(0.0f, 0.0f, 0.0f);
+    
+    PlayerID m_playerID = 15535;
+    
+    float   m_radius = 0.03f; 
+    float   m_height = 0.23f;
+    bool    m_bShowHitbox = false;
 
 public:
     Enemy();
@@ -38,9 +44,17 @@ public:
 
     virtual void Update() override;
     virtual void Render() override;
+    
+    void RenderHitbox();
 
     void TakeDamage(int damage);
     void OnDeath();
+    
+    void SetPlayerID(PlayerID id) { m_playerID = id; }
+    PlayerID GetPlayerID() const { return m_playerID; }
+
+    void SetShowHitbox(bool show) { m_bShowHitbox = show; }
+    float CheckRayHit(const glm::vec3& rayOrigin, const glm::vec3& rayDir);
     
     // 네트워크 패킷 핸들러 동기화 함수
     void SyncNetworkState(const PlayerSnapshot& snap);

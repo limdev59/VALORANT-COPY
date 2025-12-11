@@ -62,7 +62,7 @@ int main(int argc, char** argv) {
 
     g_pNetwork = new ClientNetwork();
 	// IP�� ������ �ӽ�, ��Ʈ�� ���� ����
-    if (!g_pNetwork->ConnectToServer("127.0.0.1", 7777, 9001)) {
+    if (!g_pNetwork->ConnectToServer("26.169.232.115", 7777, 9001)) {
         std::cout << "[Main] Failed to connect to server." << std::endl;
     }
 
