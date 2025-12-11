@@ -181,6 +181,12 @@ void Player::Update()
 {
     double dt = DT;
 
+    if (m_isDead)
+    {
+        m_velocity = vec3(0.0f);
+        return;
+    }
+
     // ---------------------------------------------------------
     // 1. [디버그] V키 입력 처리 (히트박스 시각화 토글)
     // ---------------------------------------------------------
@@ -827,6 +833,23 @@ void Player::ResolveWallCollision(const std::vector<glm::vec3>& mapTriangles, gl
                     segB += pushDir * pushDist;
                 }
             }
+        }
+    }
+}
+
+void Player::ApplyServerState(const PlayerSnapshot& snap)
+{
+    m_health = static_cast<int>(snap.health);
+
+    bool wasDead = m_isDead;
+    m_isDead = !snap.isAlive || m_health <= 0;
+
+    if (m_isDead)
+    {
+        m_health = 0;
+        if (!wasDead)
+        {
+            std::cout << "[Player] You died." << std::endl;
         }
     }
 }

@@ -2,10 +2,10 @@
 #include "CObject.h"
 #include "TimeMgr.h" // DT
 #include "KeyMgr.h"  // KeyMgr
-#include "IModel.h"  // 템플릿 래퍼 포함
+#include "IModel.h"  // 첩  
 #include "ClientNetwork.h" // C2S_MovementUpdate, C2S_FireAction
 
-// 전방 선언
+//  
 class AnimModel;
 class Animator;
 class Animation;
@@ -37,6 +37,7 @@ protected:
     bool    m_isMoving = false;
     float   m_jumpVelocity = 2.5f;
     int     m_health = 150;
+    bool    m_isDead = false;
     
     
     float   m_radius = 0.03f; 
@@ -73,5 +74,8 @@ public:
 
     int GetHealth() const { return m_health; }
     void SetHealth(int health) { m_health = health; }
+    bool IsDead() const { return m_isDead; }
+
+    void ApplyServerState(const PlayerSnapshot& snap);
 
 };

@@ -49,7 +49,10 @@ public:
 
     void TakeDamage(int damage);
     void OnDeath();
-    
+
+    void SetHealth(int health) { m_health = health; }
+    bool IsDead() const { return m_isDead; }
+
     void SetPlayerID(PlayerID id) { m_playerID = id; }
     PlayerID GetPlayerID() const { return m_playerID; }
 
@@ -75,4 +78,5 @@ public:
 
 private:
     int     m_health = 150;
+    bool    m_isDead = false;
 };

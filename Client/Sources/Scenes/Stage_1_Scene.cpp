@@ -67,6 +67,7 @@ void Stage_1_Scene::Update() {
 
     if (loaded) {
         CObject& player = getObject(GROUP_TYPE::PLAYER, 0);
+        Player* pLocalPlayer = dynamic_cast<Player*>(&player);
         
 
         //ApplySnapshot
@@ -77,8 +78,15 @@ void Stage_1_Scene::Update() {
 
             for (const auto& snap : snapshots)
             {
-                // 내 캐릭터는 스냅샷 적용 제외
-                if (snap.id == g_pNetwork->GetMyPlayerID()) continue;
+                // 내 캐릭터는 위치 스냅샷 적용 제외 (HP 동기화만 수행)
+                if (snap.id == g_pNetwork->GetMyPlayerID())
+                {
+                    if (pLocalPlayer)
+                    {
+                        pLocalPlayer->ApplyServerState(snap);
+                    }
+                    continue;
+                }
 
                 // 3. 해당 ID의 플레이어가 이미 씬에 있는지 확인
                 auto it = m_remotePlayers.find(snap.id);
@@ -121,7 +129,11 @@ void Stage_1_Scene::RenderPlayerHUD()
     if (!player)
         return;
 
-    const std::string hpText = "HP: " + std::to_string(player->GetHealth());
+    std::string hpText = "HP: " + std::to_string(player->GetHealth());
+    if (player->IsDead())
+    {
+        hpText += " (DEAD)";
+    }
 
     glUseProgram(0);
 
