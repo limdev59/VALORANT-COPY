@@ -262,14 +262,14 @@ void NetworkIO::HandleUDPRead()
 				if (event.movement.inputKeys & KEY_D) keyStr += "D";
 				if (keyStr.empty()) keyStr = "-";
 
-				printf("[Server] Move Recv - PID:%d | Pos(%.2f, %.2f, %.2f) | Rot(%.2f, %.2f, %.2f) | Vel(%.2f, %.2f, %.2f) | Keys(%s) | Ground(%d)\n",
+				/*printf("[Server] Move Recv - PID:%d | Pos(%.2f, %.2f, %.2f) | Rot(%.2f, %.2f, %.2f) | Vel(%.2f, %.2f, %.2f) | Keys(%s) | Ground(%d)\n",
 					pid,
 					event.movement.position.x, event.movement.position.y, event.movement.position.z,
 					event.movement.rotation.x, event.movement.rotation.y, event.movement.rotation.z,
 					event.movement.velocity.x, event.movement.velocity.y, event.movement.velocity.z,
 					keyStr.c_str(), 
 					event.movement.isOnGround ? 1 : 0
-				);
+				);*/
 			}
 		}
 		break;
