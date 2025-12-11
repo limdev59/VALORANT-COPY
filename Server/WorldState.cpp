@@ -10,7 +10,7 @@ WorldState::~WorldState()
 {
     for (auto& pair : m_PlayerStates)
     {
-        delete pair.second; // PlayerState °´Ã¼ ¸Ş¸ğ¸® ÇØÁ¦
+        delete pair.second; // PlayerState ï¿½ï¿½Ã¼ ï¿½Ş¸ï¿½ ï¿½ï¿½ï¿½ï¿½
     }
     m_PlayerStates.clear();
 }
@@ -23,9 +23,9 @@ void WorldState::Initialize(PacketQueue* inQ, ByteQueue* outQ)
 
 void WorldState::Tick(float nowSec)
 {
-    // ÀÔ·Â Å¥ Ã³¸®
+    // ì…ë ¥ í ì²˜ë¦¬
     WorldEvent event;
-    // Å¥°¡ ºô ¶§±îÁö ¸ğµç ÀÌº¥Æ®¸¦ Ã³¸®
+    // íì— ë‹´ê¸´ ëª¨ë“  ì´ë²¤íŠ¸ë¥¼ ì²˜ë¦¬
     while (m_pInputQueue->TryPop(event))
     {
         switch (event.type)
@@ -40,22 +40,30 @@ void WorldState::Tick(float nowSec)
             OnMovement(event.playerID, event.movement, nowSec);
             break;
         case E_Packet_Fire:
-            OnFire(event.playerID, event.fire);
+            OnFire(event.playerID, event.fire, nowSec);
             break;
         }
     }
 
-    // °ÔÀÓ »óÅÂ ¾÷µ¥ÀÌÆ®
+    for (auto& pair : m_PlayerStates)
+    {
+        if (pair.second)
+        {
+            pair.second->Update(nowSec);
+        }
+    }
 
-    // ½º³À¼¦ »ı¼º
+    // í‘œì¤€ ìƒíƒœ ì‚¬ì§„ ìƒì„±
+
+    // íŒŒë¼ë¯¸í„° ì¶”ì 
     S2C_SnapshotState snapshotPkt;
 
     int playerCount = BuildSnapshotAll(nowSec, snapshotPkt);
 
-    // ½º³À¼¦ Ãâ·Â Å¥¿¡ »ğÀÔ
+    // ìƒì„±í•œ ìŠ¤ëƒ…ìƒ·ì„ ì¶œë ¥ íì— ì „ë‹¬
     if (playerCount > 0)
     {
-        // 1. ½ÇÁ¦ µ¥ÀÌÅÍ Å©±â °è»ê
+        // 1. í—¤ë”ì™€ ë°ì´í„°ì˜ ì´ í¬ê¸° ê³„ì‚°
         int headerSize = sizeof(MsgType) + sizeof(uint16_t);
         int dataSize = playerCount * sizeof(PlayerSnapshot);
         int sendSize = headerSize + dataSize;
@@ -63,12 +71,12 @@ void WorldState::Tick(float nowSec)
         RawPacketBuffer buffer;
         buffer.length = sendSize;
 
-        // 2. ¸Ş¸ğ¸® º¹»ç (±¸Á¶Ã¼ -> ¹öÆÛ)
+        // 2. ë©”ëª¨ë¦¬ ë³µì‚¬ (êµ¬ì¡°ì²´ -> ë²„í¼)
         if (sendSize <= MAX_PACKET_SIZE)
         {
             std::memcpy(buffer.data, &snapshotPkt, sendSize);
 
-            // 3. Å¥¿¡ ³Ö±â
+            // 3. íì— ë„£ê¸°
             m_pOutputQueue->Push(buffer);
         }
         else
@@ -77,8 +85,7 @@ void WorldState::Tick(float nowSec)
         }
     }
 }
-
-// --- ÀÌº¥Æ® ÇÚµé·¯ ±¸Çö ---
+// --- ï¿½Ìºï¿½Æ® ï¿½Úµé·¯ ï¿½ï¿½ï¿½ï¿½ ---
 void WorldState::OnPlayerJoined(PlayerID pid)
 {
     if (m_PlayerStates.find(pid) == m_PlayerStates.end())
@@ -104,36 +111,41 @@ void WorldState::OnMovement(PlayerID pid, const C2S_MovementUpdate& pkt, float n
     auto it = m_PlayerStates.find(pid);
     if (it != m_PlayerStates.end())
     {
+        if (!it->second->IsAlive())
+        {
+            return;
+        }
+
         it->second->ApplyMovementFromClient(pkt, nowSec);
     }
 }
 
-void WorldState::OnFire(PlayerID pid, const C2S_FireAction& pkt)
+void WorldState::OnFire(PlayerID pid, const C2S_FireAction& pkt, float nowSec)
 {
-	// ÃÑÀ» ½ğ ÇÃ·¹ÀÌ¾î »óÅÂ ¾÷µ¥ÀÌÆ®
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     auto it = m_PlayerStates.find(pid);
     if (it != m_PlayerStates.end())
     {
         it->second->ApplyFireFromClient(pkt);
     }
 
-    // ÃÑÀ» ¸ÂÀº ÇÃ·¹ÀÌ¾î »óÅÂ ¾÷µ¥ÀÌÆ®
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     if (pkt.hitPlayerID != -1)
     {
-        // ÀÚ±â ÀÚ½ÅÀ» ½î´Â °æ¿ì ¹«½Ã
+        // ï¿½Ú±ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (pkt.hitPlayerID == pid) return;
 
-        // ¸ÂÀº »ç¶÷ Ã£±â
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ Ã£ï¿½ï¿½
         auto itVictim = m_PlayerStates.find(pkt.hitPlayerID);
         if (itVictim != m_PlayerStates.end())
         {
-            // ¸ÂÀº »ç¶÷¿¡°Ô µ¥¹ÌÁö Àû¿ë
-            itVictim->second->ApplyDamage(20);
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+            itVictim->second->ApplyDamage(20, nowSec);
         }
     }
 
-    // 3. [½Å±Ô ·ÎÁ÷] ¹ß»ç »ç½ÇÀ» ¸ğµç Å¬¶óÀÌ¾ğÆ®¿¡°Ô ºê·ÎµåÄ³½ºÆ®
-    //    S2C_FireEvent ÆĞÅ¶À» ¸¸µé¾î Ãâ·Â Å¥¿¡ ³Ö½À´Ï´Ù.
+    // 3. [ï¿½Å±ï¿½ ï¿½ï¿½ï¿½ï¿½] ï¿½ß»ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Îµï¿½Ä³ï¿½ï¿½Æ®
+    //    S2C_FireEvent ï¿½ï¿½Å¶ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ Å¥ï¿½ï¿½ ï¿½Ö½ï¿½ï¿½Ï´ï¿½.
     S2C_FireEvent fireEvt;
     fireEvt.type = MsgType::S2C_FIRE_EVENT;
     fireEvt.shooterID = pid;
@@ -141,19 +153,19 @@ void WorldState::OnFire(PlayerID pid, const C2S_FireAction& pkt)
     fireEvt.direction = pkt.fireDirection;
     fireEvt.hitPlayerID = pkt.hitPlayerID;
 
-    // ÆĞÅ¶ ¹öÆÛ¿¡ ´ã±â
+    // ï¿½ï¿½Å¶ ï¿½ï¿½ï¿½Û¿ï¿½ ï¿½ï¿½ï¿½
     RawPacketBuffer buffer;
     buffer.length = sizeof(S2C_FireEvent);
     std::memcpy(buffer.data, &fireEvt, buffer.length);
 
-    // Ãâ·Â Å¥¿¡ ³ÖÀ¸¸é NetworkIO ½º·¹µå°¡ ¸ğµç Å¬¶óÀÌ¾ğÆ®¿¡°Ô Àü¼ÛÇÕ´Ï´Ù.
+    // ï¿½ï¿½ï¿½ Å¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ NetworkIO ï¿½ï¿½ï¿½ï¿½ï¿½å°¡ ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
     if (m_pOutputQueue) {
         m_pOutputQueue->Push(buffer);
         printf("[WorldState] FireEvent Queued for broadcast (Shooter: %d)\n", pid);
     }
 }
 
-// ±èµµÀ±
+// ï¿½èµµï¿½ï¿½
 int WorldState::BuildSnapshotAll(float nowSec, S2C_SnapshotState& outPkt)
 {
     outPkt.type = MsgType::S2C_SNAPSHOT_STATE;
@@ -166,13 +178,13 @@ int WorldState::BuildSnapshotAll(float nowSec, S2C_SnapshotState& outPkt)
 
         if (pState != nullptr)
         {
-            // 1. PlayerState ½º³À¼¦ Á¤º¸ »ı¼º
+            // 1. PlayerState ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             PlayerSnapshot snapshot = pState->ToSnapshot();
 
-            // 2. ¼­¹ö ½Ã°£ ¼³Á¤
+            // 2. ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½
             snapshot.serverTime = nowSec;
 
-            // 3. ÆĞÅ¶ º¤ÅÍ¿¡ Ãß°¡
+            // 3. ï¿½ï¿½Å¶ ï¿½ï¿½ï¿½Í¿ï¿½ ï¿½ß°ï¿½
             outPkt.snapshots[count] = snapshot;
 
             count++;

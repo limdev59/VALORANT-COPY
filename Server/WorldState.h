@@ -8,8 +8,8 @@
 
 /**
  * @class WorldState
- * @brief ¸ðµç PlayerState¸¦ ¼ÒÀ¯/°ü¸®ÇÏ°í Å¥ÀÇ ÀÌº¥Æ®¸¦ Ã³¸®
- * ±èµµÀ±
+ * @brief ï¿½ï¿½ï¿½ PlayerStateï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ Å¥ï¿½ï¿½ ï¿½Ìºï¿½Æ®ï¿½ï¿½ Ã³ï¿½ï¿½
+ * ï¿½èµµï¿½ï¿½
  */
 class WorldState
 {
@@ -18,28 +18,28 @@ public:
     ~WorldState();
 
     /**
-     * @brief ½º·¹µå °£ Åë½Å Å¥ ¿¬°á
+     * @brief ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ Å¥ ï¿½ï¿½ï¿½ï¿½
      */
     void Initialize(PacketQueue* inQ, ByteQueue* outQ);
 
     /**
-     * @brief °ÔÀÓ ·ÎÁ÷ÀÇ ¸ÞÀÎ ·çÇÁ. ÀÔ·Â Å¥¸¦ Ã³¸®ÇÏ°í, ½º³À¼¦À» Ãâ·Â Å¥¿¡ º¸³¿
+     * @brief ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½. ï¿½Ô·ï¿½ Å¥ï¿½ï¿½ Ã³ï¿½ï¿½ï¿½Ï°ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ Å¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
      */
     void Tick(float nowSec);
     /**
-     * @brief °ú°Å ½º³À¼¦ ¹öÆÛ¸¦ ¹ÝÈ¯ÇÏ´Â ÇÔ¼ö - ½¹¹Î
+     * @brief ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Û¸ï¿½ ï¿½ï¿½È¯ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½ - ï¿½ï¿½ï¿½ï¿½
      */
     // const std::deque<S2C_SnapshotState>& GetLastSnapshots() const { return m_SnapshotHistory; }
 
 private:
-    // --- ÀÌº¥Æ® Ã³¸® ÇÔ¼ö ---
+    // --- ï¿½Ìºï¿½Æ® Ã³ï¿½ï¿½ ï¿½Ô¼ï¿½ ---
     void OnPlayerJoined(PlayerID pid);
     void OnPlayerLeft(PlayerID pid);
     void OnMovement(PlayerID pid, const C2S_MovementUpdate& pkt, float nowSec);
-    void OnFire(PlayerID pid, const C2S_FireAction& pkt);
+    void OnFire(PlayerID pid, const C2S_FireAction& pkt, float nowSec);
 
     /**
-     * @brief ¸ðµç PlayerStateÀÇ ½º³À¼¦ »ý¼º
+     * @brief ï¿½ï¿½ï¿½ PlayerStateï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
      */
     int BuildSnapshotAll(float nowSec, S2C_SnapshotState& outPkt);
 
@@ -47,10 +47,10 @@ private:
     PacketQueue* m_pInputQueue;  // NetworkIO -> WorldState
     ByteQueue* m_pOutputQueue; // WorldState -> NetworkIO
 
-    // °ÔÀÓ¿¡ Á¸ÀçÇÏ´Â ¸ðµç ÇÃ·¹ÀÌ¾îÀÇ »óÅÂ
+    // ï¿½ï¿½ï¿½Ó¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     std::map<PlayerID, PlayerState*> m_PlayerStates;
 
-    //// ½º³À¼¦ È÷½ºÅä¸® ¹öÆÛ (ÃÖ±Ù N°³ÀÇ ½º³À¼¦ ÀúÀå)
+    //// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ä¸® ï¿½ï¿½ï¿½ï¿½ (ï¿½Ö±ï¿½ Nï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
     //std::deque<S2C_SnapshotState> m_SnapshotHistory;
 
     //const size_t MAX_SNAPSHOT_HISTORY_SIZE = 60;
