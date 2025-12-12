@@ -11,6 +11,38 @@
 #include "Ascent.h"
 #include "Enemy.h"
 
+namespace
+{
+    const std::vector<glm::vec3> kSpawnPositions = {
+        glm::vec3(-1.49554f, 0.125f, -5.42878f),
+        glm::vec3(-3.76336f, 0.125f, -6.6219f),  // 백사위
+        glm::vec3(-0.518212f, 0.125f, -6.9495f),
+        glm::vec3(-1.4714f, 0.125f, -9.09569f), // ct
+        glm::vec3(-4.81171f, -0.1f, -8.39536f),  // 백사오른
+    };
+
+    glm::vec3 GetRandomSpawnPosition()
+    {
+        static std::mt19937 rng{ std::random_device{}() };
+        std::uniform_int_distribution<size_t> dist(0, kSpawnPositions.size() - 1);
+        return kSpawnPositions[dist(rng)];
+    }
+}
+
+
+void Player::RespawnAtRandomPosition()
+{
+    m_isDead = false;
+    m_respawnTimer = 0.0f;
+    m_health = m_maxHealth;
+    this->position = GetRandomSpawnPosition();
+    m_velocity = vec3(0.0f);
+    m_isOnGround = false;
+    m_isMoving = true;
+
+    std::cout << "[Player] Respawned." << std::endl;
+}
+
 
 Player::Player()
     : CObject() {
@@ -194,9 +226,7 @@ void Player::Update()
 
         if (m_respawnTimer <= 0.0f)
         {
-            m_isDead = false;
-            m_health = 150;
-            std::cout << "[Player] Respawned." << std::endl;
+            RespawnAtRandomPosition();
         }
 
         m_velocity = vec3(0.0f);
@@ -210,6 +240,13 @@ void Player::Update()
     if (KeyMgr::Instance()->getKeyState(KEY::V) == KEY_TYPE::TAP) {
         m_bThirdPerson = !m_bThirdPerson;
         std::cout << "[Camera] Mode switched to: " << (m_bThirdPerson ? "3rd Person" : "1st Person") << std::endl;
+    }
+    if (!m_isDead && KeyMgr::Instance()->getKeyState(KEY::NUM_0) == KEY_TYPE::TAP) {
+        this->position = GetRandomSpawnPosition();
+        m_velocity = glm::vec3(0.0f);
+        m_isOnGround = false;
+        m_isMoving = true;
+        std::cout << "[Player] Randomly relocated." << std::endl;
     }
     if (KeyMgr::Instance()->getKeyState(KEY::B) == KEY_TYPE::TAP) {
         m_bShowHitbox = !m_bShowHitbox;
@@ -906,10 +943,11 @@ void Player::ResolveWallCollision(const std::vector<glm::vec3>& mapTriangles, gl
 
 void Player::ApplyServerState(const PlayerSnapshot& snap)
 {
+    bool wasDead = m_isDead;
     m_health = static_cast<int>(snap.health);
 
-    bool wasDead = m_isDead;
-    m_isDead = !snap.isAlive || m_health <= 0;
+    const bool shouldBeAlive = snap.isAlive && m_health > 0;
+    m_isDead = !shouldBeAlive;
 
     if (m_isDead)
     {
@@ -919,5 +957,9 @@ void Player::ApplyServerState(const PlayerSnapshot& snap)
             std::cout << "[Player] You died." << std::endl;
             m_respawnTimer = m_respawnDelay;
         }
+    }
+    else if (wasDead)
+    {
+        RespawnAtRandomPosition();
     }
 }
